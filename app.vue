@@ -1,10 +1,11 @@
 <template>
   <NuxtLoadingIndicator color="#14b8a6" />
   <AppNavbar />
-  <div class="h-32" />
-  <AppContainer>
-    <NuxtPage />
-  </AppContainer>
+  <div class="pb-24 sm:pb-0 sm:pt-24">
+    <AppContainer>
+      <NuxtPage />
+    </AppContainer>
+  </div>
 </template>
 
 <style>

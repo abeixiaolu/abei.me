@@ -2,36 +2,17 @@
 const colorMode = useColorMode()
 const navItems = [
   { label: 'Home', path: '/', icon: 'i-solar-home-smile-bold-duotone' },
-  {
-    label: 'Bookmark',
-    path: '/bookmark',
-    icon: 'i-solar-bookmark-bold-duotone',
-  },
-  {
-    label: 'Project',
-    path: '/project',
-    icon: 'i-solar-inbox-line-bold-duotone',
-  },
-  {
-    label: 'Blog',
-    path: '/blog',
-    icon: 'i-solar-notebook-bold-duotone',
-  },
-  {
-    label: 'Lab',
-    path: '/lab',
-    icon: 'i-solar-cursor-bold-duotone',
-  },
-  {
-    label: 'What I used?',
-    path: '/bag',
-    icon: 'i-solar-bag-3-bold-duotone',
-  },
+  { label: 'Gallery', path: '/gallery', icon: 'i-solar-camera-minimalistic-bold-duotone' },
+  { label: 'Bookmark', path: '/bookmark', icon: 'i-solar-bookmark-bold-duotone' },
+  { label: 'Project', path: '/project', icon: 'i-solar-inbox-line-bold-duotone' },
+  { label: 'Blog', path: '/blog', icon: 'i-solar-notebook-bold-duotone' },
+  { label: 'Lab', path: '/lab', icon: 'i-solar-cursor-bold-duotone' },
+  { label: 'What I used?', path: '/bag', icon: 'i-solar-bag-3-bold-duotone' },
 ]
 </script>
 
 <template>
-  <div class="fixed bottom-4 md:top-0 w-full z-50">
+  <div class="fixed bottom-4 sm:bottom-auto md:top-0 w-full z-50">
     <AppContainer>
       <nav>
         <ul

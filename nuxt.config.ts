@@ -9,16 +9,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   app: {
     pageTransition: { mode: 'out-in', name: 'page' },
-    head: {
-      htmlAttrs: {
-        lang: 'en',
-      },
-    },
+    head: { htmlAttrs: { lang: 'en' } },
   },
   compatibilityDate: '2024-04-03',
-  eslint: {
-    config: {
-      stylistic: true,
-    },
-  },
+  eslint: { config: { stylistic: true } },
 })

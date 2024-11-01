@@ -1,7 +1,7 @@
 <template>
   <NuxtLoadingIndicator color="#14b8a6" />
   <AppNavbar />
-  <div class="pb-24 sm:pb-0 pt-4 sm:pt-24">
+  <div class="pb-24 sm:pb-0 pt-4 sm:pt-28">
     <AppContainer>
       <NuxtPage />
     </AppContainer>
@@ -39,5 +39,6 @@
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
+  font-family: 'Chakra Petch', 'Space Grotesk', Poppins, Inter, sans-serif;
 }
 </style>

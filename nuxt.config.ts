@@ -5,6 +5,7 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxtjs/color-mode',
     '@nuxt/eslint',
+    '@nuxt/fonts',
   ],
   devtools: { enabled: true },
   app: {

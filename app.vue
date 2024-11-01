@@ -1,7 +1,7 @@
 <template>
   <NuxtLoadingIndicator color="#14b8a6" />
   <AppNavbar />
-  <div class="pb-24 sm:pb-0 sm:pt-24">
+  <div class="pb-24 sm:pb-0 pt-4 sm:pt-24">
     <AppContainer>
       <NuxtPage />
     </AppContainer>
@@ -29,10 +29,12 @@
 :root {
   --color-bg: #F1F0EA;
   --color-text: #000000de;
+  --color-border: #ccc;
 }
 .dark-mode:root {
   --color-bg: #1a1a1a;
   --color-text: #ffffffde;
+  --color-border: #5a5a5a;
 }
 body {
   background-color: var(--color-bg);

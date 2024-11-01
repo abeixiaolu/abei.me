@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     pageTransition: { mode: 'out-in', name: 'page' },
     head: { htmlAttrs: { lang: 'en' } },
   },
+  css: ['~/assets/css/main.css'],
   compatibilityDate: '2024-04-03',
   eslint: { config: { stylistic: true } },
 })

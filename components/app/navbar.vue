@@ -33,6 +33,54 @@ const initPointerTrack = () => {
 onMounted(() => {
   navbarRef.value?.addEventListener('pointerenter', initPointerTrack)
 })
+
+const isDark = computed({
+  get: () => colorMode.preference === 'dark',
+  set: (value) => {
+    colorMode.preference = value ? 'dark' : 'light'
+  },
+})
+function toggleDark(e: MouseEvent) {
+  // @ts-expect-error experimental API
+  const isAppearanceTransition = document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (!isAppearanceTransition) {
+    isDark.value = !isDark.value
+    return
+  }
+  const x = e.clientX
+  const y = e.clientY
+  const endRadius = Math.hypot(
+    Math.max(x, innerWidth - x),
+    Math.max(y, innerHeight - y),
+  )
+  // @ts-expect-error: Transition API
+  const transition = document.startViewTransition(async () => {
+    isDark.value = !isDark.value
+    await nextTick()
+  })
+  transition.ready
+    .then(() => {
+      console.log('isDark.value: ', isDark.value)
+      const clipPath = [
+        `circle(0px at ${x}px ${y}px)`,
+        `circle(${endRadius}px at ${x}px ${y}px)`,
+      ]
+      document.documentElement.animate(
+        {
+          clipPath: isDark.value
+            ? [...clipPath].reverse()
+            : clipPath,
+        },
+        {
+          duration: 300,
+          easing: 'ease-out',
+          pseudoElement: isDark.value
+            ? '::view-transition-old(root)'
+            : '::view-transition-new(root)',
+        },
+      )
+    })
+}
 </script>
 
 <template>
@@ -78,7 +126,7 @@ onMounted(() => {
       </div>
       <button
         class="flex items-center px-2 py-2 rounded-full ml-auto dark:bg-blue-500/20 dark:text-blue-300 bg-rose-400/20 text-rose-400"
-        @click="colorMode.preference = colorMode.preference === 'dark' ? 'light' : 'dark'"
+        @click="toggleDark"
       >
         <Icon :name="colorMode.preference === 'dark' ? 'i-solar-moon-fog-bold' : 'i-solar-sun-fog-bold'" />
       </button>

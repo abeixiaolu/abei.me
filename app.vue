@@ -39,6 +39,6 @@
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-family: 'Chakra Petch', 'Space Grotesk', Poppins, Inter, sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 </style>

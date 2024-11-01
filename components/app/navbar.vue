@@ -114,7 +114,7 @@ nav {
 .tip {
   position: fixed;
   position-anchor: --nav;
-  background: var(--color-bg);
+  /* background: var(--color-bg); */
   color: var(--color-text);
   font-size: 0.875rem;
   border-radius: 100px;
@@ -133,6 +133,7 @@ nav {
   filter: blur(calc(var(--blur, 0) * 1px));
   transition: scale calc(var(--speed) * 1s) var(--ease),
   filter calc(var(--speed) * 1s) ease;
+  backdrop-filter: blur(6px);
 
   .tip__track {
     display: grid;

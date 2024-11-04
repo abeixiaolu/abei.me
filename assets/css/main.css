@@ -16,7 +16,11 @@
 body {
   background-color: var(--me-bg);
   color: var(--me-text);
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Inconsolata', sans-serif;
+}
+
+h2 {
+  font-family: 'Overpass Mono', sans-serif;
 }
 
 @keyframes slide-enter {

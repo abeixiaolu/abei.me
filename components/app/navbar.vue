@@ -14,7 +14,6 @@ const navItems = [
 const navbarRef = shallowRef<HTMLElement>()
 let bounds: DOMRect
 const track = ({ x, y }: { x: number, y: number }) => {
-  console.info({ x, y })
   document.documentElement.style.setProperty('--tip-x', `${x - bounds.left}`)
   document.documentElement.style.setProperty('--tip-y', `${y - bounds.top}`)
 }
@@ -62,7 +61,6 @@ function toggleDark(e: MouseEvent) {
   })
   transition.ready
     .then(() => {
-      console.log('isDark.value: ', isDark.value)
       const clipPath = [
         `circle(0px at ${x}px ${y}px)`,
         `circle(${endRadius}px at ${x}px ${y}px)`,

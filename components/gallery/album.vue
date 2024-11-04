@@ -23,7 +23,11 @@ const publishedDate = new Date(props.pubDate).toLocaleDateString('zh-CN', {
   >
     <div class="w-[200px] rounded-md overflow-hidden shrink-0">
       <NuxtLink :to="path">
-        <NuxtImg
+        <CldImage
+          loading="lazy"
+          width="6000"
+          height="4000"
+          quality="30"
           :src="image.src"
           :alt="image.alt"
           class="w-full h-full cursor-pointer hover:scale-105 transition-all duration-300"
@@ -49,7 +53,7 @@ const publishedDate = new Date(props.pubDate).toLocaleDateString('zh-CN', {
       >
         Published on {{ publishedDate }}
       </time>
-      <p class="text-md line-clamp-3">
+      <p class="text-md line-clamp-2">
         {{ description }}
       </p>
     </div>

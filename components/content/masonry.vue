@@ -16,7 +16,9 @@ const props = defineProps<{
         :href="image.src"
         class="image-link glightbox"
       >
-        <NuxtImg
+        <CldImage
+          width="6000"
+          height="4000"
           :src="image.src"
           :alt="image.alt"
           lazy
@@ -27,10 +29,10 @@ const props = defineProps<{
   </div>
 </template>
 
-<style scoped>
+<style>
 .masonry {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   grid-gap: 16px;
   grid-auto-flow: dense;
 }
@@ -40,13 +42,14 @@ const props = defineProps<{
   position: relative;
   overflow: hidden;
   transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  border-radius: 10px;
 }
 
 .image-container:nth-child(3n) {
   grid-row: span 2;
 }
 
-.image-container:nth-child(4n) {
+.image-container:nth-child(6n) {
   grid-column: span 2;
 }
 
@@ -69,5 +72,17 @@ const props = defineProps<{
 
 .image-container:hover .image {
   transform: scale(1.005);
+}
+
+@media (max-width: 640px) {
+  .masonry {
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+  }
+
+  .image-container:nth-child(3n),
+  .image-container:nth-child(4n) {
+    grid-row: auto;
+    grid-column: auto;
+  }
 }
 </style>

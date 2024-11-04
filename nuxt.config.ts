@@ -24,7 +24,6 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2024-04-03',
   cloudinary: {
-    apiKey: '0_8uJdmVY7tvkKR_iEUhMOJb6Gw',
     cloudName: 'dt1ribmno',
   },
   eslint: { config: { stylistic: true } },

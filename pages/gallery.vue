@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div>
+  <div class="slide-enter-content">
     <ContentList
       v-slot="{ list }"
       path="/gallery"

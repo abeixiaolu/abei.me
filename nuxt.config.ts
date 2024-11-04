@@ -16,6 +16,12 @@ export default defineNuxtConfig({
     head: { htmlAttrs: { lang: 'en' } },
   },
   css: ['~/assets/css/main.css'],
+  content: {
+    highlight: { theme: {
+      default: 'vitesse-dark',
+    },
+    },
+  },
   compatibilityDate: '2024-04-03',
   cloudinary: {
     apiKey: '0_8uJdmVY7tvkKR_iEUhMOJb6Gw',

@@ -1,4 +1,3 @@
-
 :root {
   --me-bg: #F1F0EA;
   --me-text: #000000de;
@@ -19,8 +18,8 @@ body {
   font-family: 'Inconsolata', sans-serif;
 }
 
-h2 {
-  font-family: 'Overpass Mono', sans-serif;
+.chakra {
+  font-family: 'Chakra Petch', sans-serif;
 }
 
 @keyframes slide-enter {
@@ -108,4 +107,27 @@ h2 {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--me-scrollbar-hover);
+}
+
+@keyframes underline {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.wrapping-underline {
+  @apply bg-gradient-to-r from-teal-500 to-teal-500;
+  background-size: 0 0.1em;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: all 400ms;
+}
+
+.wrapping-underline:hover,
+.wrapping-underline:focus {
+  background-size: 100% 0.1em;
+  opacity: 0.8;
 }

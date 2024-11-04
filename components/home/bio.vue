@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="chakra">
     <div class="w-16 h-16 rounded-sm ring-2 ring-gray-500/30 dark:ring-gray-300/30 overflow-hidden">
       <img
         src="/avatar.svg"
@@ -22,9 +22,3 @@
     </p>
   </div>
 </template>
-
-<style scoped>
-div {
-  font-family: 'Chakra Petch', sans-serif;
-}
-</style>

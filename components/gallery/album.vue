@@ -19,30 +19,39 @@ const publishedDate = new Date(props.pubDate).toLocaleDateString('zh-CN', {
 
 <template>
   <article
-    class="flex gap-4"
+    class="flex gap-4 mb-4 last:mb-0 items-end"
   >
-    <div class="w-[200px] rounded-md overflow-hidden">
-      <CldImage
-        :src="image.src"
-        :alt="image.alt"
-        width="600"
-        height="600"
-        class="w-full h-full cursor-pointer"
-        @click="navigateTo(path)"
-      />
+    <div class="w-[200px] rounded-md overflow-hidden shrink-0">
+      <NuxtLink :to="path">
+        <NuxtImg
+          :src="image.src"
+          :alt="image.alt"
+          class="w-full h-full cursor-pointer hover:scale-105 transition-all duration-300"
+          @click="navigateTo(path)"
+        />
+      </NuxtLink>
     </div>
     <div class="flex flex-col">
       <h2
-        class="text-2xl font-bold cursor-pointer hover:opacity-80"
+        class="text-2xl font-bold chakra"
         @click="navigateTo(path)"
       >
-        {{ title }}
+        <NuxtLink
+          class="wrapping-underline"
+          :to="path"
+        >
+          {{ title }}
+        </NuxtLink>
       </h2>
       <time
         class="text-sm text-gray-500 my-4"
         :datetime="pubDate"
-      >Published on {{ publishedDate }}</time>
-      <p>{{ description }}</p>
+      >
+        Published on {{ publishedDate }}
+      </time>
+      <p class="text-md line-clamp-3">
+        {{ description }}
+      </p>
     </div>
   </article>
 </template>

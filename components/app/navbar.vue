@@ -124,12 +124,12 @@ function toggleDark(e: MouseEvent) {
           </div>
         </div>
       </div>
-      <button
-        class="flex items-center px-2 py-2 rounded-full ml-auto dark:bg-blue-500/20 dark:text-blue-300 bg-rose-400/20 text-rose-400"
+      <AppCircleButton
+        type="primary"
+        class="ml-auto"
+        :icon="colorMode.preference === 'dark' ? 'i-solar-moon-fog-bold' : 'i-solar-sun-fog-bold'"
         @click="toggleDark"
-      >
-        <Icon :name="colorMode.preference === 'dark' ? 'i-solar-moon-fog-bold' : 'i-solar-sun-fog-bold'" />
-      </button>
+      />
     </AppContainer>
   </div>
 </template>

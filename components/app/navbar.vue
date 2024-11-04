@@ -1,6 +1,5 @@
 'use client'
 <script setup lang="ts">
-const colorMode = useColorMode()
 const navItems = [
   { label: 'Home', path: '/', icon: 'i-solar-home-smile-bold-duotone' },
   { label: 'Gallery', path: '/gallery', icon: 'i-solar-camera-minimalistic-bold-duotone' },
@@ -11,6 +10,7 @@ const navItems = [
   { label: 'What I used?', path: '/bag', icon: 'i-solar-bag-3-bold-duotone' },
 ]
 
+// tooltip for navbar items
 const navbarRef = shallowRef<HTMLElement>()
 let bounds: DOMRect
 const track = ({ x, y }: { x: number, y: number }) => {
@@ -34,6 +34,8 @@ onMounted(() => {
   navbarRef.value?.addEventListener('pointerenter', initPointerTrack)
 })
 
+// switch dark mode transition
+const colorMode = useColorMode()
 const isDark = computed({
   get: () => colorMode.preference === 'dark',
   set: (value) => {
@@ -168,7 +170,7 @@ nav {
   border-radius: 100px;
   width: 130px;
   pointer-events: none;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--me-border);
   height: var(--tip-height);
   z-index: 999999999;
   position-try: flip-block, flip-inline;

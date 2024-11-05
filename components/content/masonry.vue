@@ -7,13 +7,8 @@ const isGalleryOpen = ref(false)
 const currentIndex = ref(0)
 const showImage = computed(() => props.images[currentIndex.value])
 const openGallery = (index: number) => {
-  console.log(index)
   currentIndex.value = index
   isGalleryOpen.value = true
-}
-
-const closeGallery = () => {
-  isGalleryOpen.value = false
 }
 
 const slideDirection = ref('next')
@@ -55,64 +50,44 @@ const nextImage = () => {
         />
       </a>
     </div>
-    <Teleport to="body">
-      <Transition
-        enter-active-class="transition duration-300 ease-out"
-        enter-from-class="opacity-0 scale-95"
-        enter-to-class="opacity-100 scale-100"
-        leave-active-class="transition duration-200 ease-in"
-        leave-from-class="opacity-100 scale-100"
-        leave-to-class="opacity-0 scale-95"
-      >
-        <div
-          v-if="isGalleryOpen"
-          class="gallery-overlay"
+    <AppModal v-model="isGalleryOpen">
+      <template #actions>
+        <AppCircleButton
+          type="default"
+          aria-label="close"
+          icon="i-solar-arrow-left-broken"
+          :disabled="currentIndex === 0"
+          @click="prevImage"
+        />
+        <AppCircleButton
+          type="default"
+          aria-label="close"
+          icon="i-solar-arrow-right-broken"
+          :disabled="currentIndex === props.images.length - 1"
+          @click="nextImage"
+        />
+      </template>
+      <div class="h-3/4">
+        <Transition
+          :name="slideDirection === 'next' ? 'slide-next' : 'slide-prev'"
+          mode="out-in"
         >
-          <div class="flex flex-col gap-4 justify-between items-center absolute top-1/2 -translate-y-1/2 right-14">
-            <AppCircleButton
-              type="default"
-              aria-label="close"
-              icon="i-solar-close-circle-broken"
-              @click="closeGallery"
-            />
-            <AppCircleButton
-              type="default"
-              aria-label="close"
-              icon="i-solar-arrow-left-broken"
-              :disabled="currentIndex === 0"
-              @click="prevImage"
-            />
-            <AppCircleButton
-              type="default"
-              aria-label="close"
-              icon="i-solar-arrow-right-broken"
-              :disabled="currentIndex === props.images.length - 1"
-              @click="nextImage"
-            />
-          </div>
-          <div class="gallery-content">
-            <Transition
-              :name="slideDirection === 'next' ? 'slide-next' : 'slide-prev'"
-              mode="out-in"
-            >
-              <CldImage
-                :key="currentIndex"
-                class="w-full h-full"
-                width="6000"
-                height="4000"
-                :src="showImage.src"
-                :alt="showImage.alt"
-                lazy
-              />
-            </Transition>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
+          <CldImage
+            :key="currentIndex"
+            class="w-full h-full"
+            width="6000"
+            height="4000"
+            :src="showImage.src"
+            :alt="showImage.alt"
+            lazy
+          />
+        </Transition>
+      </div>
+    </AppModal>
   </div>
 </template>
 
-<style>
+<style scoped>
 .masonry {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -194,15 +169,5 @@ const nextImage = () => {
 .slide-prev-leave-to {
   opacity: 0;
   transform: translateX(100px);
-}
-</style>
-
-<style>
-.gallery-overlay {
-  @apply fixed top-0 left-0 w-full h-full z-[100] flex justify-center items-center bg-black/50;
-}
-
-.gallery-content {
-  @apply w-5/6 h-5/6 m-auto;
 }
 </style>

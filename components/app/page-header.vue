@@ -5,10 +5,10 @@ defineProps<{
 </script>
 
 <template>
-  <div class="mb-8">
-    <h2 class="text-2xl font-bold mb-6 chakra">
+  <div class="mb-10">
+    <h1 class="text-2xl font-bold mb-6 chakra">
       {{ title }}
-    </h2>
+    </h1>
     <slot />
   </div>
 </template>

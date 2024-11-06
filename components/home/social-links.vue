@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="slide-enter-content">
     <h2 class="uppercase text-xs font-semibold text-slate-400/80 mb-4">
       FIND ME ON
     </h2>

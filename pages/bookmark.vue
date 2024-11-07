@@ -60,6 +60,16 @@ const bookmarks = [
     url: 'https://ishadeed.com/',
     tag: ['blog', 'css'],
   },
+  {
+    label: 'animated icons',
+    url: 'https://icons.pqoqubbw.dev/',
+    tag: ['icon'],
+  },
+  {
+    label: 'uno icons',
+    url: 'https://icones.js.org/',
+    tag: ['icon'],
+  },
 ]
 
 const groupedBookmarks = computed(() => {
@@ -127,7 +137,7 @@ function handleImageError(url: string) {
       <h2 class="text-lg font-medium mb-4 text-gray-700 dark:text-gray-200 uppercase">
         {{ tag }}
       </h2>
-      <ul class="space-y-2 ">
+      <ul class="space-y-2">
         <li
           v-for="bookmark in bks"
           :key="bookmark.url"

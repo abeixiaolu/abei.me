@@ -35,6 +35,9 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.7.2
+      ufo:
+        specifier: ^1.5.4
+        version: 1.5.4
       unplugin-auto-import:
         specifier: ^0.19.0
         version: 0.19.0(@vueuse/core@11.3.0(vue@3.5.13(typescript@5.7.2)))(rollup@4.29.1)

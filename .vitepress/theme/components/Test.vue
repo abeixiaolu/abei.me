@@ -4,8 +4,6 @@
 
 <template>
   <div>
-    <h1>Artsmp</h1>
-    <Test />
-    <Content />
+    Test
   </div>
 </template>

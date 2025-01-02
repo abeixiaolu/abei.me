@@ -3,6 +3,7 @@ import Components from "unplugin-vue-components/vite";
 import AutoImport from "unplugin-auto-import/vite";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import MarkdownItGithubAlerts from "markdown-it-github-alerts";
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
 const componentsDir = join(currentDir, "theme/components");
@@ -32,5 +33,12 @@ export default defineConfig({
         dts: join(currentDir, "auto-imports.d.ts"),
       }),
     ],
+  },
+  markdown: {
+    theme: "everforest-light",
+    config(md) {
+      md.use(MarkdownItGithubAlerts);
+    },
+    gfmAlerts: false,
   },
 });

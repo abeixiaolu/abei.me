@@ -5,6 +5,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import MarkdownItGithubAlerts from "markdown-it-github-alerts";
 import { joinURL, withoutTrailingSlash } from "ufo";
+import { genOg } from "./genOg";
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
 const componentsDir = join(currentDir, "theme/components");
@@ -56,7 +57,7 @@ export default defineConfig({
     },
     gfmAlerts: false,
   },
-  transformPageData(pageData, { siteConfig }) {
+  async transformPageData(pageData, { siteConfig }) {
     // Set layout for blog articles
     if (pageData.filePath.startsWith("blog/")) {
       pageData.frontmatter.layout = "blog-show";
@@ -121,5 +122,32 @@ export default defineConfig({
         ),
       },
     ]);
+
+    const ogName = pageData.filePath
+      .replaceAll(/\//g, "-")
+      .replace(/\.md$/, ".png");
+
+    await genOg(
+      pageData.frontmatter.title || pageData.title || siteConfig.site.title,
+      joinURL(siteConfig.srcDir, "public", "og", ogName),
+    );
+
+    // Integrate OG image URL into frontmatter
+    pageData.frontmatter.head.push(
+      [
+        "meta",
+        {
+          property: "og:image",
+          content: joinURL("https://example.com", "og", ogName),
+        },
+      ],
+      [
+        "meta",
+        {
+          name: "twitter:image",
+          content: joinURL("https://example.com", "og", ogName),
+        },
+      ],
+    );
   },
 });

@@ -11,6 +11,7 @@ module.exports = {
       typography: {
         DEFAULT: {
           css: {
+            maxWidth: "100%",
             "ul > li": {
               "--tw-prose-bullets": "var(--color-blue-light)",
             },
@@ -18,15 +19,10 @@ module.exports = {
               "border-top": "2px solid var(--color-yellow)",
             },
             code: {
-              backgroundColor: "var(--color-blue-light)",
-              padding: "0 0.25rem",
+              backgroundColor: "var(--color-gray)",
               borderRadius: "2px",
-              "&::before": {
-                content: '""!important',
-              },
-              "&::after": {
-                content: '""!important',
-              },
+              padding: "3px 6px",
+              fontWeight: "bold",
             },
             pre: {
               "background-color": "#F8F8F4",
@@ -64,6 +60,8 @@ module.exports = {
   },
   plugins: [
     require("@tailwindcss/typography"),
-    iconsPlugin({ collections: getIconCollections(["logos", "solar"]) }),
+    iconsPlugin({
+      collections: getIconCollections(["logos", "solar", "simple-icons"]),
+    }),
   ],
 };

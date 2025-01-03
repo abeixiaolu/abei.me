@@ -1,9 +1,9 @@
 :root {
   --color-note: var(--color-blue);
-  --color-tip: #7ecebf;
+  --color-tip: var(--color-cyan);
   --color-warning: var(--color-yellow);
-  --color-severe: #ff7002;
-  --color-caution: #ce7e7e;
+  --color-severe: var(--color-severe);
+  --color-caution: var(--color-red);
   --color-important: var(--color-purple);
   --color-important-bg: #7e7ece20;
 }

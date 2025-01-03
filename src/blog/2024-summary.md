@@ -84,7 +84,3 @@ date: 2024-12-31
 - `Innocn 27M2v 27' 4k 160HZ`
 - `Nuphy Halo 75`
 - `Logitech Anywhere 2s`
-
-```ts
-const a = 1;
-```

@@ -5,10 +5,16 @@
 
 :root {
   --color-yellow: #cea67e;
+  --color-purple-opacity: #6464b555;
+  --color-purple-opacity-light: #6464b520;
   --color-purple: #6464b5;
   --color-purple-light: #7e7ece;
   --color-blue: #6494b5;
   --color-blue-light: #7eadce;
+  --color-severe: #ff7002;
+  --color-red: #cc8787;
+  --color-cyan: #7ecebf;
+  --color-gray: #8882;
 }
 
 @layer base {
@@ -21,4 +27,23 @@
 body {
   font-size: 14px;
   color: #000;
+}
+
+@keyframes wave {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(20deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-wave {
+  animation: wave 1s infinite;
+  display: inline-block;
 }

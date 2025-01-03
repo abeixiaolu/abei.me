@@ -5,7 +5,7 @@ const { frontmatter } = useData()
 </script>
 
 <template>
-  <section class="space-y-16">
+  <section class="space-y-16 px-6">
     <h1 class="text-6xl font-semibold">
       {{ frontmatter.title }}
     </h1>

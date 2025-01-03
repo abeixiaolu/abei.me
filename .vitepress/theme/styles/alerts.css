@@ -5,4 +5,5 @@
   --color-severe: #ff7002;
   --color-caution: #f34720;
   --color-important: #8746ff;
+  --color-important: var(--color-purple);
 }

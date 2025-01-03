@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { data } from '../../../data/blog.data';
+import { data } from "../../../data/blog.data";
 
-const { frontmatter } = useData()
+const { frontmatter } = useData();
 </script>
 
 <template>
-  <section class="space-y-16 px-6">
+  <section class="space-y-16">
     <h1 class="text-4xl font-semibold">
       {{ frontmatter.title }}
     </h1>
@@ -14,10 +14,8 @@ const { frontmatter } = useData()
       <BlogCard v-for="post in data" :key="post.url" :post="post" />
     </div>
 
-    <div class=" flex justify-center">
-      <ButtonPrimary href="/">
-        Back to Home
-      </ButtonPrimary>
+    <div class="flex justify-center">
+      <ButtonPrimary href="/"> Back to Home </ButtonPrimary>
     </div>
   </section>
 </template>

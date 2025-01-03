@@ -12,13 +12,13 @@ module.exports = {
         DEFAULT: {
           css: {
             "ul > li": {
-              "--tw-prose-bullets": "var(--color-blue)",
+              "--tw-prose-bullets": "var(--color-blue-light)",
             },
             hr: {
               "border-top": "2px solid var(--color-yellow)",
             },
             code: {
-              backgroundColor: "var(--color-blue)",
+              backgroundColor: "var(--color-blue-light)",
               padding: "0 0.25rem",
               borderRadius: "2px",
               "&::before": {

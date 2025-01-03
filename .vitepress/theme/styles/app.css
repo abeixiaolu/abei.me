@@ -1,21 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital@0;1&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital@0;1&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --color-yellow: #ffbf00;
-  --color-sand: #fdf6e3;
-  --color-purple: #6c71c4;
+  --color-yellow: #cea67e;
+  --color-purple: #6464b5;
+  --color-purple-light: #7e7ece;
+  --color-blue: #6494b5;
+  --color-blue-light: #7eadce;
 }
 
 @layer base {
   @font-face {
-    font-family: 'LXGWMarkerGothic';
-    src: url('/LXGWMarkerGothic-Regular.ttf');
+    font-family: "LXGWMarkerGothic";
+    src: url("/LXGWMarkerGothic-Regular.ttf");
   }
 }
-
 
 body {
   font-size: 14px;

@@ -12,15 +12,15 @@ module.exports = {
         DEFAULT: {
           css: {
             "ul > li": {
-              "--tw-prose-bullets": "var(--color-yellow)",
+              "--tw-prose-bullets": "var(--color-blue)",
             },
             hr: {
               "border-top": "2px solid var(--color-yellow)",
             },
             code: {
-              backgroundColor: "#fdf6e3",
+              backgroundColor: "var(--color-blue)",
               padding: "0 0.25rem",
-              borderRadius: "0",
+              borderRadius: "2px",
               "&::before": {
                 content: '""!important',
               },
@@ -29,10 +29,13 @@ module.exports = {
               },
             },
             pre: {
-              "background-color": "#fdf6e3",
+              "background-color": "#F8F8F4",
               "border-radius": "0",
               border: "2px solid black",
               margin: "0",
+              "&>code": {
+                backgroundColor: "#F8F8F4",
+              },
             },
           },
         },

@@ -6,13 +6,13 @@ const { frontmatter } = useData()
 
 <template>
   <section class="space-y-16">
-    <h1 class="text-6xl font-semibold">
+    <h1 class="text-4xl font-semibold">
       {{ frontmatter.title }}
     </h1>
 
     <div v-for="section in data" :key="section.title" class="space-y-20">
       <section class="space-y-10">
-        <h2 class="text-4xl font-semibold">
+        <h2 class="text-2xl font-semibold">
           {{ section.title }}
         </h2>
 

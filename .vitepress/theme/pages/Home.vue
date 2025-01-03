@@ -1,16 +1,12 @@
 <template>
   <section>
-    <h1 class="text-6xl text-black font-semibold">
-      Welcome!
-    </h1>
-
-    <div class="mt-16 border-4 border-black p-12 shadow-[8px_8px_0_black]">
-      <Content class="prose-xl text-black prose prose-zinc [&>div>:first-child]:mt-0 [&>div>:last-child]:mb-0" />
+    <div class="border-4 border-black p-12 shadow-[8px_8px_0_black]">
+      <Content class="prose prose-sky [&>div>:first-child]:mt-0 [&>div>:last-child]:mb-0" />
     </div>
   </section>
 
   <section class="mt-16">
-    <h2 class="text-4xl text-black font-semibold">
+    <h2 class="text-4xl font-semibold">
       Find me online
     </h2>
 

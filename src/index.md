@@ -21,6 +21,5 @@ I favor simplicity over complexity when creating user experiences. I focus
 on details to deliver the best possible product that pleases both the
 client and the user.
 
-Thus, I've developed expertise in **JavaScript**, **TypeScript**, **Vue** ,
-**Nuxt**, **React**, **Nextjs**, which aids me in thoroughly understanding the
-client's needs and proposing the best solutions.
+Thus, I've developed expertise in JavaScript <IconTag icon='i-logos-javascript' text='JavaScript'/>, <IconTag icon='i-logos-typescript-icon' text='TypeScript'/>, <IconTag icon='i-logos-vue' text='Vue'/>, <IconTag icon='i-logos-nuxt-icon' text='Nuxt'/>, <IconTag icon='i-logos-react' text='React'/>, <IconTag icon='i-logos-nextjs-icon' text='Nextjs'/>,
+which aids me in thoroughly understanding the client's needs and proposing the best solutions.

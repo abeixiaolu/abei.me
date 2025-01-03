@@ -5,7 +5,7 @@ const { frontmatter } = useData();
 
 <template>
   <div class="min-h-screen">
-    <TheHeader class="top-0 z-10" />
+    <TheHeader class="sticky top-0 z-10" />
     <div class="px-4 py-16">
       <main class="mx-auto max-w-screen-md">
         <Home v-if="frontmatter.layout === 'home'" />

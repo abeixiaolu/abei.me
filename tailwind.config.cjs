@@ -16,7 +16,7 @@ module.exports = {
               "--tw-prose-bullets": "var(--color-blue-light)",
             },
             hr: {
-              "border-top": "2px solid var(--color-yellow)",
+              "border-top": "2px solid var(--color-gray)",
             },
             code: {
               backgroundColor: "var(--color-gray)",
@@ -39,7 +39,7 @@ module.exports = {
     },
     fontFamily: {
       sans: [
-        "LXGWMarkerGothic",
+        // "LXGWMarkerGothic",
         "ui-sans-serif",
         "system-ui",
         "-apple-system",

@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="border-4 border-black p-4 lg:p-12 shadow-[8px_8px_0_black]">
-      <Content class="prose prose-sm [&>div>:first-child]:mt-0 [&>div>:last-child]:mb-0" />
+      <Content class="prose dark:prose-invert prose-sm [&>div>:first-child]:mt-0 [&>div>:last-child]:mb-0" />
     </div>
   </section>
 

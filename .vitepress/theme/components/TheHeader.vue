@@ -4,10 +4,10 @@ console.log('site: ', site);
 </script>
 
 <template>
-  <header class="border-b-4 border-black bg-white px-8 py-4">
+  <header class="border-b-4 border-black px-8 py-4">
     <div class="mx-auto max-w-screen-md flex flex-col items-center justify-between gap-6 md:flex-row">
       <span>
-        <a href="/" class="text-2xl text-black font-semibold">
+        <a href="/" class="text-2xl font-semibold">
           {{ site.title }}
         </a>
       </span>

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-const { site, } = useData()
-console.log('site: ', site);
+const { site } = useData()
 </script>
 
 <template>

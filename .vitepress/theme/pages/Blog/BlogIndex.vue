@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { data } from "../../../data/blog.data";
+import { data } from '../../../data/blog.data'
 
-const { frontmatter } = useData();
+const { frontmatter } = useData()
 </script>
 
 <template>
@@ -15,7 +15,9 @@ const { frontmatter } = useData();
     </div>
 
     <div class="flex justify-center">
-      <ButtonPrimary href="/"> Back to Home </ButtonPrimary>
+      <ButtonPrimary href="/">
+        Back to Home
+      </ButtonPrimary>
     </div>
   </section>
 </template>

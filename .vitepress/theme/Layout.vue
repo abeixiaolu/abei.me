@@ -1,6 +1,5 @@
 <script setup lang="ts">
-
-const { frontmatter } = useData();
+const { frontmatter } = useData()
 </script>
 
 <template>

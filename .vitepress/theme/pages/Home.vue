@@ -23,8 +23,10 @@
         BlueSky
       </ButtonSecondary>
 
-      <ButtonSecondary href="https://music.163.com/#/user/home?id=130837120" target="_blank"
-        icon="i-simple-icons-neteasecloudmusic text-red-500">
+      <ButtonSecondary
+        href="https://music.163.com/#/user/home?id=130837120" target="_blank"
+        icon="i-simple-icons-neteasecloudmusic text-red-500"
+      >
         网易云音乐
       </ButtonSecondary>
     </div>

@@ -25,12 +25,12 @@ module.exports = {
               fontWeight: "bold",
             },
             pre: {
-              "background-color": "#F8F8F4",
+              // "background-color": "#F8F8F4",
               "border-radius": "0",
               border: "2px solid black",
               margin: "0",
               "&>code": {
-                backgroundColor: "#F8F8F4",
+                // backgroundColor: "#F8F8F4",
               },
             },
           },

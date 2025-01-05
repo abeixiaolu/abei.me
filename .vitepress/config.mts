@@ -51,7 +51,7 @@ export default defineConfig({
     ],
   },
   markdown: {
-    theme: "everforest-light",
+    theme: "ayu-dark",
     config(md) {
       md.use(MarkdownItGithubAlerts);
     },

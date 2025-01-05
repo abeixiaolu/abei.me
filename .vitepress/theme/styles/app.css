@@ -25,6 +25,10 @@
   --color-text: #d1cdc2;
 }
 
+::selection {
+  background-color: #6494b550;
+}
+
 @layer base {
   @font-face {
     font-family: "LXGWMarkerGothic";

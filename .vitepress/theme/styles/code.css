@@ -15,3 +15,9 @@ div[class*="language-"] > span.lang {
   font-size: 12px;
   font-weight: 500;
 }
+
+.vp-code .line.highlighted {
+  display: inline-block;
+  background-color: #fff4;
+  width: 100%;
+}

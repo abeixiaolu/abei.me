@@ -1,6 +1,6 @@
 ---
 title: VitePress 自动生成侧边栏
-description: vitepress | auto generate sidebar | 自动生成侧边栏
+description: vitepress | auto generate sidebar
 date: 2025-01-03
 ---
 
@@ -102,10 +102,15 @@ const options = computed(() => {
     })
   })
 
-  return Object.values(groupedOptions).map((item: any) => ({
-    ...item,
-    label: `${item.label}(${item.children.length})`,
-  }))
+  const menuOptions = Object.values(groupedOptions)
+    .map((item: any) => ({ ...item, label: `${item.label}(${item.children.length})` }))
+  const defaultGroupIndex = menuOptions.findIndex((item: any) => item.key === 'default' && item.type === 'group')
+  if (defaultGroupIndex !== -1) {
+    const defaultGroup = menuOptions.splice(defaultGroupIndex, 1)
+    menuOptions.unshift(...defaultGroup[0].children)
+  }
+
+  return menuOptions
 })
 ```
 

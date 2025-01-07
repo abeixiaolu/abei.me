@@ -6,8 +6,16 @@
   --color-caution: var(--color-red);
   --color-important: var(--color-purple);
   --color-important-bg: #7e7ece20;
+  --color-note-bg: #6494b520;
+  --color-tip-bg: #7ecebf20;
 }
 
 .markdown-alert.markdown-alert-important {
   background-color: var(--color-important-bg);
+}
+.markdown-alert.markdown-alert-tip {
+  background-color: var(--color-tip-bg);
+}
+.markdown-alert.markdown-alert-note {
+  background-color: var(--color-note-bg);
 }

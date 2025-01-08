@@ -71,8 +71,6 @@ date: 2024-12-31
 
 ## 设备清单
 
-## 设备
-
 - `IPhone 15 Pro`
 - `AirPods 4`
 - `Macbook Pro 14`

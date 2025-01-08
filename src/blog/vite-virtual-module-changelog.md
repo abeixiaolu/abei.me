@@ -156,7 +156,7 @@ console.log(data) // 输出虚拟模块的内容
     </template>
     ```
 
-4. 在 vite.config.ts 中使用该插件：
+4. 在 `vite.config.ts` 中使用该插件：
 
     ```ts
     import { ChangeLog } from './plugins/changelog'

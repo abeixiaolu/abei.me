@@ -1,15 +1,3 @@
-:root {
-  --color-note: var(--color-blue);
-  --color-tip: var(--color-cyan);
-  --color-warning: var(--color-yellow);
-  --color-severe: var(--color-severe);
-  --color-caution: var(--color-red);
-  --color-important: var(--color-purple);
-  --color-important-bg: #7e7ece20;
-  --color-note-bg: #6494b520;
-  --color-tip-bg: #7ecebf20;
-}
-
 .markdown-alert.markdown-alert-important {
   background-color: var(--color-important-bg);
 }

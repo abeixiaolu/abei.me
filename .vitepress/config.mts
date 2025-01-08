@@ -18,7 +18,7 @@ export default defineConfig({
   lang: 'zh-CN',
   title: 'Artsmp\'s Blog',
   description: 'A blog about study and life',
-  sitemap: { hostname: 'https://example.com' },
+  sitemap: { hostname: 'https://artsmp-me.pages.dev' },
   head: [
     ['meta', { name: 'twitter:site', content: '@abei557832' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
@@ -106,7 +106,7 @@ export default defineConfig({
       {
         rel: 'canonical',
         href: joinURL(
-          'https://example.com',
+          'https://artsmp-me.pages.dev',
           withoutTrailingSlash(pageData.filePath.replace(/(index)?\.md$/, '')),
         ),
       },
@@ -117,7 +117,7 @@ export default defineConfig({
       {
         property: 'og:url',
         content: joinURL(
-          'https://example.com',
+          'https://artsmp-me.pages.dev',
           withoutTrailingSlash(pageData.filePath.replace(/(index)?\.md$/, '')),
         ),
       },
@@ -138,14 +138,14 @@ export default defineConfig({
         'meta',
         {
           property: 'og:image',
-          content: joinURL('https://example.com', 'og', ogName),
+          content: joinURL('https://artsmp-me.pages.dev', 'og', ogName),
         },
       ],
       [
         'meta',
         {
           name: 'twitter:image',
-          content: joinURL('https://example.com', 'og', ogName),
+          content: joinURL('https://artsmp-me.pages.dev', 'og', ogName),
         },
       ],
     )

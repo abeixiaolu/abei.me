@@ -102,7 +102,6 @@ cask "raycast"
 cask "snipaste"
 cask "wechat"
 cask "wetype"
-cask "wezterm"
 cask "zen-browser"
 cask "stats"
 cask "neteasemusic"
@@ -120,7 +119,7 @@ Immersive Translate
 Clicknow: https://clicknow.ai
 ```
 
-## 终端等配置
+## 终端工具配置
 
 1. 拷贝[线上配置目录](https://github.com/abeixiaolu/.config)到本地。
 2. 安装 [starship](https://starship.rs/): `curl -sS https://starship.rs/install.sh | sh`
@@ -193,8 +192,83 @@ Clicknow: https://clicknow.ai
           name = shenmengping
           email = shenmengping@gupo.onaliyun.com
         ```
-6. 从 iCloud 上恢复一些必要文件例如 `.ssh, .logseq` 目录。
+6. 从 iCloud 上恢复一些必要文件例如 `.ssh, .logseq` 目录。记得要修改目录和文件的权限。
+    ```bash
+    chmod 700 ~/.ssh
+    chmod 600 ~/.ssh/id_rsa
+    chmod 644 ~/.ssh/id_rsa.pub
+    eval "$(ssh-agent -s)"  # 启动SSH Agent
+    ssh-add ~/.ssh/id_rsa   # 添加私钥
+    ```
 
+## vscode｜cursor 配置
+
+安装依赖采用脚本安装：
+```sh
+#!/usr/bin/env bash
+
+cat extensions.txt | while read extension || [[ -n $extension ]];
+do
+  cursor --install-extension $extension --force
+done
+
+cursor --list-extensions
+```
+需要在同级目录放置一个 `extensions.txt` 文件，里面存放的是 `code --list-extensions` 的输出内容。下面是我用到的一些扩展：
+
+```
+aaron-bond.better-comments
+antfu.iconify
+antfu.icons-carbon
+antfu.theme-vitesse
+antfu.unocss
+astro-build.astro-vscode
+bradlc.vscode-tailwindcss
+christian-kohler.path-intellisense
+dbaeumer.vscode-eslint
+devsense.composer-php-vscode
+dsznajder.es7-react-js-snippets
+eamodio.gitlens
+esbenp.prettier-vscode
+gruntfuggly.bettercomment
+johnsoncodehk.vscode-tsconfig-helper
+naumovs.color-highlight
+pkief.material-icon-theme
+prisma.prisma
+raunofreiberg.vesper
+rust-lang.rust-analyzer
+serayuzgur.crates
+streetsidesoftware.code-spell-checker
+tamasfe.even-better-toml
+usernamehw.errorlens
+vue.volar
+whtouche.vscode-js-console-utils
+xiaoluabei.xiaoluabei-vscode-theme
+yandeu.five-server
+yoavbls.pretty-ts-errors
+yummygum.city-lights-icon-vsc
+yzhang.markdown-all-in-one
+```
+
+我还会修改一些默认快捷键 `cmd+shift+p` 打开命令面板，搜索 `Open Keyboard Shortcuts` 打开快捷键配置文件：
+```json
+[
+  {
+    "key": "cmd+i",
+    "command": "-inlineChat.start",
+    "when": "editorFocus && inlineChatHasProvider && !editorReadonly"
+  },
+  {
+    "key": "cmd+i",
+    "command": "-composer.startComposerPrompt",
+    "when": "composerIsEnabled"
+  },
+  {
+    "key": "shift+cmd+l",
+    "command": "-aichat.insertselectionintochat"
+  }
+]
+```
 ## 其它
 
 禁用 macOS 默认输入法，仅采用微信输入法。可以参考这篇文章：[macOS 禁用自带的 ABC 输入法](https://rokcso.com/p/macos-remove-abc/)。
@@ -209,3 +283,10 @@ sudo spctl --master-disable
 xattr -cr /Applications/WeChat.app
 ```
 如果仍然打不开，则需要打开**系统设置 – 隐私和安全性，“安全性” 下面出现提示，点击 “仍要打开”**，当然该操作仅需要一次，以后可以正常打开。
+
+## 结束
+
+自己整体跑了一遍这个流程，整体配置下来还是很快的。常用的在用户家目录下的配置我一般会复制一份到 `iCloud` 中，这样复制出来改改权限基本就可以用了。
+不过也有几个痛点：
+1. raycast 配置拷贝出来后，再拷贝回去好像他并不会读取，需要重新配置。当然我基本上就是几个插件和快捷键，问题不大。
+2. 不知道有没有办法自动同步几个目录到 `iCloud` 中，这样我就可以不用每次手动同步了，之后有时间可以研究一下这个。

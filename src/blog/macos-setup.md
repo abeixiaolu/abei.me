@@ -55,6 +55,11 @@ defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.Web
 ```
 > [!TIP]
 > 执行完记得注销重新登录
+>
+> 备份时需要递归删除某个目录下的所有`node_modules`目录，记录一下命令：
+> ```bash
+> find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
+> ```
 
 ## 软件安装
 

@@ -65,6 +65,8 @@ defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.Web
 
 由于国内环境，首先需要安装代理软件，这里使用 `Quantumult X` 作为代理软件。导入订阅，我使用的是[白月光](https://www.bygcloud.com/dashboard)，不过它最近有点不稳定，我也不知道是我电脑问题还是什么，时不时会断流。
 
+安装 `Homebrew`：
+
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
@@ -269,6 +271,116 @@ yzhang.markdown-all-in-one
   }
 ]
 ```
+
+::: details 下面再贴一下我的 `vscode` 配置，有需要可以展开看看：
+```json
+{
+  "window.commandCenter": false,
+  "window.nativeTabs": true,
+  "window.nativeFullScreen": false,
+  "window.dialogStyle": "custom",
+  "window.title": "${rootName}",
+  "window.titleBarStyle": "custom",
+  "window.autoDetectColorScheme": true,
+  // workbench
+  "workbench.preferredLightColorTheme": "Xiaolu Abei Light",
+  "workbench.preferredDarkColorTheme": "Xiaolu Abei Dark",
+  "workbench.layoutControl.enabled": false,
+  "workbench.tree.indent": 12,
+  "workbench.tree.renderIndentGuides": "none",
+  "workbench.sideBar.location": "right",
+  "workbench.productIconTheme": "icons-carbon",
+  "workbench.iconTheme": "city-lights-icons-vsc",
+
+  "workbench.editor.customLabels.enabled": false,
+  "workbench.editor.customLabels.patterns": {
+    "**/views/**/index.vue": "${dirname} - View",
+    "**/components/**/*.vue": "${filename} - Component",
+    "**/utils/**/*.ts": "${filename} - Util",
+    "**/hooks/**/*.ts": "${filename} - Hook",
+    "**/composables/**/*.ts": "${filename} - Hook",
+    "**/router/**/*": "${filename} - Route",
+    "**/stores/**/*": "${filename} - Store",
+    "**/styles/**/*": "${filename} - Style",
+    "**/assets/**/*": "${filename} - Asset",
+    "**/docs/**/*": "${filename} - Docs(${extname})",
+    "**/examples/**/*": "${filename} - Examples"
+  },
+  // explorer
+  "explorer.compactFolders": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.sortOrder": "foldersNestsFiles",
+  "explorer.confirmPasteNative": false,
+  // editor
+  "editor.fontFamily": "Dank Mono, OperatorMonoLig Nerd Font Mono, Berkeley Mono, 方正悠宋 简",
+  "editor.fontWeight": "bold",
+  "editor.fontLigatures": true,
+  "editor.tabSize": 2,
+  "editor.lineHeight": 1.8,
+  "editor.fontSize": 15,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.cursorBlinking": "expand",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.smoothScrolling": true,
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "editor.suggestLineHeight": 20,
+  "editor.inlayHints.fontSize": 12,
+  "editor.suggestFontSize": 12,
+  "editor.suggestSelection": "first",
+  "editor.wordSeparators": "`~!#%^&*()=+[{]}\\|;:'\",.<>/?",
+  "editor.bracketPairColorization.enabled": false,
+  "editor.guides.bracketPairs": "active",
+  "editor.lightbulb.enabled": "off",
+  "editor.lineNumbers": "interval",
+  "editor.accessibilitySupport": "off",
+  "diffEditor.ignoreTrimWhitespace": true,
+  // terminal
+  "terminal.integrated.fontFamily": "Berkeley Mono",
+  "terminal.integrated.fontSize": 12,
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.persistentSessionReviveProcess": "never",
+  "terminal.integrated.stickyScroll.enabled": false,
+  "terminal.integrated.tabs.enabled": true,
+  // language
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "[json, css, jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "files.associations": {
+    "*.toml": "yaml"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer"
+  },
+  // plugins
+  "color-highlight.markerType": "dot-before",
+  "gitlens.graph.layout": "editor",
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "errorLens.fontSize": "12px",
+  "errorLens.enabledDiagnosticLevels": ["error", "warning"],
+  "cSpell.userWords": [],
+  "[php]": {
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  },
+  "git.enableSmartCommit": true
+}
+```
+:::
+
 ## 其它
 
 禁用 macOS 默认输入法，仅采用微信输入法。可以参考这篇文章：[macOS 禁用自带的 ABC 输入法](https://rokcso.com/p/macos-remove-abc/)。

@@ -65,3 +65,31 @@ fi
 ```
 
 执行完之后，运行 `git push --force` 强制推送到远程仓库。
+
+## 开了翻墙推送报错
+
+遇到如下错误，只需要把 ssh 的 remote地址修改为 https 的即可。
+```bash
+artsmp.me on  main [⇡] is 📦 v1.0.0 via ⬢ v22.13.0 took 4m12s
+○ gps
+Connection closed by 198.18.1.36 port 22
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+```
+
+逐条运行下面的命令：
+```bash
+# 查看自己的 remote 地址和名称
+git remote -v
+
+# 修改为 https 的地址
+git remote remove origin
+git remote add origin https://github.com/abeixiaolu/artsmp.me.git
+# or
+git remote set-url origin https://github.com/abeixiaolu/artsmp.me.git
+
+# 推送
+git push --set-upstream [名称] main
+```

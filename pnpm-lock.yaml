@@ -14,9 +14,6 @@ importers:
       '@egoist/tailwindcss-icons':
         specifier: ^1.8.2
         version: 1.8.2(tailwindcss@4.0.0)
-      '@iconify-json/simple-icons':
-        specifier: ^1.2.18
-        version: 1.2.18
       '@iconify/json':
         specifier: ^2.2.291
         version: 2.2.291

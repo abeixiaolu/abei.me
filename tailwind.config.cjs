@@ -38,28 +38,10 @@ module.exports = {
       },
     },
     fontFamily: {
-      sans: [
-        // "LXGWMarkerGothic",
-        'ui-sans-serif',
-        'system-ui',
-        '-apple-system',
-        'BlinkMacSystemFont',
-        'Segoe UI',
-        'Roboto',
-        'Helvetica Neue',
-        'Arial',
-        'Noto Sans',
-        'sans-serif',
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-        '"Noto Color Emoji"',
-      ],
       mono: ['DM Mono', 'ui-monospace', 'monospace'],
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
     iconsPlugin({
       collections: getIconCollections(['logos', 'solar', 'simple-icons']),
     }),

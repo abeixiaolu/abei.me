@@ -1,7 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital@0;1&display=swap");
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@config "../../../tailwind.config.cjs";
+
+@theme {
+  --color-primary: var(--color-green);
+}
 
 :root {
   --color-blue: #7eadce;
@@ -65,12 +69,12 @@
   background-color: #6494b550;
 }
 
-@layer base {
+/* @layer base {
   @font-face {
     font-family: "LXGWMarkerGothic";
     src: url("/LXGWMarkerGothic-Regular.ttf");
   }
-}
+} */
 
 html,
 body {

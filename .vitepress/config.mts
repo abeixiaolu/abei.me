@@ -1,5 +1,6 @@
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
 import MarkdownItGithubAlerts from 'markdown-it-github-alerts'
 import { joinURL, withoutTrailingSlash } from 'ufo'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -48,6 +49,7 @@ export default defineConfig({
         dirs: [composablesDir, utilsDir],
         dts: join(currentDir, 'auto-imports.d.ts'),
       }),
+      tailwindcss(),
     ],
   },
   markdown: {

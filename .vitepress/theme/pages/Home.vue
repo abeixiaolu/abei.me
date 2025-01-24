@@ -1,3 +1,12 @@
+<script lang="ts" setup>
+const socials = [
+  { href: 'https://x.com/xiaoluabei', icon: 'i-logos-twitter', name: 'Twitter' },
+  { href: 'https://github.com/abeixiaolu', icon: 'i-uiw-github', name: 'GitHub' },
+  { href: 'https://bsky.app/profile/xlabei.bsky.social', icon: 'i-logos-bluesky', name: 'BlueSky' },
+  { href: 'https://music.163.com/#/user/home?id=130837120', icon: 'i-simple-icons-neteasecloudmusic text-red-500', name: '网易云音乐' },
+]
+</script>
+
 <template>
   <section>
     <div class="border-4 border-black p-4 lg:p-12 shadow-[8px_8px_0_black]">
@@ -11,24 +20,9 @@
     </h2>
 
     <div class="mt-8 flex flex-wrap justify-center gap-4 md:justify-start">
-      <ButtonSecondary href="https://x.com/xiaoluabei" target="_blank" icon="i-logos-twitter">
-        Twitter
-      </ButtonSecondary>
-
-      <ButtonSecondary href="https://https://github.com/abeixiaolu" target="_blank" icon="i-logos-github-icon">
-        GitHub
-      </ButtonSecondary>
-
-      <ButtonSecondary href="https://bsky.app/profile/xlabei.bsky.social" target="_blank" icon="i-logos-bluesky">
-        BlueSky
-      </ButtonSecondary>
-
-      <ButtonSecondary
-        href="https://music.163.com/#/user/home?id=130837120" target="_blank"
-        icon="i-simple-icons-neteasecloudmusic text-red-500"
-      >
-        网易云音乐
-      </ButtonSecondary>
+      <Button v-for="social in socials" :key="social.href" variant="secondary" :href="social.href" target="_blank" :icon="social.icon">
+        {{ social.name }}
+      </Button>
     </div>
   </section>
 </template>

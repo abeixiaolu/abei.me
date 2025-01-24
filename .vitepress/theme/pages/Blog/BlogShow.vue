@@ -12,8 +12,8 @@ const { frontmatter } = useData()
   </article>
 
   <div class="mt-16 flex justify-center">
-    <ButtonPrimary href="/blog">
+    <Button href="/blog">
       Back to Blog
-    </ButtonPrimary>
+    </Button>
   </div>
 </template>

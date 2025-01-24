@@ -38,12 +38,13 @@ module.exports = {
       },
     },
     fontFamily: {
-      mono: ['DM Mono', 'ui-monospace', 'monospace'],
+      mono: ['Geist Mono', 'ui-monospace', 'monospace'],
+      sans: ['DotGothic16', 'ui-sans-serif', 'system-ui', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'],
     },
   },
   plugins: [
     iconsPlugin({
-      collections: getIconCollections(['logos', 'solar', 'simple-icons']),
+      collections: getIconCollections(['logos', 'solar', 'simple-icons', 'uiw']),
     }),
   ],
 }

@@ -7,18 +7,15 @@ defineProps<{
 </script>
 
 <template>
-  <article
-    class="group relative border-4 border-black p-4 shadow-[8px_8px_0_black] transition duration-150 ease-linear space-y-3 hover:shadow-[12px_12px_0_black] hover:-translate-x-1 hover:-translate-y-1"
-  >
-    <h2 class="text-2xl font-medium">
-      <a :href="post.url">
+  <Button variant="default" class="flex! justify-start" :href="post.url" size="lg">
+    <div>
+      <h2 class="md:text-xl font-medium mb-4">
         {{ post.frontmatter.title }}
-        <span class="absolute inset-0" />
-      </a>
-    </h2>
+      </h2>
 
-    <p>
-      {{ post.frontmatter.description }}
-    </p>
-  </article>
+      <p class="text-sm opacity-50">
+        {{ post.frontmatter.description }}
+      </p>
+    </div>
+  </Button>
 </template>

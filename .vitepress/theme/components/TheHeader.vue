@@ -8,13 +8,13 @@
       </span>
 
       <div class="flex items-center gap-3">
-        <ButtonPrimary href="/blog">
+        <Button size="sm" href="/blog">
           Blog
-        </ButtonPrimary>
+        </Button>
 
-        <ButtonPrimary href="/project">
+        <Button size="sm" href="/project">
           Project
-        </ButtonPrimary>
+        </Button>
       </div>
     </div>
   </header>

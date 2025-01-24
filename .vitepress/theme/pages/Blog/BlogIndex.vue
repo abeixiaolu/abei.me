@@ -5,19 +5,19 @@ const { frontmatter } = useData()
 </script>
 
 <template>
-  <section class="space-y-16">
+  <section class="space-y-8 md:space-y-16">
     <h1 class="text-4xl font-semibold">
       {{ frontmatter.title }}
     </h1>
 
-    <div class="space-y-10">
+    <div class="space-y-4">
       <BlogCard v-for="post in data" :key="post.url" :post="post" />
     </div>
 
     <div class="flex justify-center">
-      <ButtonPrimary href="/">
+      <Button href="/" size="md">
         Back to Home
-      </ButtonPrimary>
+      </Button>
     </div>
   </section>
 </template>

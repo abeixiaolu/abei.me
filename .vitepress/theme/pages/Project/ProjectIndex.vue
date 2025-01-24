@@ -11,7 +11,7 @@ const { frontmatter } = useData()
     </h1>
 
     <div v-for="section in data" :key="section.title" class="space-y-10">
-      <section class="space-y-6">
+      <section class="space-y-4">
         <h2 class="text-2xl font-semibold">
           {{ section.title }}
         </h2>
@@ -21,9 +21,9 @@ const { frontmatter } = useData()
     </div>
 
     <div class="flex justify-center">
-      <ButtonPrimary href="/">
+      <Button href="/" size="md">
         Back to Home
-      </ButtonPrimary>
+      </Button>
     </div>
   </section>
 </template>

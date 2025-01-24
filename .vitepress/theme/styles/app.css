@@ -1,58 +1,48 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital@0;1&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Geist+Mono:wght@100..900&display=swap');
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @config "../../../tailwind.config.cjs";
 
 @theme {
   --color-primary: var(--color-green);
+  --color-secondary: var(--color-magenta);
 }
 
 :root {
-  --color-blue: #7eadce;
-  --color-blue-light: #71a0c2;
-  --color-cyan: #7ecebf;
-  --color-cyan-light: #71c2b3;
-  --color-green: #7ece7e;
-  --color-green-light: #71c271;
-  --color-magenta: #7e7ece;
-  --color-magenta-light: #7171c2;
-  --color-orange: #cea67e;
-  --color-orange-light: #c29971;
-  --color-red: #ce7e7e;
-  --color-red-light: #c27171;
+  --color-blue: #5a86a6;
+  --color-green: #569056;
+  --color-magenta: #5a5aa6;
+  --color-orange: #a6805a;
+  --color-red: #a65a5a;
+  --color-cyan: #5aa698;
 
-  --color-important-bg: #7eadce20;
-  --color-note-bg: #7ecebf20;
-  --color-tip-bg: #7ece7e20;
-  --color-warning-bg: #cea67e20;
-  --color-severe-bg: #7e7ece20;
-  --color-caution-bg: #ce7e7e20;
+  --color-note-bg: #5a86a620;
+  --color-tip-bg: #56905620;
+  --color-important-bg: #5a5aa620;
+  --color-warning-bg: #a6805a20;
+  --color-severe-bg: #a65a5a20;
+  --color-caution-bg: #5aa69820;
 
   --color-note: var(--color-blue);
   --color-tip: var(--color-cyan);
-  --color-warning: var(--color-yellow);
-  --color-severe: var(--color-orange);
-  --color-caution: var(--color-red);
-  --color-important: var(--color-magenta);
+  --color-warning: var(--color-orange);
+  --color-severe: var(--color-red);
+  --color-caution: var(--color-magenta);
+  --color-important: var(--color-green);
 
   --color-gray: #8882;
-  --color-bg: #F8F8F0;
+  --color-bg: #ffffff;
   --color-text: #000;
 }
 
 .dark {
   --color-blue: #94b5c0;
-  --color-blue-light: #89a7b2;
   --color-cyan: #6eb4b4;
-  --color-cyan-light: #63a5a5;
   --color-green: #8ebf9d;
-  --color-green-light: #83b191;
   --color-magenta: #9d94bf;
-  --color-magenta-light: #9189b1;
   --color-orange: #bf9d94;
-  --color-orange-light: #b19189;
   --color-red: #cc8787;
-  --color-red-light: #bf7a7a;
 
   --color-important-bg: #94b5c020;
   --color-note-bg: #6eb4b420;
@@ -61,7 +51,7 @@
   --color-severe-bg: #9d94bf20;
   --color-caution-bg: #cc878720;
 
-  --color-bg: #111315;
+  --color-bg: #212325;
   --color-text: #d1cdc2;
 }
 

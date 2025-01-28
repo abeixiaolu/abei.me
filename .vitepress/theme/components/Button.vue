@@ -15,7 +15,7 @@ const button = tv({
       default: 'border-black before:border-black after:border-black',
     },
     size: {
-      sm: 'px-2 py-0.5 border-1 after:border-1 before:border-1 after:border-l-0 after:border-t-0 before:border-r-0 before:border-b-0 after:bottom-[1px] after:right-[1px] before:top-[1px] before:left-[1px] hover:after:border-r-[2px] hover:after:border-b-[2px] hover:after:bottom-[-2px] hover:after:right-[-2px]',
+      sm: 'px-2 py-0.5 border-2 after:border-2 before:border-2 after:border-l-0 after:border-t-0 before:border-r-0 before:border-b-0 after:bottom-[2px] after:right-[2px] before:top-[2px] before:left-[2px] hover:after:border-r-[4px] hover:after:border-b-[4px] hover:after:bottom-[-4px] hover:after:right-[-4px]',
       md: 'px-3 py-1.5 border-2 after:border-2 before:border-2 after:border-l-0 after:border-t-0 before:border-r-0 before:border-b-0 after:bottom-[2px] after:right-[2px] before:top-[2px] before:left-[2px] hover:after:border-r-[4px] hover:after:border-b-[4px] hover:after:bottom-[-4px] hover:after:right-[-4px]',
       lg: 'px-6 py-4 border-4 after:border-4 before:border-4 after:border-l-0 after:border-t-0 before:border-r-0 before:border-b-0 after:bottom-[4px] after:right-[4px] before:top-[4px] before:left-[4px] hover:after:border-r-[8px] hover:after:border-b-[8px] hover:after:bottom-[-8px] hover:after:right-[-8px]',
     },
@@ -27,7 +27,7 @@ const button = tv({
     {
       size: 'sm',
       smooth: true,
-      class: 'hover:before:translate-x-[-2px] hover:before:translate-y-[-2px]',
+      class: 'hover:before:translate-x-[-4px] hover:before:translate-y-[-4px]',
     },
     {
       size: 'md',

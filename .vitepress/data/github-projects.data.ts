@@ -22,7 +22,7 @@ export default {
         projects: ['abeixiaolu/rustfinity', 'abeixiaolu/nuxt-tutorial'],
       },
     ]
-    const env = loadEnv('', join(process.cwd(), 'src'))
+    const env = loadEnv('', join(process.cwd(), '.'))
     const octokit = new Octokit({ auth: env.VITE_GITHUB_TOKEN })
 
     const loadedProjects = await Promise.all(

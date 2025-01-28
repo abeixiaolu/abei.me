@@ -89,3 +89,7 @@ body {
   animation: wave 1s infinite;
   display: inline-block;
 }
+
+strong {
+  @apply text-rose-300 dark:text-rose-500 px-1;
+}

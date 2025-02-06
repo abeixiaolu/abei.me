@@ -14,12 +14,16 @@ export default {
   async load() {
     const projects = [
       {
+        title: 'Personal',
+        projects: ['abei.me'],
+      },
+      {
         title: 'Vscode Theme',
-        projects: ['abeixiaolu/xiaoluabei-vscode-theme'],
+        projects: ['xiaoluabei-vscode-theme'],
       },
       {
         title: 'Learning',
-        projects: ['abeixiaolu/rustfinity', 'abeixiaolu/nuxt-tutorial'],
+        projects: ['rustfinity', 'nuxt-tutorial', 'php-study'],
       },
     ]
     const env = loadEnv('', join(process.cwd(), '.'))
@@ -28,16 +32,14 @@ export default {
     const loadedProjects = await Promise.all(
       projects.map(async (project) => {
         const projects = await Promise.all(
-          project.projects.map(async (project) => {
-            const [owner, repo] = project.split('/')
-
+          project.projects.map(async (repo) => {
             const { data } = await octokit.rest.repos.get({
-              owner,
+              owner: 'abeixiaolu',
               repo,
             })
 
             return {
-              name: project,
+              name: repo,
               description: data.description,
               url: data.html_url,
             } satisfies Project

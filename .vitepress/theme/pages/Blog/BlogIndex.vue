@@ -13,19 +13,16 @@ const newData = computed(() => {
   })
   return groupedByYear
 })
-const { frontmatter } = useData()
 </script>
 
 <template>
   <section class="space-y-8 md:space-y-16">
-    <h1 class="text-4xl font-semibold">
-      {{ frontmatter.title }}
-    </h1>
+    <PageHeader />
 
     <div v-for="[year, blogs] in newData" :key="year" class="mt-4">
-      <LineYear :year="year" />
+      <StrokeLineText :text="year" />
       <div class="space-y-4">
-        <BlogCard v-for="blog in blogs" :key="blog.url" :post="blog" />
+        <BlogItem v-for="blog in blogs" :key="blog.url" :post="blog" />
       </div>
     </div>
 

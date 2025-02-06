@@ -1,9 +1,13 @@
 <script lang="ts" setup>
 import type { ContentData } from 'vitepress'
 
-defineProps<{
+const props = defineProps<{
   post: ContentData
 }>()
+
+const date = computed(() =>
+  props.post.frontmatter.date.split('T')[0].split('-').slice(1).join('-'),
+)
 </script>
 
 <template>
@@ -12,7 +16,7 @@ defineProps<{
       {{ post.frontmatter.title }}
     </a>
     <span class="text-sm text-[#888A]">
-      {{ post.frontmatter.date.split('T')[0] }}
+      {{ date }}
     </span>
   </div>
 </template>

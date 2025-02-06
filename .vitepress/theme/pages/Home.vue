@@ -10,6 +10,16 @@ const socials = [
 <template>
   <section>
     <div class="border-4 border-black p-4 lg:p-12 shadow-[8px_8px_0_black]">
+      <div class="flex items-center gap-4 mb-4 lg:mb-8">
+        <img
+          src="/avatar.png"
+          alt="Profile Picture"
+          class="h-28 w-28 my-0 border-4 border-black rounded-full"
+        >
+        <h1 class="text-4xl">
+          abei.me
+        </h1>
+      </div>
       <Content class="prose dark:prose-invert prose-sm [&>div>:first-child]:mt-0 [&>div>:last-child]:mb-0" />
     </div>
   </section>

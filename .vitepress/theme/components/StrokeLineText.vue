@@ -13,6 +13,6 @@ const fontSize = computed(() => {
 
 <template>
   <div class="relative select-none h-10 z-0">
-    <span :class="fontSize" class="absolute font-bold z-[-1] text-gray-400/20 dark:[-webkit-text-stroke:1px_rgba(255,255,255,0.3)] [-webkit-text-stroke:1px_rgba(0,0,0,0.3)] pointer-events-none">{{ text }}</span>
+    <span :class="fontSize" class="absolute font-bold z-[-1] text-gray-400/5 dark:[-webkit-text-stroke:1px_rgba(255,255,255,0.3)] [-webkit-text-stroke:1px_rgba(0,0,0,0.3)] pointer-events-none">{{ text }}</span>
   </div>
 </template>

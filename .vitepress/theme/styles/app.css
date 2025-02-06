@@ -32,7 +32,7 @@
   --color-important: var(--color-green);
 
   --color-gray: #8882;
-  --color-bg: #ffffff;
+  --color-bg: #fcfcff;
   --color-text: #000;
 }
 
@@ -70,6 +70,10 @@
     font-family: "anwt";
     src: url("/font/anwt.woff2");
   }
+  @font-face {
+    font-family: "LXGWNeoZhiSongPlus";
+    src: url("/font/LXGWNeoZhiSongPlus.ttf");
+  }
 }
 
 html,
@@ -97,5 +101,5 @@ body {
 }
 
 strong {
-  @apply text-rose-300 dark:text-rose-500 px-1;
+  @apply text-rose-400 dark:text-rose-500 px-1;
 }

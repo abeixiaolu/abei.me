@@ -38,7 +38,7 @@ module.exports = {
       },
     },
     fontFamily: {
-      sans: ['anwt', 'ui-sans-serif', 'system-ui', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'],
+      sans: ['anwt', 'LXGWNeoZhiSongPlus', 'ui-sans-serif', 'system-ui', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'],
     },
   },
   plugins: [

@@ -8,7 +8,7 @@ const { frontmatter } = useData()
       {{ frontmatter.title }}
     </h1>
 
-    <Content class="prose dark:prose-invert prose-sm" />
+    <Content class="prose prose-sm sm:prose-base dark:prose-invert" />
   </article>
 
   <div class="mt-16 flex justify-center">

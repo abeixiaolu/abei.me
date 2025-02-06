@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap');
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @config "../../../tailwind.config.cjs";
@@ -55,15 +54,19 @@
 }
 
 ::selection {
-  background-color: #6494b550;
+  background-color: #56905650;
 }
 
-/* @layer base {
+.dark ::selection {
+  background-color: #8ebf9d50;
+}
+
+@layer base {
   @font-face {
-    font-family: "LXGWMarkerGothic";
-    src: url("/LXGWMarkerGothic-Regular.ttf");
+    font-family: "anwt";
+    src: url("/font/anwt.woff2");
   }
-} */
+}
 
 html,
 body {

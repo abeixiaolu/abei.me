@@ -1,20 +1,19 @@
 <template>
-  <header class="border-b-4 border-black px-8 py-4">
+  <header class="px-8 py-4">
     <div class="relative mx-auto max-w-screen-md flex items-center justify-between gap-6">
       <span>
         <a href="/">
-          <Logo class="absolute top-[-6px] left-0" />
+          <h1 class="uppercase text-2xl">Abei</h1>
         </a>
       </span>
 
-      <div class="flex items-center gap-3">
-        <Button size="sm" href="/blog">
+      <div class="flex items-center gap-4">
+        <a href="/blog">
           Blog
-        </Button>
-
-        <Button size="sm" href="/project">
+        </a>
+        <a href="/project">
           Project
-        </Button>
+        </a>
       </div>
     </div>
   </header>

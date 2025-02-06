@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 const socials = [
-  { href: 'https://x.com/xiaoluabei', icon: 'i-logos-twitter', name: 'Twitter' },
-  { href: 'https://github.com/abeixiaolu', icon: 'i-uiw-github', name: 'GitHub' },
-  { href: 'https://bsky.app/profile/xlabei.bsky.social', icon: 'i-logos-bluesky', name: 'BlueSky' },
-  { href: 'https://music.163.com/#/user/home?id=130837120', icon: 'i-simple-icons-neteasecloudmusic text-red-500', name: '网易云音乐' },
+  { href: 'https://x.com/xiaoluabei', icon: 'i-mdi-twitter-circle', name: 'Twitter' },
+  { href: 'https://github.com/abeixiaolu', icon: 'i-mdi-github', name: 'GitHub' },
+  { href: 'https://bsky.app/profile/xlabei.bsky.social', icon: 'i-fa6-brands-square-bluesky text-[15px]', name: 'BlueSky' },
+  { href: 'https://music.163.com/#/user/home?id=130837120', icon: 'i-simple-icons-neteasecloudmusic text-[15px]', name: '网易云音乐' },
 ]
 </script>
 

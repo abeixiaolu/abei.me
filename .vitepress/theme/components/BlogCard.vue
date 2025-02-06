@@ -7,15 +7,12 @@ defineProps<{
 </script>
 
 <template>
-  <Button variant="default" class="flex! justify-start" :href="post.url" size="lg">
-    <div>
-      <h2 class="md:text-xl font-medium mb-4">
-        {{ post.frontmatter.title }}
-      </h2>
-
-      <p class="text-sm opacity-50">
-        {{ post.frontmatter.description }}
-      </p>
-    </div>
-  </Button>
+  <div class="flex items-center justify-between gap-2 min-w-0">
+    <a :href="post.url" class="truncate hover:underline underline-offset-4 hover:text-primary transition-all duration-200 ease-linear">
+      {{ post.frontmatter.title }}
+    </a>
+    <span class="text-sm text-[#888A]">
+      {{ post.frontmatter.date.split('T')[0] }}
+    </span>
+  </div>
 </template>

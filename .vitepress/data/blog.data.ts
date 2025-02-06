@@ -6,6 +6,7 @@ export { data }
 
 export default createContentLoader('blog/*.md', {
   transform(data) {
+    // 按日期排序
     return data.sort(
       (a, b) =>
         new Date(b.frontmatter.date).getTime()

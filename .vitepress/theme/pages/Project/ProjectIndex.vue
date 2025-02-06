@@ -15,8 +15,11 @@ const { frontmatter } = useData()
         <h2 class="text-2xl font-semibold">
           {{ section.title }}
         </h2>
-
-        <ProjectCard v-for="project in section.projects" :key="project.url" :project="project" />
+        <div v-for="project in section.projects" :key="project.url" class="flex items-center justify-between gap-2 min-w-0">
+          <a :href="project.url" class="truncate hover:underline underline-offset-4 hover:text-primary transition-all duration-200 ease-linear">
+            {{ project.name }}
+          </a>
+        </div>
       </section>
     </div>
 

@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import { data } from '../../../data/blog.data'
 
+const newData = computed(() => {
+  // 根据年份分组
+  const groupedByYear: Map<number, any[]> = new Map()
+  data.forEach((item) => {
+    const year = new Date(item.frontmatter.date).getFullYear()
+    if (!groupedByYear.has(year)) {
+      groupedByYear.set(year, [])
+    }
+    groupedByYear.get(year)!.push(item)
+  })
+  return groupedByYear
+})
 const { frontmatter } = useData()
 </script>
 
@@ -10,8 +22,11 @@ const { frontmatter } = useData()
       {{ frontmatter.title }}
     </h1>
 
-    <div class="space-y-4">
-      <BlogCard v-for="post in data" :key="post.url" :post="post" />
+    <div v-for="[year, blogs] in newData" :key="year" class="mt-4">
+      <LineYear :year="year" />
+      <div class="space-y-4">
+        <BlogCard v-for="blog in blogs" :key="blog.url" :post="blog" />
+      </div>
     </div>
 
     <div class="flex justify-center">

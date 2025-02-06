@@ -22,6 +22,8 @@
   --color-severe-bg: #a65a5a20;
   --color-caution-bg: #5aa69820;
 
+  --color-grid: #56905610;
+
   --color-note: var(--color-blue);
   --color-tip: var(--color-cyan);
   --color-warning: var(--color-orange);
@@ -49,6 +51,8 @@
   --color-severe-bg: #9d94bf20;
   --color-caution-bg: #cc878720;
 
+  --color-grid: #8ebf9d10;
+
   --color-bg: #212325;
   --color-text: #d1cdc2;
 }
@@ -72,6 +76,21 @@ html,
 body {
   color: var(--color-text);
   background-color: var(--color-bg);
+  background-image:
+    linear-gradient(-180deg,
+      rgba(255, 255, 255, 0),
+      var(--color-bg)),
+    linear-gradient(to right, var(--color-grid) 1px, transparent 0),
+    linear-gradient(to bottom, var(--color-grid) 1px, transparent 0);
+  background-size:
+    100% 100%,
+    20px 20px,
+    20px 20px;
+  background-position:
+    0 0,
+    0 0,
+    0 0;
+  background-repeat: no-repeat, repeat, repeat;
 }
 
 @keyframes wave {

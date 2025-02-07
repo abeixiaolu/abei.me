@@ -383,23 +383,27 @@ yzhang.markdown-all-in-one
 
 ## 其它
 
-禁用 macOS 默认输入法，仅采用微信输入法。可以参考这篇文章：[macOS 禁用自带的 ABC 输入法](https://rokcso.com/p/macos-remove-abc/)。
+1. 禁用 macOS 默认输入法，仅采用微信输入法。可以参考这篇文章：[macOS 禁用自带的 ABC 输入法](https://rokcso.com/p/macos-remove-abc/)。
 
-遇到软件提示已损坏，先打开允许任何来源：
-```bash
-sudo spctl --master-disable
-```
-然后针对这个软件运行：
-```bash
-# 地址可以从访达中拖入终端
-xattr -cr /Applications/WeChat.app
-```
-如果仍然打不开，则需要打开**系统设置 – 隐私和安全性，“安全性” 下面出现提示，点击 “仍要打开”**，当然该操作仅需要一次，以后可以正常打开。
+2. 遇到软件提示已损坏，先打开允许任何来源：
+    ```bash
+    sudo spctl --master-disable
+    ```
+    然后针对这个软件运行：
+    ```bash
+    # 地址可以从访达中拖入终端
+    xattr -cr /Applications/WeChat.app
+    ```
+    如果仍然打不开，则需要打开**系统设置 – 隐私和安全性，“安全性” 下面出现提示，点击 “仍要打开”**，当然该操作仅需要一次，以后可以正常打开。
 
-homebrew 更新所有已安装软件：
-```bash
-brew update && brew upgrade && brew cleanup
-```
+3. homebrew 更新所有已安装软件：
+    ```bash
+    brew update && brew upgrade && brew cleanup
+    ```
+4. 开启允许任何来源软件，然后到设置中选择任何来源：
+    ```bash
+    sudo spctl --master-enable
+    ```
 
 ## 结束
 

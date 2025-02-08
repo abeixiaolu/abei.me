@@ -4,6 +4,7 @@ const navList = computed(() => {
   return [
     { name: 'Blog', path: '/blog', active: route.path.startsWith('/blog') },
     { name: 'Project', path: '/project', active: route.path.startsWith('/project') },
+    { name: 'Demo', path: '/demo', active: route.path.startsWith('/demo') },
   ]
 })
 </script>

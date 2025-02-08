@@ -10,6 +10,7 @@ import { genOg } from './genOg'
 
 const currentDir = dirname(fileURLToPath(import.meta.url))
 const componentsDir = join(currentDir, 'theme/components')
+const demoDir = join(currentDir, '../src/demo')
 const pagesDir = join(currentDir, 'theme/pages')
 const composablesDir = join(currentDir, 'theme/composables')
 const utilsDir = join(currentDir, 'theme/utils')
@@ -35,12 +36,12 @@ export default defineConfig({
       {
         name: 'watcher',
         configureServer(server) {
-          server.watcher.add([componentsDir, pagesDir])
+          server.watcher.add([componentsDir, pagesDir, demoDir])
           server.watcher.add([composablesDir, utilsDir])
         },
       },
       Components({
-        dirs: [componentsDir, pagesDir],
+        dirs: [componentsDir, pagesDir, demoDir],
         include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
         dts: join(currentDir, 'components.d.ts'),
       }),

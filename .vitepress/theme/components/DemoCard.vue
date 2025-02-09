@@ -9,7 +9,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="border-2 border-black shadow-[4px_4px_0_black]">
+  <BorderContainer size="sm">
     <div class="flex items-center justify-between border-b-2 border-black px-4 py-2">
       <h3
         class="text-xl font-semibold flex gap-1"
@@ -39,5 +39,5 @@ defineProps<{
         {{ answer }}
       </p>
     </div>
-  </div>
+  </BorderContainer>
 </template>

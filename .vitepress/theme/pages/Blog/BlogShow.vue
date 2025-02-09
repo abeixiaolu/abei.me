@@ -5,7 +5,7 @@ const { frontmatter } = useData()
 <template>
   <article>
     <BorderContainer>
-      <h1 class="text-3xl lg:text-3xl font-semibold">
+      <h1 class="text-3xl lg:text-3xl font-semibold mb-4">
         {{ frontmatter.title }}
       </h1>
       <Content class="prose prose-sm sm:prose-base dark:prose-invert" />

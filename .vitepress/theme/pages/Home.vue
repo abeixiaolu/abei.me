@@ -9,7 +9,7 @@ const socials = [
 
 <template>
   <section>
-    <div class="border-4 border-black p-4 lg:p-12 shadow-[8px_8px_0_black]">
+    <BorderContainer>
       <div class="flex items-center gap-4 mb-4 lg:mb-8">
         <img
           src="/avatar.png"
@@ -21,7 +21,7 @@ const socials = [
         </h1>
       </div>
       <Content class="prose dark:prose-invert prose-sm [&>div>:first-child]:mt-0 [&>div>:last-child]:mb-0" />
-    </div>
+    </BorderContainer>
   </section>
 
   <section class="mt-16">

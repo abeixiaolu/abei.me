@@ -8,7 +8,7 @@ const sizeClass = computed(() => {
     case 'sm':
       return 'shadow-[4px_4px_0_#000]'
     default:
-      return 'p-2 md:p-8 shadow-[6px_6px_0_#000]'
+      return 'p-4 md:p-8 shadow-[6px_6px_0_#000]'
   }
 })
 </script>

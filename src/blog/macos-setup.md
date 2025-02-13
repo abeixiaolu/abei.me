@@ -404,6 +404,10 @@ yzhang.markdown-all-in-one
     ```bash
     sudo spctl --master-enable
     ```
+5. 当系统某些文件的图标被 webstorm、cursor 等软件修改时，你卸载了这个软件，但是文件图标仍然是该软件，则可以运行以下命令进行恢复：
+    ```bash
+    /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill
+    ```
 
 ## 结束
 

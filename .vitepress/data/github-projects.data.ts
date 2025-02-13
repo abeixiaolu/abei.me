@@ -23,7 +23,7 @@ export default {
       },
       {
         title: 'Learning',
-        projects: ['rustfinity', 'nuxt-tutorial', 'php-study'],
+        projects: ['rustfinity', 'nuxt-tutorial', 'php-study', 'pixel-position'],
       },
     ]
     const env = loadEnv('', join(process.cwd(), '.'))

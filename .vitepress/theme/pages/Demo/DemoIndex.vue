@@ -23,6 +23,13 @@
       >
         <Checkbox />
       </DemoCard>
+
+      <DemoCard
+        title="Blur Image Card"
+        name="BlurImageCard/BlurImageCard"
+      >
+        <BlurImageCard />
+      </DemoCard>
     </div>
 
     <div class="flex justify-center">

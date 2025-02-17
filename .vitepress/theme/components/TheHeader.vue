@@ -22,6 +22,7 @@ const navList = computed(() => {
         <a v-for="nav in navList" :key="nav.path" :href="nav.path" :class="{ 'font-bold underline decoration-2': nav.active }">
           {{ nav.name }}
         </a>
+        <ThemeBtn />
       </div>
     </div>
   </header>

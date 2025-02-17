@@ -1,0 +1,15 @@
+<script setup lang="ts">
+import { useData } from 'vitepress'
+
+const { isDark } = useData()
+
+function toggleDark() {
+  isDark.value = !isDark.value
+}
+</script>
+
+<template>
+  <button @click="toggleDark">
+    <div class="i-mdi-theme-light-dark" />
+  </button>
+</template>

@@ -32,6 +32,14 @@
       >
         <BlurImageCard />
       </DemoCard>
+
+      <DemoCard
+        title="Matrix Rain"
+        name="MatrixRain/MatrixRain"
+        class="mb-4 break-inside-avoid"
+      >
+        <MatrixRain />
+      </DemoCard>
     </div>
 
     <div class="flex justify-center">

@@ -20,7 +20,7 @@ const navList = computed(() => {
       </span>
 
       <div class="flex items-center gap-4">
-        <a v-for="nav in navList" :key="nav.path" :href="nav.path" :class="{ 'underline decoration-2': nav.active }">
+        <a v-for="nav in navList" :key="nav.path" :href="nav.path" :class="{ 'underline underline-offset-6 decoration-2': nav.active }">
           {{ nav.name }}
         </a>
         <ThemeBtn />

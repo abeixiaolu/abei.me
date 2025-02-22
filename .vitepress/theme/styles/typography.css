@@ -1,48 +1,32 @@
-@layer components {
-  .link {
-    text-underline-offset: 3px;
-    text-decoration: underline;
-    transition: all 0.2s ease;
-    color: var(--color-text);
-    text-decoration-color: #8886;
-    cursor: pointer;
+@utility link {
+  text-underline-offset: 3px;
+  text-decoration-color: #8886;
+  transition: all 0.2s ease;
+  cursor: pointer;
 
+  &::after {
+    content: "⤤";
+    margin-left: 2px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    color: #8888;
+  }
+
+  &:hover {
+    @apply text-primary underline;
+    text-decoration-color: var(--color-primary);
 
     &::after {
-      content: "↗";
-      font-size: 10px;
-      font-weight: bold;
-      margin-top: 6px;
-      margin-left: 1px;
-    }
-
-    &:hover {
-      @apply text-primary underline;
-      text-decoration-color: var(--color-primary);
+      color: var(--color-primary);
     }
   }
 }
 
+
 .prose {
 
   a:not(h1 a, h2 a, h3 a, h4 a, h5 a, h6 a) {
-    text-underline-offset: 3px;
-    text-decoration-color: #8886;
-    transition: all 0.2s ease;
-    cursor: pointer;
-
-    &::after {
-      content: "↗";
-      font-size: 10px;
-      font-weight: bold;
-      margin-top: 6px;
-      margin-left: 1px;
-    }
-
-    &:hover {
-      @apply text-primary underline;
-      text-decoration-color: var(--color-primary);
-    }
+    @apply link;
   }
 
   strong {

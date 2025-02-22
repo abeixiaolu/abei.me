@@ -8,7 +8,6 @@
   --color-primary: var(--color-green);
   --color-primary-hover: #56905650;
   --color-secondary: var(--color-magenta);
-  --default-font-family: 'LXGWNeoZhiSongPlus', 'ui-sans-serif', 'system-ui';
   --font-family-anwt: 'anwt';
 }
 
@@ -28,11 +27,11 @@
     font-display: swap;
   }
 
-  @font-face {
+  /* @font-face {
     font-family: "LXGWNeoZhiSongPlus";
     src: url("/font/LXGWNeoZhiSongPlus.ttf") format("truetype");
     font-display: swap;
-  }
+  } */
 }
 
 html,

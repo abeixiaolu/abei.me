@@ -14,7 +14,7 @@ defineProps<{
       <h3
         class="text-xl font-semibold flex gap-1"
       >
-        <a v-if="link" :href="link" target="_blank" class="hover:underline decoration-2 after:content-['\2197'] after:text-sm after:mt-[6px] after:ml-1 after:font-bold">
+        <a v-if="link" :href="link" target="_blank" class="link">
           {{ title }}
         </a>
         <span v-else>

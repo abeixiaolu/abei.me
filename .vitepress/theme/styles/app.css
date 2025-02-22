@@ -2,11 +2,14 @@
 @import "./vars.css";
 @plugin "@tailwindcss/typography";
 @config "../../../tailwind.config.cjs";
+@import "./typography.css";
 @custom-variant dark (&:where(.dark, .dark *));
 @theme {
   --color-primary: var(--color-green);
   --color-primary-hover: #56905650;
   --color-secondary: var(--color-magenta);
+  --default-font-family: 'LXGWNeoZhiSongPlus', 'ui-sans-serif', 'system-ui';
+  --font-family-anwt: 'anwt';
 }
 
 
@@ -54,24 +57,4 @@ body {
 .animate-wave {
   animation: wave 1s infinite;
   display: inline-block;
-}
-
-strong {
-  @apply text-rose-400 dark:text-rose-500 px-1;
-}
-
-@utility link {
-  text-underline-offset: 4px;
-  transition: all 0.2s ease-linear;
-  cursor: pointer;
-  &::after {
-    content: "↗";
-    font-size: 10px;
-    font-weight: bold;
-    margin-top: 6px;
-    margin-left: 1px;
-  }
-  &:hover {
-    @apply text-primary underline underline-offset-4;
-  }
 }

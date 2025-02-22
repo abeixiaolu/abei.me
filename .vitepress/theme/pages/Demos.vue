@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <section class="space-y-8 md:space-y-16">
+  <section class="space-y-8 md:space-y-16 font-family-anwt">
     <PageHeader />
 
     <div class="columns-1 md:columns-2 gap-6">

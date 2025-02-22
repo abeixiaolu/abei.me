@@ -7,6 +7,8 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vitepress'
 import { genOg } from './genOg'
+import darkTheme from './theme/vscode/Xiaolu Abei Dark Soft-color-theme.json'
+import lightTheme from './theme/vscode/Xiaolu Abei Light-color-theme.json'
 
 const currentDir = dirname(fileURLToPath(import.meta.url))
 const componentsDir = join(currentDir, 'theme/components')
@@ -14,6 +16,7 @@ const demoDir = join(currentDir, '../src/demo')
 const pagesDir = join(currentDir, 'theme/pages')
 const composablesDir = join(currentDir, 'theme/composables')
 const utilsDir = join(currentDir, 'theme/utils')
+const stylesDir = join(currentDir, 'theme/styles')
 
 export default defineConfig({
   cleanUrls: true,
@@ -22,6 +25,7 @@ export default defineConfig({
   description: 'A blog about study and life',
   sitemap: { hostname: 'https://artsmp-me.pages.dev' },
   head: [
+    ['link', { rel: 'icon', href: '/logo.svg' }],
     ['meta', { name: 'twitter:site', content: '@abei557832' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { property: 'og:image:width', content: '1200' }],
@@ -36,8 +40,14 @@ export default defineConfig({
       {
         name: 'watcher',
         configureServer(server) {
-          server.watcher.add([componentsDir, pagesDir, demoDir])
-          server.watcher.add([composablesDir, utilsDir])
+          server.watcher.add([
+            componentsDir,
+            pagesDir,
+            demoDir,
+            stylesDir,
+            composablesDir,
+            utilsDir,
+          ])
         },
       },
       Components({
@@ -54,7 +64,7 @@ export default defineConfig({
     ],
   },
   markdown: {
-    theme: 'ayu-dark',
+    theme: { light: lightTheme, dark: darkTheme },
     config(md) {
       md.use(MarkdownItGithubAlerts)
     },

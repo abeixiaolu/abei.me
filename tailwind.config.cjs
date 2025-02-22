@@ -12,26 +12,17 @@ module.exports = {
         DEFAULT: {
           css: {
             'maxWidth': '100%',
-            'ul > li': {
-              '--tw-prose-bullets': 'var(--color-blue-light)',
+            'h1, h2, h3, h4, h5, h6, a': {
+              color: 'var(--color-text)',
             },
-            'hr': {
-              'border-top': '2px solid var(--color-gray)',
-            },
-            'code': {
-              backgroundColor: 'var(--color-gray)',
-              borderRadius: '2px',
-              padding: '3px 6px',
-              fontWeight: 'bold',
-            },
-            'pre': {
-              // "background-color": "#F8F8F4",
-              'border-radius': '0',
-              'border': '2px solid black',
-              'margin': '0',
-              '&>code': {
-                // backgroundColor: "#F8F8F4",
+            'li': {
+              '&::marker': {
+                color: 'var(--color-text)',
               },
+            },
+            'color': 'var(--color-text)',
+            'pre': {
+              backgroundColor: 'var(--color-code-bg)',
             },
           },
         },

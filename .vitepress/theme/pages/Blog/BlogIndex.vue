@@ -16,7 +16,7 @@ const newData = computed(() => {
 </script>
 
 <template>
-  <section class="space-y-8 md:space-y-16">
+  <section class="space-y-8 md:space-y-16 font-family-anwt">
     <PageHeader />
 
     <div v-for="[year, blogs] in newData" :key="year" class="mt-4">

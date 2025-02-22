@@ -8,7 +8,7 @@ const socials = [
 </script>
 
 <template>
-  <section>
+  <section class="font-family-anwt">
     <BorderContainer>
       <div class="flex items-center gap-4 mb-4 lg:mb-8">
         <img

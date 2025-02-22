@@ -21,3 +21,11 @@ div[class*="language-"] > span.lang {
   background-color: #fff4;
   width: 100%;
 }
+
+.dark .vp-code span {
+  color: var(--shiki-dark, inherit);
+}
+
+html:not(.dark) .vp-code span {
+  color: var(--shiki-light, inherit);
+}

@@ -11,7 +11,7 @@ const navList = computed(() => {
 </script>
 
 <template>
-  <header class="px-8 py-4">
+  <header class="px-8 py-4 font-family-anwt">
     <div class="relative mx-auto max-w-screen-md flex justify-between gap-6">
       <span>
         <a href="/">

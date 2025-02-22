@@ -49,25 +49,9 @@ description: Some of my favorite tools and gear.
 <style scoped>
 @import '../.vitepress/theme/styles/app.css';
 ul {
-  list-style-type: '†';
-}
-
-a {
-  text-underline-offset: 2px;
-  text-decoration-thickness: 3px;
-  text-decoration-color: #8886;
-  transition: all 2s ease-linear;
-  cursor: pointer;
-  &::after {
-    content: "↗";
-    font-size: 10px;
-    font-weight: bold;
-    margin-top: 6px;
-    margin-left: 1px;
-  }
-  &:hover {
-    @apply text-primary underline;
-    text-decoration-color: var(--color-primary);
+  list-style-type: '➻';
+  li::marker {
+    font-size: 1em;
   }
 }
 </style>

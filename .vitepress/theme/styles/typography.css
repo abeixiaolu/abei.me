@@ -1,0 +1,52 @@
+@layer components {
+  .link {
+    text-underline-offset: 3px;
+    text-decoration: underline;
+    transition: all 0.2s ease;
+    color: var(--color-text);
+    text-decoration-color: #8886;
+    cursor: pointer;
+
+
+    &::after {
+      content: "↗";
+      font-size: 10px;
+      font-weight: bold;
+      margin-top: 6px;
+      margin-left: 1px;
+    }
+
+    &:hover {
+      @apply text-primary underline;
+      text-decoration-color: var(--color-primary);
+    }
+  }
+}
+
+.prose {
+
+  a:not(h1 a, h2 a, h3 a, h4 a, h5 a, h6 a) {
+    text-underline-offset: 3px;
+    text-decoration-color: #8886;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &::after {
+      content: "↗";
+      font-size: 10px;
+      font-weight: bold;
+      margin-top: 6px;
+      margin-left: 1px;
+    }
+
+    &:hover {
+      @apply text-primary underline;
+      text-decoration-color: var(--color-primary);
+    }
+  }
+
+  strong {
+    @apply text-rose-400 dark:text-rose-500 px-1;
+  }
+
+}

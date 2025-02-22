@@ -3,7 +3,7 @@ import { data } from '../../data/github-projects.data'
 </script>
 
 <template>
-  <section>
+  <section class="font-family-anwt">
     <PageHeader />
     <div class="space-y-10">
       <div v-for="section in data" :key="section.title">

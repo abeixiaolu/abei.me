@@ -11,8 +11,9 @@ const { frontmatter } = useData()
         <Home v-if="frontmatter.layout === 'home'" />
         <BlogIndex v-else-if="frontmatter.layout === 'blog'" />
         <BlogShow v-else-if="frontmatter.layout === 'blog-show'" />
-        <ProjectIndex v-else-if="frontmatter.layout === 'projects'" />
-        <DemoIndex v-else-if="frontmatter.layout === 'demo'" />
+        <Projects v-else-if="frontmatter.layout === 'projects'" />
+        <Demos v-else-if="frontmatter.layout === 'demo'" />
+        <Uses v-else-if="frontmatter.layout === 'uses'" />
         <Content v-else />
       </main>
     </div>

@@ -5,6 +5,7 @@ const navList = computed(() => {
     { name: 'Blog', path: '/blog', active: route.path.startsWith('/blog') },
     { name: 'Project', path: '/project', active: route.path.startsWith('/project') },
     { name: 'Demo', path: '/demo', active: route.path.startsWith('/demo') },
+    { name: 'Use', path: '/use', active: route.path.startsWith('/use') },
   ]
 })
 </script>
@@ -19,7 +20,7 @@ const navList = computed(() => {
       </span>
 
       <div class="flex items-center gap-4">
-        <a v-for="nav in navList" :key="nav.path" :href="nav.path" :class="{ 'font-bold underline decoration-2': nav.active }">
+        <a v-for="nav in navList" :key="nav.path" :href="nav.path" :class="{ 'underline decoration-2': nav.active }">
           {{ nav.name }}
         </a>
         <ThemeBtn />

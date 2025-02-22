@@ -10,6 +10,6 @@ function toggleDark() {
 
 <template>
   <button @click="toggleDark">
-    <div class="i-mdi-theme-light-dark" />
+    <div :class="isDark ? 'i-solar-moon-sleep-linear' : 'i-solar-water-sun-linear'" />
   </button>
 </template>

@@ -1,16 +1,33 @@
 <script lang="ts" setup>
+import { PowerGlitch } from 'powerglitch'
+
 const socials = [
   { href: 'https://x.com/xiaoluabei', icon: 'i-mdi-twitter-circle', name: 'Twitter' },
   { href: 'https://github.com/abeixiaolu', icon: 'i-mdi-github', name: 'GitHub' },
   { href: 'https://bsky.app/profile/xlabei.bsky.social', icon: 'i-fa6-brands-square-bluesky text-[15px]', name: 'BlueSky' },
   { href: 'https://music.163.com/#/user/home?id=130837120', icon: 'i-simple-icons-neteasecloudmusic text-[15px]', name: '网易云音乐' },
 ]
+
+onMounted(() => {
+  PowerGlitch.glitch('.avatar-glitch', {
+    playMode: 'click',
+    timing: {
+      duration: 1000,
+      iterations: 1,
+      easing: 'ease-in-out',
+    },
+    glitchTimeSpan: {
+      start: 0,
+      end: 1,
+    },
+  })
+})
 </script>
 
 <template>
   <section class="font-family-anwt">
     <BorderContainer>
-      <div class="flex items-center mb-4 lg:mb-8">
+      <div class="flex items-center mb-4 lg:mb-8 avatar-glitch">
         <img src="/avatar.png" alt="Profile Picture" class="h-28 w-28 my-0 border-4 border-black rounded-full dark:brightness-75 dark:hover:brightness-100 transition-all duration-300">
         <h1 class="text-4xl border-4 border-transparent border-b-black border-l-0 px-4 py-1 pl-5 pb-2 translate-x-[-10px] text-black">
           abei.me

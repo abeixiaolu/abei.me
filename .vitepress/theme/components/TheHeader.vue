@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { PowerGlitch } from 'powerglitch'
+
 const route = useRoute()
 const navList = computed(() => {
   return [
@@ -8,6 +10,10 @@ const navList = computed(() => {
     { name: 'Use', path: '/use', active: route.path.startsWith('/use') },
   ]
 })
+
+onMounted(() => {
+  PowerGlitch.glitch('.logo-glitch')
+})
 </script>
 
 <template>
@@ -15,7 +21,7 @@ const navList = computed(() => {
     <div class="relative mx-auto max-w-screen-md flex justify-between gap-6">
       <span>
         <a href="/">
-          <h1 class="uppercase text-3xl">Abei</h1>
+          <h1 class="uppercase text-3xl logo-glitch">Abei</h1>
         </a>
       </span>
 

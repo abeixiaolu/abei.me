@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      powerglitch:
+        specifier: ^2.4.0
+        version: 2.4.0
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^3.12.1
@@ -2238,6 +2242,9 @@ packages:
   postcss@8.5.1:
     resolution: {integrity: sha512-6oz2beyjc5VMn/KV1pPw8fliQkhBXrVn1Z3TVyqZxU8kZpzEKhBdmCFqI6ZbmGtamQvQGuU1sgPTk8ZrXDD7jQ==}
     engines: {node: ^10 || ^12 || >=14}
+
+  powerglitch@2.4.0:
+    resolution: {integrity: sha512-O/WgCJ2GthDfKanl6YDUn7FHWa9GOj8R7UPTX6cwGbl0R+FTiQtba0zuVOIviydr6cOIgNqvz+8hAhvyn7FtBw==}
 
   preact@10.25.4:
     resolution: {integrity: sha512-jLdZDb+Q+odkHJ+MpW/9U5cODzqnB+fy2EiHSZES7ldV5LK7yjlVzTp7R8Xy6W6y75kfK8iWYtFVH7lvjwrCMA==}
@@ -5113,6 +5120,8 @@ snapshots:
       nanoid: 3.3.8
       picocolors: 1.1.1
       source-map-js: 1.2.1
+
+  powerglitch@2.4.0: {}
 
   preact@10.25.4: {}
 

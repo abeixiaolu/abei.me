@@ -10,13 +10,9 @@ const socials = [
 <template>
   <section class="font-family-anwt">
     <BorderContainer>
-      <div class="flex items-center gap-4 mb-4 lg:mb-8">
-        <img
-          src="/avatar.png"
-          alt="Profile Picture"
-          class="h-28 w-28 my-0 border-4 border-black rounded-full"
-        >
-        <h1 class="text-4xl">
+      <div class="flex items-center mb-4 lg:mb-8">
+        <img src="/avatar.png" alt="Profile Picture" class="h-28 w-28 my-0 border-4 border-black rounded-full dark:brightness-75 dark:hover:brightness-100 transition-all duration-300">
+        <h1 class="text-4xl border-4 border-transparent border-b-black border-l-0 px-4 py-1 pl-5 pb-2 translate-x-[-10px] text-black">
           abei.me
         </h1>
       </div>
@@ -30,9 +26,28 @@ const socials = [
     </h2>
 
     <div class="mt-8 flex flex-wrap justify-center gap-4 md:justify-start">
-      <Button v-for="social in socials" :key="social.href" variant="secondary" :href="social.href" target="_blank" :icon="social.icon">
+      <Button
+        v-for="(social, index) in socials" :key="social.href" variant="secondary" :href="social.href"
+        target="_blank" :icon="social.icon" :style="{
+          animation: `slideUp 0.5s ease-out ${index * 0.15}s both`,
+        }"
+      >
         {{ social.name }}
       </Button>
     </div>
   </section>
 </template>
+
+<style>
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

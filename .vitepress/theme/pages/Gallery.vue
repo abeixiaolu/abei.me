@@ -72,6 +72,7 @@ const currentPhoto = computed(() => {
         <BorderContainer
           v-for="album in albums"
           :key="album.id"
+          size="sm"
           class="group cursor-pointer transition-all duration-300 p-2! overflow-hidden mb-4"
           @click="viewAlbum(album)"
         >
@@ -103,7 +104,7 @@ const currentPhoto = computed(() => {
           class="flex items-center text-sm opacity-70 hover:opacity-100 transition-opacity"
           @click="backToList"
         >
-          <i class="i-solar-arrow-left-linear mr-1" /> 返回
+          <i class="i-solar-arrow-left-broken mr-1" /> 返回
         </button>
         <h2 class="text-2xl font-medium ml-4">
           {{ selectedAlbum.title }}
@@ -138,6 +139,7 @@ const currentPhoto = computed(() => {
           :src="currentPhoto.src"
           :alt="currentPhoto.alt"
           class="max-h-[90vh] max-w-[90vw] object-contain"
+          loading="lazy"
         >
 
         <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white bg-black bg-opacity-50 px-4 py-2 rounded-md text-sm">

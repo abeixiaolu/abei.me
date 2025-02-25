@@ -4,11 +4,11 @@ import { PowerGlitch } from 'powerglitch'
 const route = useRoute()
 const navList = computed(() => {
   return [
-    { name: 'Blog', path: '/blog', active: route.path.startsWith('/blog') },
-    { name: 'Project', path: '/project', active: route.path.startsWith('/project') },
-    { name: 'Demo', path: '/demo', active: route.path.startsWith('/demo') },
-    { name: 'Use', path: '/use', active: route.path.startsWith('/use') },
-    { name: 'Gallery', path: '/gallery', active: route.path.startsWith('/gallery') },
+    { name: 'Blog', icon: 'i-solar-notes-broken', path: '/blog', active: route.path.startsWith('/blog') },
+    { name: 'Project', icon: 'i-solar-folder-open-broken', path: '/project', active: route.path.startsWith('/project') },
+    { name: 'Demo', icon: 'i-solar-code-line-duotone', path: '/demo', active: route.path.startsWith('/demo') },
+    { name: 'Use', icon: 'i-solar-airbuds-case-charge-broken', path: '/use', active: route.path.startsWith('/use') },
+    { name: 'Gallery', icon: 'i-solar-gallery-broken', path: '/gallery', active: route.path.startsWith('/gallery') },
   ]
 })
 
@@ -26,9 +26,9 @@ onMounted(() => {
         </a>
       </span>
 
-      <div class="flex items-center gap-4">
-        <a v-for="nav in navList" :key="nav.path" :href="nav.path" :class="{ 'underline underline-offset-6 decoration-2': nav.active }">
-          {{ nav.name }}
+      <div class="flex items-center gap-2 sm:gap-4">
+        <a v-for="nav in navList" :key="nav.path" :href="nav.path" class="flex items-center pb-1 mt-1 border-3 border-transparent border-double" :class="{ 'text-primary border-b-primary': nav.active }">
+          <span :class="nav.icon" />
         </a>
         <ThemeBtn />
       </div>

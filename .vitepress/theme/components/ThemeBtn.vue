@@ -23,7 +23,7 @@ async function toggleDark() {
   ] */
 
   const clipPath = [
-    `inset(0 100% 0 0)`,
+    `inset(100% 0% 0% 0%)`,
     `inset(0 0 0 0)`,
   ]
 
@@ -35,7 +35,7 @@ async function toggleDark() {
   document.documentElement.animate(
     { clipPath: isDark.value ? clipPath.reverse() : clipPath },
     {
-      duration: 300,
+      duration: 399,
       easing: 'ease-in',
       pseudoElement: `::view-transition-${isDark.value ? 'old' : 'new'}(root)`,
     },
@@ -44,8 +44,8 @@ async function toggleDark() {
 </script>
 
 <template>
-  <button @click="toggleDark">
-    <div :class="isDark ? 'i-solar-moon-sleep-linear' : 'i-solar-water-sun-linear'" />
+  <button class="cursor-pointer" @click="toggleDark">
+    <div :class="isDark ? 'i-solar-moon-stars-broken' : 'i-solar-sun-2-broken'" />
   </button>
 </template>
 

@@ -8,6 +8,7 @@ const navList = computed(() => {
     { name: 'Project', path: '/project', active: route.path.startsWith('/project') },
     { name: 'Demo', path: '/demo', active: route.path.startsWith('/demo') },
     { name: 'Use', path: '/use', active: route.path.startsWith('/use') },
+    { name: 'Gallery', path: '/gallery', active: route.path.startsWith('/gallery') },
   ]
 })
 

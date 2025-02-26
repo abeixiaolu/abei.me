@@ -30,7 +30,7 @@
   }
 
   strong {
-    @apply text-rose-400 dark:text-rose-500 px-1;
+    color: var(--color-blue);
   }
 
 }

@@ -34,7 +34,7 @@ module.exports = {
   },
   plugins: [
     iconsPlugin({
-      collections: getIconCollections(['logos', 'solar', 'simple-icons', 'uiw', 'mdi', 'fa6-brands']),
+      collections: getIconCollections(['logos', 'solar', 'simple-icons', 'ph', 'uiw', 'mdi', 'fa6-brands']),
       extraProperties: {
         'vertical-align': '-0.25em',
         'font-size': '1.3em',

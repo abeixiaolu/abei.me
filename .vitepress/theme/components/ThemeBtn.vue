@@ -45,7 +45,7 @@ async function toggleDark() {
 
 <template>
   <button class="cursor-pointer" @click="toggleDark">
-    <div :class="isDark ? 'i-solar-moon-stars-broken' : 'i-solar-sun-2-broken'" />
+    <div :class="isDark ? 'i-ph-moon-stars-duotone' : 'i-ph-sun-dim-duotone'" />
   </button>
 </template>
 

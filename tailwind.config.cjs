@@ -5,7 +5,6 @@ const {
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.md', './.vitepress/**/*.{vue,ts}'],
   theme: {
     extend: {
       typography: {
@@ -27,9 +26,6 @@ module.exports = {
           },
         },
       },
-    },
-    fontFamily: {
-      sans: ['anwt', 'LXGWNeoZhiSongPlus', 'ui-sans-serif', 'system-ui', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'],
     },
   },
   plugins: [

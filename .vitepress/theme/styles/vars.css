@@ -26,6 +26,10 @@
   --color-bg: #fcfcff;
   --color-text: #000;
   --color-code-bg: #eeeeee;
+
+  --scrollbar-track: var(--color-bg);
+  --scrollbar-thumb: #c1c1c1;
+  --scrollbar-thumb-hover: #a8a8a8;
 }
 
 .dark {
@@ -48,4 +52,8 @@
   --color-bg: #313335;
   --color-text: #d1cdc2;
   --color-code-bg: #222222;
+
+  --scrollbar-track: var(--color-bg);
+  --scrollbar-thumb: #555;
+  --scrollbar-thumb-hover: #666;
 }

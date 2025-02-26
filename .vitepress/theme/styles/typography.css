@@ -9,7 +9,7 @@
     margin-left: 2px;
     font-weight: bold;
     transition: all 0.2s ease;
-    color: #8888;
+    opacity: 0.5;
   }
 
   &:hover {

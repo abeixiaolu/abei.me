@@ -5,10 +5,10 @@ const route = useRoute()
 const navList = computed(() => {
   return [
     { name: 'Blog', icon: 'i-ph-notepad-duotone', path: '/blog', active: route.path.startsWith('/blog') },
-    { name: 'Project', icon: 'i-ph-folder-notch-minus-duotone', path: '/project', active: route.path.startsWith('/project') },
-    { name: 'Demo', icon: 'i-ph-code-simple-duotone', path: '/demo', active: route.path.startsWith('/demo') },
-    { name: 'Use', icon: 'i-ph-bag-simple-duotone', path: '/use', active: route.path.startsWith('/use') },
-    { name: 'Gallery', icon: 'i-ph-image-square-duotone', path: '/gallery', active: route.path.startsWith('/gallery') },
+    { name: 'Project', icon: 'i-ph-sparkle-duotone', path: '/project', active: route.path.startsWith('/project') },
+    { name: 'Demo', icon: 'i-ph-brackets-angle-duotone', path: '/demo', active: route.path.startsWith('/demo') },
+    { name: 'Use', icon: 'i-ph-bag-duotone', path: '/use', active: route.path.startsWith('/use') },
+    { name: 'Gallery', icon: 'i-ph-camera-duotone', path: '/gallery', active: route.path.startsWith('/gallery') },
   ]
 })
 

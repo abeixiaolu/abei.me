@@ -6,7 +6,7 @@ description: Some of my favorite tools and gear.
 
 <StrokeLineText size="sm" text="Editor" />
 
-- [Cursor](https://www.cursor.com/) with minimal settings
+- [Cursor](https://www.cursor.com/) and [Windsurf](https://codeium.com/windsurf) with minimal settings
 - Font: [MesloLGL Nerd Font](https://www.nerdfonts.com/font-downloads), [Dank Mono](https://philpl.gumroad.com/l/dank-mono)
 - [Theme: Xiaolu Abei](https://github.com/abeixiaolu/xiaoluabei-vscode-theme)
 - Icons: [City Lights](https://marketplace.visualstudio.com/items?itemName=Yummygum.city-lights-icon-vsc) and [Carbon Icons](https://marketplace.visualstudio.com/items?itemName=antfu.icons-carbon).

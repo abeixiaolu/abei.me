@@ -1,23 +1,27 @@
 @import "tailwindcss";
-@import "./vars.css";
-@plugin "@tailwindcss/typography";
 @config "../../../tailwind.config.cjs";
+@plugin "@tailwindcss/typography";
+@import "./vars.css";
 @import "./typography.css";
+@import "./animation.css";
+@import "./global.css";
 @custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-primary: var(--color-green);
   --color-primary-hover: #56905650;
   --color-secondary: var(--color-magenta);
-  --font-family-anwt: 'anwt';
-}
-
-
-::selection {
-  background-color: #56905650;
-}
-
-.dark ::selection {
-  background-color: #8ebf9d50;
+  --font-family-anwt: "anwt";
+  --animate-wiggle: wiggle 1s ease-in-out infinite;
+  @keyframes wiggle {
+    0%,100% {
+      transform: rotate(0deg);
+    }
+  
+    50% {
+      transform: rotate(20deg);
+    }
+  }
 }
 
 @layer base {
@@ -26,70 +30,5 @@
     src: url("/font/anwt.woff2") format("woff2");
     font-display: swap;
   }
-
-  /* @font-face {
-    font-family: "LXGWNeoZhiSongPlus";
-    src: url("/font/LXGWNeoZhiSongPlus.ttf") format("truetype");
-    font-display: swap;
-  } */
 }
 
-html,
-body {
-  color: var(--color-text);
-}
-
-@keyframes wave {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  50% {
-    transform: rotate(20deg);
-  }
-
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-.animate-wave {
-  animation: wave 1s infinite;
-  display: inline-block;
-}
-
-:root {
-  --scrollbar-track: var(--color-bg);
-  --scrollbar-thumb: #c1c1c1;
-  --scrollbar-thumb-hover: #a8a8a8;
-}
-
-.dark {
-  --scrollbar-track: var(--color-bg);
-  --scrollbar-thumb: #555;
-  --scrollbar-thumb-hover: #666;
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--scrollbar-track);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb);
-  border-radius: 5px;
-  transition: background-color 0.2s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-thumb-hover);
-}
-
-/* Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-}

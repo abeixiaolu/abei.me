@@ -115,7 +115,7 @@ function getOpacityClass(index: number) {
 
       <!-- 中间照片展示区 -->
       <div
-        class="flex-1 h-full md:whitespace-nowrap overflow-auto md:snap-x snap-y snap-mandatory pointer-events-auto w-full md:w-[unset] md:h-[66vh] text-[0px] scroll-smooth"
+        class="flex-1 h-full md:whitespace-nowrap overflow-auto md:snap-x snap-y snap-mandatory pointer-events-auto w-full md:w-[unset] md:h-[50vh] text-[0px] scroll-smooth"
       >
         <div
           v-for="(photo, idx) in selectedAlbum?.photos"
@@ -126,7 +126,7 @@ function getOpacityClass(index: number) {
           <img
             :src="photo.src"
             :alt="photo.alt"
-            class="h-full"
+            class="md:h-full"
             loading="lazy"
           >
         </div>

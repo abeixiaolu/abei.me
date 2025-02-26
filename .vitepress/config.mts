@@ -16,7 +16,6 @@ const demoDir = join(currentDir, '../src/demo')
 const pagesDir = join(currentDir, 'theme/pages')
 const composablesDir = join(currentDir, 'theme/composables')
 const utilsDir = join(currentDir, 'theme/utils')
-const stylesDir = join(currentDir, 'theme/styles')
 
 export default defineConfig({
   cleanUrls: true,
@@ -37,7 +36,7 @@ export default defineConfig({
   srcDir: 'src',
   vite: {
     plugins: [
-      {
+      /* {
         name: 'watcher',
         configureServer(server) {
           server.watcher.add([
@@ -49,7 +48,7 @@ export default defineConfig({
             utilsDir,
           ])
         },
-      },
+      }, */
       Components({
         dirs: [componentsDir, pagesDir, demoDir],
         include: [/\.vue$/, /\.vue\?vue/, /\.md$/],

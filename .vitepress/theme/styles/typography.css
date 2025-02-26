@@ -33,4 +33,19 @@
     color: var(--color-blue);
   }
 
+  code {
+    background-color: #9992;
+    padding: .2em .3em !important;
+    font-weight: 500 !important;
+    color: var(--color-text) !important;
+
+    &::before {
+      content: "" !important;
+    }
+
+    &::after {
+      content: "" !important;
+    }
+  }
+
 }

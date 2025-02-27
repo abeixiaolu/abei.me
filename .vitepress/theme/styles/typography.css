@@ -33,7 +33,7 @@
     color: var(--color-blue);
   }
 
-  code {
+  code:not(pre code) {
     background-color: #9992;
     padding: .2em .3em !important;
     font-weight: 500 !important;

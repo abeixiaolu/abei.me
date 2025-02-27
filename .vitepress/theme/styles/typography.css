@@ -33,6 +33,10 @@
     color: var(--color-blue);
   }
 
+  .mermaid {
+    background-color: #9992;
+  }
+
   code:not(pre code) {
     background-color: #9992;
     padding: .2em .3em !important;

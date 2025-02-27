@@ -6,6 +6,7 @@ import { joinURL, withoutTrailingSlash } from 'ufo'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 import { genOg } from './genOg'
 import darkTheme from './theme/vscode/Xiaolu Abei Dark Soft-color-theme.json'
 import lightTheme from './theme/vscode/Xiaolu Abei Light-color-theme.json'
@@ -17,7 +18,7 @@ const pagesDir = join(currentDir, 'theme/pages')
 const composablesDir = join(currentDir, 'theme/composables')
 const utilsDir = join(currentDir, 'theme/utils')
 
-export default defineConfig({
+export default withMermaid(defineConfig({
   cleanUrls: true,
   lang: 'zh-CN',
   title: 'Artsmp\'s Blog',
@@ -36,19 +37,6 @@ export default defineConfig({
   srcDir: 'src',
   vite: {
     plugins: [
-      /* {
-        name: 'watcher',
-        configureServer(server) {
-          server.watcher.add([
-            componentsDir,
-            pagesDir,
-            demoDir,
-            stylesDir,
-            composablesDir,
-            utilsDir,
-          ])
-        },
-      }, */
       Components({
         dirs: [componentsDir, pagesDir, demoDir],
         include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
@@ -162,4 +150,4 @@ export default defineConfig({
       ],
     )
   },
-})
+}))

@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import type { Album } from '../types/album'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { data as albumsData } from '../../data/albums.data'
+import { data as galleryData } from '../../data/gallery.data'
 
 // 影集数据
-const albums = ref(albumsData)
+const albums = ref(galleryData)
 
 // 当前查看的相册
-const selectedAlbum = ref<Album | null>(null)
+const selectedAlbum = ref<any>(albums.value[0].frontmatter)
 // 当前查看的照片索引
 const currentPhotoIndex = ref(0)
 // 是否显示大图
@@ -16,7 +15,7 @@ const showLightbox = ref(false)
 const activeAlbumIndex = ref(0)
 
 // 选择相册查看详情
-function viewAlbum(album: Album, index: number) {
+function viewAlbum(album: any, index: number) {
   selectedAlbum.value = album
   activeAlbumIndex.value = index
 }
@@ -40,8 +39,8 @@ function prevPhoto() {
     return
 
   currentPhotoIndex.value
-    = (currentPhotoIndex.value - 1 + selectedAlbum.value.photos.length)
-    % selectedAlbum.value.photos.length
+    = (currentPhotoIndex.value - 1 + selectedAlbum.value.pictures.length)
+    % selectedAlbum.value.pictures.length
 }
 
 // 查看下一张照片
@@ -50,7 +49,7 @@ function nextPhoto() {
     return
 
   currentPhotoIndex.value
-    = (currentPhotoIndex.value + 1) % selectedAlbum.value.photos.length
+    = (currentPhotoIndex.value + 1) % selectedAlbum.value.pictures.length
 }
 
 // 键盘导航
@@ -69,13 +68,13 @@ function handleKeyDown(e: KeyboardEvent) {
 const currentPhoto = computed(() => {
   if (!selectedAlbum.value)
     return null
-  return selectedAlbum.value.photos[currentPhotoIndex.value]
+  return selectedAlbum.value.pictures[currentPhotoIndex.value]
 })
 
 // 生命周期钩子
 onMounted(() => {
   if (albums.value.length > 0)
-    selectedAlbum.value = albums.value[0]
+    selectedAlbum.value = albums.value[0].frontmatter
   window.addEventListener('keydown', handleKeyDown)
 })
 
@@ -104,32 +103,32 @@ function getOpacityClass(index: number) {
       <div class="w-1/8 min-w-[66px] p-4 flex flex-col items-center justify-center pointer-events-auto relative">
         <div
           v-for="(album, index) in albums"
-          :key="album.id"
+          :key="index"
           class="mb-4 cursor-pointer transition-all duration-300 transform hover:scale-105"
           :class="getOpacityClass(index)"
-          @click="viewAlbum(album, index)"
+          @click="viewAlbum(album.frontmatter, index)"
         >
-          {{ album.title }}
+          {{ album.frontmatter.title }}
         </div>
       </div>
 
       <!-- 中间照片展示区 -->
       <div
-        class="flex-1 h-full md:whitespace-nowrap overflow-auto md:snap-x snap-y snap-mandatory pointer-events-auto w-full md:w-[unset] md:h-[50vh] text-[0px] scroll-smooth"
+        class="flex-1 md:space-x-4 h-full md:whitespace-nowrap overflow-auto md:snap-x md:snap-mandatory pointer-events-auto w-full md:w-[unset] md:h-[60vh] text-[0px] scroll-smooth"
       >
-        <div
-          v-for="(photo, idx) in selectedAlbum?.photos"
-          :key="photo.id"
-          class="md:h-full block md:inline-block snap-center"
+        <BorderContainer
+          v-for="(photo, idx) in selectedAlbum.pictures"
+          :key="photo"
+          size="sm"
+          class="md:h-[98%] block md:inline-block md:snap-center p-4 group"
           @click="openLightbox(idx)"
         >
           <img
-            :src="photo.src"
-            :alt="photo.alt"
-            class="md:h-full"
+            :src="photo"
+            class="md:h-full group-hover:scale-105 transition-all duration-300"
             loading="lazy"
           >
-        </div>
+        </BorderContainer>
       </div>
     </div>
 
@@ -141,18 +140,10 @@ function getOpacityClass(index: number) {
     >
       <div class="relative w-full h-full flex items-center justify-center" @click.stop>
         <img
-          :src="currentPhoto.src"
-          :alt="currentPhoto.alt"
+          :src="currentPhoto"
           class="max-h-[90vh] max-w-[90vw] object-contain transition-transform duration-500"
           loading="lazy"
         >
-
-        <div
-          class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white bg-black/60
-                 px-6 py-3 rounded-full text-sm backdrop-blur-sm"
-        >
-          {{ currentPhoto.description || currentPhoto.alt }}
-        </div>
 
         <button
           class="absolute left-4 p-4 text-white bg-black/40 rounded-full hover:bg-black/60

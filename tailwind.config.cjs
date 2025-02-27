@@ -26,6 +26,16 @@ module.exports = {
           },
         },
       },
+      animation: {
+        'pulse-ring': 'pulseRing 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      },
+      keyframes: {
+        pulseRing: {
+          '0%': { transform: 'scale(0.8)', opacity: '0.8' },
+          '50%': { transform: 'scale(1)', opacity: '0.4' },
+          '100%': { transform: 'scale(0.8)', opacity: '0.8' },
+        },
+      },
     },
   },
   plugins: [

@@ -2,11 +2,36 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { data as galleryData } from '../../data/gallery.data'
 
+interface Album {
+  title: string
+  description: string
+  pictures: Picture[]
+}
+
+interface Picture {
+  url: string
+  width: number
+  height: number
+}
+
 // 影集数据
-const albums = ref(galleryData)
+const albums = computed(() => {
+  return galleryData.map((item) => {
+    return {
+      ...item.frontmatter,
+      pictures: item.frontmatter.pictures.map((picture: string) => {
+        return {
+          url: picture,
+          width: 0,
+          height: 0,
+        } satisfies Picture
+      }),
+    } as Album
+  })
+})
 
 // 当前查看的相册
-const selectedAlbum = ref<any>(albums.value[0].frontmatter)
+const selectedAlbum = ref<Album>(albums.value[0])
 // 当前查看的照片索引
 const currentPhotoIndex = ref(0)
 // 是否显示大图
@@ -15,7 +40,7 @@ const showLightbox = ref(false)
 const activeAlbumIndex = ref(0)
 
 // 选择相册查看详情
-function viewAlbum(album: any, index: number) {
+function viewAlbum(album: Album, index: number) {
   selectedAlbum.value = album
   activeAlbumIndex.value = index
 }
@@ -71,11 +96,32 @@ const currentPhoto = computed(() => {
   return selectedAlbum.value.pictures[currentPhotoIndex.value]
 })
 
+const loading = ref(true)
+
+function loadImage(pic: Picture) {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.onload = () => {
+      resolve(true)
+      pic.width = img.width
+      pic.height = img.height
+    }
+    img.src = pic.url
+  })
+}
+
 // 生命周期钩子
-onMounted(() => {
+onMounted(async () => {
   if (albums.value.length > 0)
-    selectedAlbum.value = albums.value[0].frontmatter
+    selectedAlbum.value = albums.value[0]
   window.addEventListener('keydown', handleKeyDown)
+  await Promise.all(selectedAlbum.value.pictures.map(loadImage))
+  loading.value = false
+  albums.value.map((album, idx) => {
+    if (idx !== 0)
+      return Promise.all(album.pictures.map(loadImage))
+    return null
+  })
 })
 
 onUnmounted(() => {
@@ -104,31 +150,42 @@ function getOpacityClass(index: number) {
         <div
           v-for="(album, index) in albums"
           :key="index"
-          class="mb-4 cursor-pointer transition-all duration-300 transform hover:scale-105"
+          class="mb-4 cursor-pointer transition-all duration-300 transform hover:scale-103"
           :class="getOpacityClass(index)"
-          @click="viewAlbum(album.frontmatter, index)"
+          @click="viewAlbum(album, index)"
         >
-          {{ album.frontmatter.title }}
+          {{ album.title }}
         </div>
       </div>
 
       <!-- 中间照片展示区 -->
       <div
-        class="flex-1 md:space-x-4 h-full md:whitespace-nowrap overflow-auto md:snap-x md:snap-mandatory pointer-events-auto w-full md:w-[unset] md:h-[60vh] text-[0px] scroll-smooth"
+        v-if="!loading"
+        class="flex-1 space-y-4 md:space-y-0 md:space-x-4  h-full md:whitespace-nowrap overflow-auto md:snap-x md:snap-mandatory pointer-events-auto w-full md:w-[unset] md:h-[60vh] text-[0px] scroll-smooth"
       >
         <BorderContainer
           v-for="(photo, idx) in selectedAlbum.pictures"
-          :key="photo"
+          :key="photo.url"
           size="sm"
+          :style="`aspect-ratio: ${photo.width} / ${photo.height};`"
           class="md:h-[98%] block md:inline-block md:snap-center p-4 group"
           @click="openLightbox(idx)"
         >
           <img
-            :src="photo"
-            class="md:h-full group-hover:scale-105 transition-all duration-300"
+            :src="photo.url"
+            :width="photo.width"
+            :height="photo.height"
+            :style="`aspect-ratio: ${photo.width} / ${photo.height};`"
+            class="md:h-full group-hover:scale-101 transition-all duration-300"
             loading="lazy"
           >
         </BorderContainer>
+      </div>
+      <div v-else class="flex-1 flex items-center justify-center">
+        <div class="relative">
+          <div class="w-16 h-16 rounded-full border-4 border-gray-200 opacity-30" />
+          <div class="w-16 h-16 rounded-full border-4 border-primary absolute top-0 left-0 animate-pulse-ring" />
+        </div>
       </div>
     </div>
 
@@ -140,7 +197,9 @@ function getOpacityClass(index: number) {
     >
       <div class="relative w-full h-full flex items-center justify-center" @click.stop>
         <img
-          :src="currentPhoto"
+          :src="currentPhoto.url"
+          :width="currentPhoto.width"
+          :height="currentPhoto.height"
           class="max-h-[90vh] max-w-[90vw] object-contain transition-transform duration-500"
           loading="lazy"
         >

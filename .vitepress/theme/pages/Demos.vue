@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DraggableCards from '../../../src/demo/DraggableCards/index.vue'
 </script>
 
 <template>
@@ -39,6 +40,16 @@
         class="mb-4 break-inside-avoid"
       >
         <MatrixRain />
+      </DemoCard>
+
+      <DemoCard
+        title="可拖动卡片"
+        name="DraggableCards/index"
+        question="如何实现卡片拖动动画效果？"
+        answer="使用鼠标事件监听卡片拖动，当拖动距离超过阈值时移除卡片并添加新卡片。通过HSL颜色模型生成和谐的背景色和阴影，确保视觉效果一致。"
+        class="mb-4 break-inside-avoid"
+      >
+        <DraggableCards />
       </DemoCard>
     </div>
 

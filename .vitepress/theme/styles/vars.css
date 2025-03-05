@@ -49,9 +49,9 @@
 
   --color-grid: #8ebf9d10;
 
-  --color-bg: #08170D;
-  --color-text: #d1cdc2;
-  --color-code-bg: #222222;
+  --color-bg: #121814;
+  --color-text: #dddddd;
+  --color-code-bg: #1B241E;
 
   --scrollbar-track: var(--color-bg);
   --scrollbar-thumb: #555;

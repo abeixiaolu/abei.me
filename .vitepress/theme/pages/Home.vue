@@ -28,8 +28,8 @@ onMounted(() => {
   <section class="font-family-anwt">
     <BorderContainer>
       <div class="flex items-center mb-4 lg:mb-8 avatar-glitch">
-        <img src="/avatar.png" alt="Profile Picture" class="h-28 w-28 my-0 border-4 border-black rounded-full dark:brightness-75 dark:hover:brightness-100 transition-all duration-300">
-        <h1 class="text-4xl border-4 border-transparent border-b-black border-l-0 px-4 py-1 pl-5 pb-2 translate-x-[-10px] text-black">
+        <img src="/avatar.png" alt="Profile Picture" class="h-28 w-28 my-0 border-4 border-black dark:border-[#506C59] rounded-full">
+        <h1 class="text-4xl border-4 border-transparent dark:text-[#506C59] border-b-black dark:border-b-[#506C59] border-l-0 px-4 py-1 pl-5 pb-2 translate-x-[-10px] text-black">
           abei.me
         </h1>
       </div>

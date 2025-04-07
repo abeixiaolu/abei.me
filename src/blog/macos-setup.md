@@ -71,11 +71,9 @@ defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.Web
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-安装完成后，先安装下面的软件。
+安装完成后，先安装下面的软件：`brew bundle install`。
 
 ```bash
-tap "homebrew/bundle"
-tap "mihomo-party-org/mihomo-party"
 brew "bat"
 brew "eza"
 brew "fastfetch"

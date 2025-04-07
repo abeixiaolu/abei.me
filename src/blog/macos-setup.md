@@ -63,7 +63,7 @@ defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.Web
 
 ## 软件安装
 
-由于国内环境，首先需要安装代理软件，这里使用 `Quantumult X` 作为代理软件。导入订阅，我使用的是[白月光](https://www.bygcloud.com/dashboard)，不过它最近有点不稳定，我也不知道是我电脑问题还是什么，时不时会断流。
+由于国内环境，首先需要安装代理软件，这里使用 ~~`Quantumult X`~~ 作为代理软件（改投 [`Clash Verge`](https://www.clashverge.dev/install.html) 了）。导入订阅，我使用的是[白月光](https://www.bygcloud.com/dashboard)，不过它最近有点不稳定，我也不知道是我电脑问题还是什么，时不时会断流。
 
 安装 `Homebrew`：
 
@@ -80,33 +80,28 @@ brew "bat"
 brew "eza"
 brew "fastfetch"
 brew "fnm"
-brew "mysql"
-brew "php"
 brew "pnpm"
-brew "smartmontools"
-brew "tmux"
 brew "zoxide"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
-cask "arc"
+brew "yt-dlp"
 cask "cursor"
 cask "dingtalk"
 cask "finalshell"
 cask "ghostty"
+cask "edge"
 cask "iina"
 cask "itsycal"
 cask "jordanbaird-ice"
-cask "karabiner-elements"
 cask "keka"
-cask "logseq"
 cask "monitorcontrol"
+cask "neteasemusic"
+cask "orbstack"
 cask "raycast"
 cask "snipaste"
 cask "wechat"
 cask "wetype"
-cask "zen-browser"
 cask "stats"
-cask "neteasemusic"
 cask "cursor"
 cask "logi-options+"
 cask "appcleaner"
@@ -119,6 +114,8 @@ cask "appcleaner"
 AdBlocker
 Immersive Translate
 Clicknow: https://clicknow.ai
+Accents
+Pixpin
 ```
 
 ## 终端工具配置
@@ -160,6 +157,7 @@ Clicknow: https://clicknow.ai
     alias c="cursor"
     alias ws="cd ~/Documents/workspace"
     alias ss="cd ~/Documents/studyspace"
+    alias i="cd ~/Documents/studyspace/i"
     alias d="nr dev"
     alias dt="nr dev:test"
     alias b="nr build"
@@ -189,7 +187,7 @@ Clicknow: https://clicknow.ai
     - `mkdir -p ~/Documents/workspace`
     - `mkdir -p ~/Documents/studyspace`
     - `vim ~/Documents/workspace/.gitconfig`
-        ```
+        ```bash
         [user]
           name = shenmengping
           email = shenmengping@gupo.onaliyun.com
@@ -218,28 +216,36 @@ cursor --list-extensions
 ```
 需要在同级目录放置一个 `extensions.txt` 文件，里面存放的是 `code --list-extensions` 的输出内容。下面是我用到的一些扩展：
 
-```
+```bash
 aaron-bond.better-comments
+antfu.goto-alias
 antfu.iconify
 antfu.icons-carbon
+antfu.pnpm-catalog-lens
 antfu.theme-vitesse
 antfu.unocss
 astro-build.astro-vscode
+bierner.markdown-mermaid
 bradlc.vscode-tailwindcss
 christian-kohler.path-intellisense
 dbaeumer.vscode-eslint
-devsense.composer-php-vscode
 dsznajder.es7-react-js-snippets
 eamodio.gitlens
 esbenp.prettier-vscode
+fabiospampinato.vscode-diff
 gruntfuggly.bettercomment
+humao.rest-client
 johnsoncodehk.vscode-tsconfig-helper
+mhutchie.git-graph
 naumovs.color-highlight
+nichabosh.minimalist-dark
 pkief.material-icon-theme
 prisma.prisma
 raunofreiberg.vesper
 rust-lang.rust-analyzer
 serayuzgur.crates
+simonsiefke.svg-preview
+stivo.tailwind-fold
 streetsidesoftware.code-spell-checker
 tamasfe.even-better-toml
 usernamehw.errorlens
@@ -257,17 +263,37 @@ yzhang.markdown-all-in-one
 [
   {
     "key": "cmd+i",
-    "command": "-inlineChat.start",
-    "when": "editorFocus && inlineChatHasProvider && !editorReadonly"
+    "command": "editor.action.triggerSuggest",
+    "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly && !suggestWidgetVisible"
   },
   {
     "key": "cmd+i",
-    "command": "-composer.startComposerPrompt",
-    "when": "composerIsEnabled"
+    "command": "-editor.action.triggerSuggest",
+    "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly && !suggestWidgetVisible"
+  },
+  {
+    "key": "shift+cmd+u",
+    "command": "aichat.insertselectionintochat"
   },
   {
     "key": "shift+cmd+l",
     "command": "-aichat.insertselectionintochat"
+  },
+  {
+    "key": "cmd+u",
+    "command": "composer.startComposerPrompt"
+  },
+  {
+    "key": "cmd+i",
+    "command": "-composer.startComposerPrompt"
+  },
+  {
+    "key": "shift+cmd+u",
+    "command": "composer.newAgentChat"
+  },
+  {
+    "key": "shift+cmd+i",
+    "command": "-composer.newAgentChat"
   }
 ]
 ```
@@ -282,15 +308,15 @@ yzhang.markdown-all-in-one
   "window.title": "${rootName}",
   "window.titleBarStyle": "custom",
   "window.autoDetectColorScheme": true,
-  // workbench
-  "workbench.preferredLightColorTheme": "Xiaolu Abei Light",
-  "workbench.preferredDarkColorTheme": "Xiaolu Abei Dark",
   "workbench.layoutControl.enabled": false,
   "workbench.tree.indent": 12,
   "workbench.tree.renderIndentGuides": "none",
   "workbench.sideBar.location": "right",
   "workbench.productIconTheme": "icons-carbon",
   "workbench.iconTheme": "city-lights-icons-vsc",
+  "git.decorations.enabled": false,
+  "explorer.decorations.badges": false,
+  "city-lights-icons-vsc.hidesExplorerArrows": true,
 
   "workbench.editor.customLabels.enabled": false,
   "workbench.editor.customLabels.patterns": {
@@ -312,13 +338,15 @@ yzhang.markdown-all-in-one
   "explorer.confirmDragAndDrop": false,
   "explorer.sortOrder": "foldersNestsFiles",
   "explorer.confirmPasteNative": false,
-  // editor
-  "editor.fontFamily": "Dank Mono, OperatorMonoLig Nerd Font Mono, Berkeley Mono, 方正悠宋 简",
-  "editor.fontWeight": "bold",
-  "editor.fontLigatures": true,
+  // editor 测试
+  "editor.fontFamily": "Iosevka Abei, Sarasa Mono SC, Maple Mono, MesloLGL Nerd Font, Dank Mono, FZYouSongS, Berkeley Mono",
+  "editor.fontLigatures": "'calt', 'zero', 'cv01', 'cv04'",
+  // "editor.fontVariations": "'wght' 340",
+  // "editor.letterSpacing": -0.4,
+  "editor.fontWeight": "400",
   "editor.tabSize": 2,
   "editor.lineHeight": 1.8,
-  "editor.fontSize": 15,
+  "editor.fontSize": 14,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.cursorBlinking": "expand",
@@ -334,11 +362,15 @@ yzhang.markdown-all-in-one
   "editor.guides.bracketPairs": "active",
   "editor.lightbulb.enabled": "off",
   "editor.lineNumbers": "interval",
+  "files.trimTrailingWhitespace": true,
+  "scm.diffDecorations": "none",
   "editor.accessibilitySupport": "off",
   "diffEditor.ignoreTrimWhitespace": true,
+  "editor.colorDecorators": false,
+  "editor.codeLens": true,
   // terminal
-  "terminal.integrated.fontFamily": "Berkeley Mono",
-  "terminal.integrated.fontSize": 12,
+  "terminal.integrated.fontFamily": "Iosevka Abei",
+  "terminal.integrated.fontSize": 14,
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "line",
   "terminal.integrated.persistentSessionReviveProcess": "never",
@@ -372,11 +404,33 @@ yzhang.markdown-all-in-one
   "git.confirmSync": false,
   "errorLens.fontSize": "12px",
   "errorLens.enabledDiagnosticLevels": ["error", "warning"],
-  "cSpell.userWords": [],
   "[php]": {
     "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
   },
-  "git.enableSmartCommit": true
+  "git.enableSmartCommit": true,
+  "cursor.cpp.disabledLanguages": [],
+  "bladeFormatter.format.indentSize": 2,
+  "[blade]": {
+    "editor.defaultFormatter": "shufo.vscode-blade-formatter"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  },
+  "git.openRepositoryInParentFolders": "never",
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  },
+  "cSpell.userWords": [],
+  "editor.gotoLocation.multipleDefinitions": "goto",
+  "workbench.preferredDarkColorTheme": "Xiaolu Abei Dark Green",
+  "git.replaceTagsWhenPull": true,
+  "workbench.preferredLightColorTheme": "Xiaolu Abei Dark",
+  "tailwind-fold.autoFold": false,
+  "cursor.composer.shouldAllowCustomModes": true,
+  "extensions.ignoreRecommendations": true
 }
 ```
 :::

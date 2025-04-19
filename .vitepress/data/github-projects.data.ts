@@ -12,44 +12,49 @@ export { data }
 
 export default {
   async load() {
-    const projects = [
-      {
-        title: 'Personal',
-        projects: ['abei.me'],
-      },
-      {
-        title: 'Vscode Theme',
-        projects: ['xiaoluabei-vscode-theme'],
-      },
-      {
-        title: 'Learning',
-        projects: ['rustfinity', 'nuxt-tutorial', 'php-study', 'pixel-position'],
-      },
-    ]
-    const env = loadEnv('', join(process.cwd(), '.'))
-    const octokit = new Octokit({ auth: env.VITE_GITHUB_TOKEN })
+    try {
+      const projects = [
+        {
+          title: 'Personal',
+          projects: ['abei.me'],
+        },
+        {
+          title: 'Vscode Theme',
+          projects: ['xiaoluabei-vscode-theme'],
+        },
+        {
+          title: 'Learning',
+          projects: ['rustfinity', 'nuxt-tutorial', 'php-study', 'pixel-position', 'random-emoji'],
+        },
+      ]
+      const env = loadEnv('', join(process.cwd(), '.'))
+      const octokit = new Octokit({ auth: env.VITE_GITHUB_TOKEN })
 
-    const loadedProjects = await Promise.all(
-      projects.map(async (project) => {
-        const projects = await Promise.all(
-          project.projects.map(async (repo) => {
-            const { data } = await octokit.rest.repos.get({
-              owner: 'abeixiaolu',
-              repo,
-            })
+      const loadedProjects = await Promise.all(
+        projects.map(async (project) => {
+          const projects = await Promise.all(
+            project.projects.map(async (repo) => {
+              const { data } = await octokit.rest.repos.get({
+                owner: 'abeixiaolu',
+                repo,
+              })
 
-            return {
-              name: repo,
-              description: data.description,
-              url: data.html_url,
-            } satisfies Project
-          }),
-        )
+              return {
+                name: repo,
+                description: data.description,
+                url: data.html_url,
+              } satisfies Project
+            }),
+          )
 
-        return { ...project, projects }
-      }),
-    )
+          return { ...project, projects }
+        }),
+      )
 
-    return loadedProjects
+      return loadedProjects
+    }
+    catch {
+      return []
+    }
   },
 }

@@ -5,6 +5,7 @@ import { data as galleryData } from '../../data/gallery.data'
 interface Album {
   title: string
   description: string
+  bordered?: boolean
   pictures: Picture[]
 }
 
@@ -96,34 +97,6 @@ const currentPhoto = computed(() => {
   return selectedAlbum.value.pictures[currentPhotoIndex.value]
 })
 
-const loading = ref(true)
-
-function loadImage(pic: Picture) {
-  return new Promise((resolve) => {
-    const img = new Image()
-    img.onload = () => {
-      resolve(true)
-      pic.width = img.width
-      pic.height = img.height
-    }
-    img.src = pic.url
-  })
-}
-
-// 生命周期钩子
-onMounted(async () => {
-  if (albums.value.length > 0)
-    selectedAlbum.value = albums.value[0]
-  window.addEventListener('keydown', handleKeyDown)
-  await Promise.all(selectedAlbum.value.pictures.map(loadImage))
-  loading.value = false
-  albums.value.map((album, idx) => {
-    if (idx !== 0)
-      return Promise.all(album.pictures.map(loadImage))
-    return null
-  })
-})
-
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown)
 })
@@ -143,69 +116,60 @@ function getOpacityClass(index: number) {
 </script>
 
 <template>
-  <section class="space-y-8 md:space-y-16 font-family-anwt">
-    <div class="flex items-center absolute w-full left-0 top-0 pt-16 md:pb-16 h-full mx-auto pointer-events-none z--1">
-      <!-- 左侧相册导航 -->
-      <div class="w-1/8 min-w-[66px] p-4 flex flex-col items-center justify-center pointer-events-auto relative">
-        <div
-          v-for="(album, index) in albums"
-          :key="index"
-          class="mb-4 cursor-pointer transition-all duration-300 transform hover:scale-103"
-          :class="getOpacityClass(index)"
-          @click="viewAlbum(album, index)"
-        >
-          {{ album.title }}
-        </div>
-      </div>
-
-      <!-- 中间照片展示区 -->
+  <section class="flex font-family-anwt h-[calc(100vh-68px)]">
+    <!-- 左侧相册导航 -->
+    <div class="w-fit min-w-[66px] px-4 flex flex-col h-full overflow-auto">
       <div
-        v-if="!loading"
-        class="flex-1 space-y-4 md:space-y-0 md:space-x-4  h-full md:whitespace-nowrap overflow-auto md:snap-x md:snap-mandatory pointer-events-auto w-full md:w-[unset] md:h-[60vh] text-[0px] scroll-smooth"
+        v-for="(album, index) in albums"
+        :key="index"
+        class="mb-4 cursor-pointer transition-all duration-300 transform hover:scale-103 "
+        :class="getOpacityClass(index)"
+        @click="viewAlbum(album, index)"
       >
-        <BorderContainer
-          v-for="(photo, idx) in selectedAlbum.pictures"
-          :key="photo.url"
-          size="sm"
-          :style="`aspect-ratio: ${photo.width} / ${photo.height};`"
-          class="md:h-[98%] block md:inline-block md:snap-center p-4 group"
-          @click="openLightbox(idx)"
-        >
-          <img
-            :src="photo.url"
-            :width="photo.width"
-            :height="photo.height"
-            :style="`aspect-ratio: ${photo.width} / ${photo.height};`"
-            class="md:h-full group-hover:scale-101 transition-all duration-300"
-            loading="lazy"
-          >
-        </BorderContainer>
-      </div>
-      <div v-else class="flex-1 flex items-center justify-center">
-        <div class="relative">
-          <div class="w-16 h-16 rounded-full border-4 border-gray-200 opacity-30" />
-          <div class="w-16 h-16 rounded-full border-4 border-primary absolute top-0 left-0 animate-pulse-ring" />
-        </div>
+        {{ album.title }}
       </div>
     </div>
+
+    <!-- 中间照片展示区 -->
+    <div
+      class="flex-1 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 scroll-smooth h-full pb-4 overflow-auto"
+    >
+      <div
+        v-for="(photo, idx) in selectedAlbum.pictures"
+        :key="photo.url"
+        class="size-full"
+      >
+        <img
+          :src="photo.url"
+          class="hover:scale-101 transition-all duration-300 size-full aspect-square object-cover"
+          :class="selectedAlbum.bordered ? 'border-2 border-solid border-gray-200' : ''"
+          loading="lazy"
+          @click="openLightbox(idx)"
+        >
+      </div>
+    </div>
+    <!-- <div v-else class="flex-1 flex items-center justify-center">
+      <div class="relative">
+        <div class="w-16 h-16 rounded-full border-4 border-gray-200 opacity-30" />
+        <div class="w-16 h-16 rounded-full border-4 border-primary absolute top-0 left-0 animate-pulse-ring" />
+      </div>
+    </div> -->
 
     <!-- 灯箱模式 -->
     <div
       v-if="showLightbox && currentPhoto"
-      class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center backdrop-blur-sm transition-all duration-300"
+      class="fixed inset-0 bg-black/50 backdrop:blur-sm z-50 flex items-center justify-center backdrop-blur-sm transition-all duration-300"
       @click="closeLightbox"
     >
-      <div class="relative w-full h-full flex items-center justify-center" @click.stop>
+      <div class="relative w-full h-full flex items-center justify-center" @click.stop="closeLightbox">
         <img
           :src="currentPhoto.url"
-          :width="currentPhoto.width"
-          :height="currentPhoto.height"
           class="max-h-[90vh] max-w-[90vw] object-contain transition-transform duration-500"
           loading="lazy"
         >
 
         <button
-          class="absolute left-4 p-4 text-white bg-black/40 rounded-full hover:bg-black/60
+          class="absolute left-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60
                  transition-all duration-300 backdrop-blur-sm transform hover:-translate-x-1"
           @click.stop="prevPhoto"
         >
@@ -213,7 +177,7 @@ function getOpacityClass(index: number) {
         </button>
 
         <button
-          class="absolute right-4 p-4 text-white bg-black/40 rounded-full hover:bg-black/60
+          class="absolute right-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60
                  transition-all duration-300 backdrop-blur-sm transform hover:translate-x-1"
           @click.stop="nextPhoto"
         >
@@ -221,7 +185,7 @@ function getOpacityClass(index: number) {
         </button>
 
         <button
-          class="absolute top-4 right-4 p-3 text-white bg-black/40 rounded-full
+          class="absolute top-4 right-4 p-2 text-white bg-black/40 rounded-full
                  hover:bg-black/60 transition-all duration-300 backdrop-blur-sm transform hover:rotate-90"
           @click.stop="closeLightbox"
         >

@@ -3,7 +3,7 @@ import DraggableCards from '../../../src/demo/DraggableCards/index.vue'
 </script>
 
 <template>
-  <section class="space-y-8 md:space-y-16 font-family-anwt mx-auto max-w-screen-md">
+  <section class="space-y-8 md:space-y-16 px-4 font-family-anwt mx-auto max-w-screen-md">
     <PageHeader />
 
     <div class="columns-1 md:columns-2 gap-6">

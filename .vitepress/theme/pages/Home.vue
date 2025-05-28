@@ -25,7 +25,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="mx-auto max-w-screen-md">
+  <main class="mx-auto max-w-screen-md px-4">
     <section class="font-family-anwt ">
       <BorderContainer>
         <div class="flex items-center mb-4 lg:mb-8 avatar-glitch">

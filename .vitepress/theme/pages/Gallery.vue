@@ -235,13 +235,13 @@ function getOpacityClass(index: number) {
 </script>
 
 <template>
-  <section class="flex font-family-anwt h-[calc(100vh-68px)]">
+  <section class="flex font-family-anwt h-[calc(100dvh-68px)]">
     <!-- 左侧相册导航 -->
     <div class="w-fit min-w-[66px] px-4 flex flex-col h-full overflow-auto">
       <div
         v-for="(album, index) in albums"
         :key="index"
-        class="mb-4 cursor-pointer transition-all duration-300 transform hover:scale-103 "
+        class="mb-4 cursor-pointer transition-all duration-300 transform hover:scale-103"
         :class="getOpacityClass(index)"
         @click="viewAlbum(album, index)"
       >
@@ -279,10 +279,11 @@ function getOpacityClass(index: number) {
     <!-- 灯箱模式 -->
     <div
       v-if="showLightbox && currentPhoto"
-      class="fixed inset-0 bg-black/50 backdrop:blur-sm z-50 flex items-center justify-center backdrop-blur-sm transition-all duration-300"
+      class="fixed inset-0 z-50 flex items-center justify-center transition-all backdrop-blur-sm duration-300"
       @click="closeLightbox"
     >
-      <div class="relative w-full h-full flex items-center justify-center" @click.stop="closeLightbox">
+      <div class="relative w-full h-full flex items-center justify-center " @click.stop="closeLightbox">
+        <div class="absolute z-[-1] size-full blur-3xl" :style="{ background: `no-repeat center/cover url(${currentPhoto.url})` }" />
         <img
           :src="currentPhoto.url"
           class="max-h-[90vh] max-w-[90vw] object-contain transition-transform duration-500"

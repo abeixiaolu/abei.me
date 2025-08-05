@@ -39,7 +39,8 @@ const currentPhotoIndex = ref(0)
 const showLightbox = ref(false)
 
 // 打开灯箱查看大图
-function openLightbox(index: number) {
+function openLightbox(photo: Picture, index: number) {
+  selectedAlbum.value = albums.value.find(album => album.pictures.includes(photo))!
   currentPhotoIndex.value = index
   showLightbox.value = true
   document.body.style.overflow = 'hidden'
@@ -96,7 +97,7 @@ const canGoNext = computed(() => selectedAlbum.value && currentPhotoIndex.value 
           :key="idx"
           class="mb-4"
           :class="album.bordered ? 'border-1 border-gray-200' : ''"
-          @click="openLightbox(idx)"
+          @click="openLightbox(photo, idx)"
         >
           <img
             :src="photo.url"

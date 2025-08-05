@@ -3,7 +3,7 @@ const { frontmatter } = useData()
 </script>
 
 <template>
-  <article>
+  <article class="max-w-screen-md mx-auto px-4">
     <BorderContainer>
       <h1 class="text-3xl lg:text-3xl font-semibold mb-4">
         {{ frontmatter.title }}

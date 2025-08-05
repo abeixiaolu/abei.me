@@ -67,8 +67,8 @@ export default withMermaid(defineConfig({
       = pageData.frontmatter.title || pageData.title || siteConfig.site.title
     const description
       = pageData.frontmatter.description
-      || pageData.description
-      || siteConfig.site.description
+        || pageData.description
+        || siteConfig.site.description
     pageData.frontmatter.head.push(
       [
         'meta',

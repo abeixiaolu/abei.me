@@ -58,11 +58,11 @@ Chrome 浏览器凭借其强大的扩展生态，让我们可以轻松定制功�
 ```
 
 这文件啥意思呢？
-- **`manifest_version: 3`**：Chrome 现在推荐用版本 3，规则更现代。
-- **`name` 和 `description`**：插件的名字和简介，随手取个明白的。
-- **`permissions`**：告诉 Chrome 我们需要啥权限，比如访问当前标签页和调用翻译 API 的网络权限。
-- **`background`**：指定背景脚本 `background.js`，它像个后台管家，处理翻译请求。
-- **`content_scripts`**：定义内容脚本 `content.js`，它会在网页上跑，负责抓取你选中的文字。
+- `manifest_version: 3`：Chrome 现在推荐用版本 3，规则更现代。
+- `name`和`description`：插件的名字和简介，随手取个明白的。
+- `permissions`：告诉 Chrome 我们需要啥权限，比如访问当前标签页和调用翻译 API 的网络权限。
+- `background`：指定背景脚本 `background.js`，它像个后台管家，处理翻译请求。
+- `content_scripts`：定义内容脚本 `content.js`，它会在网页上跑，负责抓取你选中的文字。
 
 ---
 

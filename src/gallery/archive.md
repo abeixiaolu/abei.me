@@ -1,6 +1,6 @@
 ---
 {
-  "title": "归档照片",
+  "title": "0=0",
   "description": "一些我以前拍的照片",
   "date": "2024-12-31",
   "pictures": [

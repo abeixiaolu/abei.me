@@ -37,14 +37,6 @@ const selectedAlbum = ref<Album>(albums.value[0])
 const currentPhotoIndex = ref(0)
 // 是否显示大图
 const showLightbox = ref(false)
-// 当前激活的相册索引
-const activeAlbumIndex = ref(0)
-
-// 选择相册查看详情
-function viewAlbum(album: Album, index: number) {
-  selectedAlbum.value = album
-  activeAlbumIndex.value = index
-}
 
 // 打开灯箱查看大图
 function openLightbox(index: number) {
@@ -85,50 +77,31 @@ const currentPhoto = computed(() => {
 // 是否可以前进/后退
 const canGoPrev = computed(() => currentPhotoIndex.value > 0)
 const canGoNext = computed(() => selectedAlbum.value && currentPhotoIndex.value < selectedAlbum.value.pictures.length - 1)
-
-function getOpacityClass(index: number) {
-  const distance = Math.abs(index - activeAlbumIndex.value)
-  if (distance === 0)
-    return 'opacity-100 font-medium'
-  else if (distance <= 1)
-    return 'opacity-80 scale-80'
-  else if (distance <= 2)
-    return 'opacity-60 scale-70'
-  else if (distance <= 3)
-    return 'opacity-40 scale-60'
-  return 'opacity-20 scale-50'
-}
 </script>
 
 <template>
-  <section class="flex font-family-anwt h-[calc(100dvh-68px)]">
-    <!-- 左侧相册导航 -->
-    <div class="w-fit min-w-[66px] px-4 flex flex-col h-full overflow-auto">
-      <div
-        v-for="(album, index) in albums"
-        :key="index"
-        class="mb-4 cursor-pointer transition-all duration-300 transform hover:scale-103"
-        :class="getOpacityClass(index)"
-        @click="viewAlbum(album, index)"
-      >
-        {{ album.title }}
+  <section class="h-[calc(100dvh-68px)] px-4 font-family-anwt">
+    <div v-for="album in albums" :key="album.title" class="mb-4">
+      <div class="flex gap-8 py-4 sticky top-0 bg-(--color-bg) z-10">
+        <div class="text-xl font-medium self-baseline">
+          {{ album.title }}
+        </div>
+        <div class="text-sm text-gray-500 self-baseline">
+          {{ album.description }}
+        </div>
       </div>
-    </div>
-
-    <!-- 中间照片展示区 -->
-    <div class="flex-1 mx-auto h-full pb-4 overflow-auto px-4">
-      <div
-        class="relative w-full grid grid-cols-6 gap-4"
-      >
+      <div class="relative w-full columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4">
         <div
-          v-for="(photo, idx) in selectedAlbum.pictures"
+          v-for="(photo, idx) in album.pictures"
           :key="idx"
+          class="mb-4"
+          :class="album.bordered ? 'border-1 border-gray-200' : ''"
           @click="openLightbox(idx)"
         >
           <img
             :src="photo.url"
-            :alt="`${selectedAlbum.title} - ${idx + 1}`"
-            class="aspect-square object-cover"
+            :alt="`${album.title} - ${idx + 1}`"
+            class="size-full"
             loading="lazy"
           >
         </div>

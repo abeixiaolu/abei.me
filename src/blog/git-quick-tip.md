@@ -93,3 +93,38 @@ git remote set-url origin https://github.com/abeixiaolu/artsmp.me.git
 # 推送
 git push --set-upstream [名称] main
 ```
+
+## 代码 revert 之后，修改完想继续合并回去
+
+1. 比如当前你想要重新合并到 master 的分支是 feat/aaa。
+2. 首先，从 master 分支拉取新分支 feat/bbb 并切换到新分支。
+3. 然后找到 revert 的那一条 commit，执行 `git revert -m 1 commitID`
+3. 然后再执行 `git merge feat/aaa`。
+
+> -m 1的意思是：“以 merge 的第一个父分支（通常是 master）为主线，把当时合并进来的另一个分支的内容反向恢复出来。”
+
+错误操作流程：
+```
+1. feat/5890 分支 pr 合并到 master
+2. master 合并 pr 后部署发现有问题
+3. master 执行 revert 这个 pr后
+4. 我回到 master 后拉取新分支 feat/5890-2 后，又把 feat/5890 合并到 feat/5890-2 然后继续修改。
+5. 修改结束后，我又再一次提 pr 把 feat/5890-2 合并到 master 了。
+6. 合并完成后发现代码还是丢失，虽然有提交记录。
+```
+正确恢复流程：
+```
+git checkout master
+git pull
+git checkout -b feat/5890-fix
+
+# 反转之前那个 revert 的 merge 提交
+git revert -m 1 dac2f0a029b2faf2af328c130b3bf7f5312d320c
+
+# 如果有冲突，解决后继续
+git add .
+git revert --continue
+
+# 推送并提 PR
+git push origin feat/5890-fix
+```

@@ -12,7 +12,7 @@ const { frontmatter } = useData()
     </BorderContainer>
   </article>
 
-  <div class="mt-16 flex justify-center">
+  <div class="my-16 flex justify-center">
     <Button href="/blog">
       Back to Blog
     </Button>

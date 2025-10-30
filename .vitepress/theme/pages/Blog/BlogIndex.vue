@@ -26,7 +26,7 @@ const newData = computed(() => {
       </div>
     </div>
 
-    <div class="flex justify-center">
+    <div class="flex justify-center my-16">
       <Button href="/" size="md">
         Back to Home
       </Button>

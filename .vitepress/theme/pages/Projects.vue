@@ -14,7 +14,7 @@ import { data } from '../../data/github-projects.data'
       </div>
     </div>
 
-    <div class="flex justify-center mt-12">
+    <div class="flex justify-center my-16">
       <Button href="/" size="md">
         Back to Home
       </Button>

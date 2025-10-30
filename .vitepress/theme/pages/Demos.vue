@@ -53,7 +53,7 @@ import DraggableCards from '../../../src/demo/DraggableCards/index.vue'
       </DemoCard>
     </div>
 
-    <div class="flex justify-center">
+    <div class="flex justify-center my-16">
       <Button href="/" size="md">
         Back to Home
       </Button>

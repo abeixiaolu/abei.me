@@ -128,3 +128,8 @@ git revert --continue
 # 推送并提 PR
 git push origin feat/5890-fix
 ```
+
+## feature分支协作方式，保持线性提交
+
+在feature分支上需要经常rebase一下master分支，保持最新的代码状态。使用rebase是为了避免产生过多的merge commit，使得提交历史更加清晰。
+feature分支上结束开发后，切换到master分支，确保master分支是最新的，然后将master分支再次rebase到feature分支上，最后提交feature分支的PR请求。

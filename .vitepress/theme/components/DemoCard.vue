@@ -10,9 +10,9 @@ defineProps<{
 
 <template>
   <BorderContainer size="sm">
-    <div class="flex items-center justify-between border-b-2 border-black dark:border-[#506C59] px-4 py-2">
+    <div class="flex items-center justify-between border-b border-(--color-border) px-4 py-2.5 font-family-anwt">
       <h3
-        class="text-xl font-semibold flex gap-1"
+        class="flex gap-1 text-lg text-(--color-heading)"
       >
         <a v-if="link" :href="link" target="_blank" class="link">
           {{ title }}
@@ -28,14 +28,14 @@ defineProps<{
     <div class="p-4">
       <slot />
     </div>
-    <div v-if="question && answer" class="border-t-2 border-black dark:border-[#506C59] p-4 space-y-2">
-      <h4 class="text-sm font-bold">
+    <div v-if="question && answer" class="space-y-2 border-t border-(--color-border) p-4">
+      <h4 class="text-sm font-bold text-(--color-heading)">
         问题说明
       </h4>
-      <p class="text-sm opacity-60 leading-relaxed">
+      <p class="text-sm leading-relaxed text-(--color-text-soft)">
         {{ question }}
       </p>
-      <p class="text-sm opacity-60 leading-relaxed">
+      <p class="text-sm leading-relaxed text-(--color-text-soft)">
         {{ answer }}
       </p>
     </div>

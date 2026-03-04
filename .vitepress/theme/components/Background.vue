@@ -6,26 +6,23 @@
 .bg {
   width: 100vw;
   height: 100vh;
-  top:0;
-  left:0;
+  top: 0;
+  left: 0;
   position: fixed;
   z-index: -1;
-  color: var(--color-text);
   background-color: var(--color-bg);
   background-image:
-    linear-gradient(-180deg,
-      rgba(255, 255, 255, 0),
-      var(--color-bg)),
-    linear-gradient(to right, var(--color-grid) 1px, transparent 0),
-    linear-gradient(to bottom, var(--color-grid) 1px, transparent 0);
+    radial-gradient(1200px 600px at 12% -10%, color-mix(in srgb, var(--color-primary) 8%, transparent), transparent 65%),
+    radial-gradient(900px 500px at 88% -20%, color-mix(in srgb, var(--color-magenta) 7%, transparent), transparent 65%),
+    linear-gradient(180deg, var(--color-bg-soft), var(--color-bg) 22%, var(--color-bg) 76%, var(--color-bg-soft));
   background-size:
     100% 100%,
-    20px 20px,
-    20px 20px;
+    100% 100%,
+    100% 100%;
   background-position:
     0 0,
     0 0,
     0 0;
-  background-repeat: no-repeat, repeat, repeat;
+  background-repeat: no-repeat;
 }
 </style>

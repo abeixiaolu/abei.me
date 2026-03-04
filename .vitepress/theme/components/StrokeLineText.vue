@@ -3,16 +3,14 @@ const props = defineProps<{
   text: number | string
   size?: 'sm'
 }>()
-
-const fontSize = computed(() => {
-  if (props.size === 'sm')
-    return 'text-[3em] top-[-0.4em]'
-  return 'text-[8em] top-[-0.6em]'
-})
 </script>
 
 <template>
-  <div class="relative select-none h-10 z-0">
-    <span :class="fontSize" class="absolute font-bold z-[-1] text-gray-400/5 dark:[-webkit-text-stroke:1px_rgba(255,255,255,0.1)] [-webkit-text-stroke:1px_rgba(0,0,0,0.1)] pointer-events-none">{{ text }}</span>
+  <div class="mb-4 flex items-center gap-3 font-family-anwt select-none">
+    <span class="h-px flex-1 bg-(--color-border)" />
+    <span class="tracking-[0.18em] text-(--color-text-soft)" :class="props.size === 'sm' ? 'text-xs' : 'text-[0.72rem]'">
+      {{ text }}
+    </span>
+    <span class="h-px w-8 bg-(--color-border)" />
   </div>
 </template>

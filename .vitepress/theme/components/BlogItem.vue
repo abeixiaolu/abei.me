@@ -11,15 +11,17 @@ const date = computed(() =>
 </script>
 
 <template>
-  <div class="flex items-center justify-between gap-2 min-w-0">
-    <div class="flex items-center gap-2 relative">
-      <a :href="post.url" class="truncate hover:underline underline-offset-4 hover:text-primary transition-all duration-200 ease-linear">
-        {{ post.frontmatter.title }}
-      </a>
-      <IconTag v-if="post.frontmatter.series" class="text-sm lg:absolute uppercase left-[-60px] text-primary bg-primary/15" text="Series" />
+  <article class="group rounded-lg border border-transparent px-1 py-2 transition-colors hover:border-(--color-border)">
+    <div class="flex items-center justify-between gap-3 min-w-0">
+      <div class="flex min-w-0 items-center gap-2">
+        <a :href="post.url" class="truncate text-[1.02rem] text-(--color-heading) decoration-(--color-border) underline-offset-4 transition-colors hover:text-(--color-primary)">
+          {{ post.frontmatter.title }}
+        </a>
+        <IconTag v-if="post.frontmatter.series" class="shrink-0 text-xs uppercase" text="Series" />
+      </div>
+      <span class="shrink-0 text-xs tracking-[0.08em] text-(--color-text-soft)">
+        {{ date }}
+      </span>
     </div>
-    <span class="text-sm text-[#888A]">
-      {{ date }}
-    </span>
-  </div>
+  </article>
 </template>

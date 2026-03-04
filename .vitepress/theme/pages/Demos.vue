@@ -3,7 +3,7 @@ import DraggableCards from '../../../src/demo/DraggableCards/index.vue'
 </script>
 
 <template>
-  <section class="space-y-8 md:space-y-16 px-4 font-family-anwt mx-auto max-w-screen-md">
+  <section class="site-shell space-y-8 py-8 font-family-anwt md:space-y-12">
     <PageHeader />
 
     <div class="columns-1 md:columns-2 gap-6">
@@ -53,7 +53,7 @@ import DraggableCards from '../../../src/demo/DraggableCards/index.vue'
       </DemoCard>
     </div>
 
-    <div class="flex justify-center my-16">
+    <div class="my-14 flex justify-center">
       <Button href="/" size="md">
         Back to Home
       </Button>

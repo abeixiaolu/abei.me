@@ -2,7 +2,6 @@
 import { data } from '../../../data/blog.data'
 
 const newData = computed(() => {
-  // 根据年份分组
   const groupedByYear: Map<number, any[]> = new Map()
   data.forEach((item) => {
     const year = new Date(item.frontmatter.date).getFullYear()
@@ -11,22 +10,23 @@ const newData = computed(() => {
     }
     groupedByYear.get(year)!.push(item)
   })
-  return groupedByYear
+
+  return new Map([...groupedByYear.entries()].sort((a, b) => b[0] - a[0]))
 })
 </script>
 
 <template>
-  <section class="space-y-8 px-4 md:space-y-16 font-family-anwt mx-auto max-w-screen-md">
+  <section class="site-shell space-y-10 py-8 font-family-anwt md:space-y-14">
     <PageHeader />
 
-    <div v-for="[year, blogs] in newData" :key="year" class="mt-4">
+    <div v-for="[year, blogs] in newData" :key="year">
       <StrokeLineText :text="year" />
-      <div class="space-y-4">
+      <div class="space-y-1">
         <BlogItem v-for="blog in blogs" :key="blog.url" :post="blog" />
       </div>
     </div>
 
-    <div class="flex justify-center my-16">
+    <div class="my-14 flex justify-center">
       <Button href="/" size="md">
         Back to Home
       </Button>

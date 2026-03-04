@@ -3,18 +3,18 @@ import { data } from '../../data/github-projects.data'
 </script>
 
 <template>
-  <section class="font-family-anwt px-4 mx-auto max-w-screen-md">
+  <section class="site-shell py-8 font-family-anwt">
     <PageHeader />
-    <div class="space-y-10">
+    <div class="space-y-9">
       <div v-for="section in data" :key="section.title">
         <StrokeLineText size="sm" :text="section.title" />
-        <section class="space-y-4 pl-4 pt-2">
+        <section class="space-y-3">
           <Project v-for="project in section.projects" :key="project.url" :project />
         </section>
       </div>
     </div>
 
-    <div class="flex justify-center my-16">
+    <div class="my-14 flex justify-center">
       <Button href="/" size="md">
         Back to Home
       </Button>

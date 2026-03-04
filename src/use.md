@@ -49,9 +49,6 @@ description: Some of my favorite tools and gear.
 <style scoped>
 @import '../.vitepress/theme/styles/app.css';
 ul {
-  list-style-type: '➻';
-  li::marker {
-    font-size: 1em;
-  }
+  list-style-type: disc;
 }
 </style>

@@ -1,47 +1,96 @@
 @utility link {
-  text-underline-offset: 3px;
-  text-decoration-color: #8886;
-  transition: all 0.2s ease;
+  text-underline-offset: 0.22em;
+  text-decoration-color: color-mix(in srgb, var(--color-text-soft) 55%, transparent);
+  text-decoration-thickness: 1px;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
   cursor: pointer;
 
   &::after {
-    content: "⤤";
-    margin-left: 2px;
-    font-weight: bold;
-    transition: all 0.2s ease;
-    opacity: 0.5;
+    content: "";
+    margin-left: 0;
   }
 
   &:hover {
-    @apply text-primary underline;
-    text-decoration-color: var(--color-primary);
-
-    &::after {
-      color: var(--color-primary);
-    }
+    @apply underline;
+    color: var(--color-primary);
+    text-decoration-color: color-mix(in srgb, var(--color-primary) 65%, transparent);
   }
 }
 
-
 .prose {
+  max-width: none;
+  color: var(--color-text);
+  font-size: 1.02rem;
+  line-height: 1.95;
+  letter-spacing: 0.002em;
+  font-family: "LXGWNeoZhiSongPlus", "Noto Serif SC", "Source Han Serif SC", "Songti SC", Georgia, serif;
 
   a:not(h1 a, h2 a, h3 a, h4 a, h5 a, h6 a) {
     @apply link;
   }
 
   strong {
-    color: var(--color-blue);
+    color: var(--color-heading);
+    font-weight: 640;
+  }
+
+  p {
+    margin-top: 1.2em;
+    margin-bottom: 1.2em;
+  }
+
+  h1, h2, h3, h4 {
+    color: var(--color-heading);
+    line-height: 1.35;
+    font-family: "anwt", "PingFang SC", sans-serif;
+    letter-spacing: 0.01em;
+    margin-top: 2.1em;
+    margin-bottom: 0.75em;
+  }
+
+  h1 {
+    font-size: clamp(1.72rem, 2.6vw, 2rem);
+  }
+
+  h2 {
+    font-size: clamp(1.46rem, 2.2vw, 1.72rem);
+  }
+
+  h3 {
+    font-size: clamp(1.28rem, 2vw, 1.46rem);
+  }
+
+  h4 {
+    font-size: 1.15rem;
+  }
+
+  blockquote {
+    color: var(--color-text-soft);
+    border-left: 2px solid color-mix(in srgb, var(--color-border) 75%, var(--color-primary) 25%);
+    padding-left: 1em;
+  }
+
+  ul, ol {
+    padding-inline-start: 1.2em;
+  }
+
+  li {
+    margin-block: 0.4em;
   }
 
   .mermaid {
-    background-color: #9992;
+    background-color: color-mix(in srgb, var(--color-text-soft) 9%, transparent);
+    border-radius: 0.4rem;
   }
 
   code:not(pre code) {
-    background-color: #9992;
-    padding: .2em .3em !important;
+    background-color: color-mix(in srgb, var(--color-text-soft) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+    border-radius: 0.32rem;
+    padding: 0.1em 0.35em !important;
     font-weight: 500 !important;
     color: var(--color-text) !important;
+    font-size: 0.92em;
 
     &::before {
       content: "" !important;
@@ -51,5 +100,4 @@
       content: "" !important;
     }
   }
-
 }

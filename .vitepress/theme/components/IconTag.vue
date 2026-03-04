@@ -7,9 +7,9 @@ defineProps<{
 
 <template>
   <span
-    class="inline-flex items-center text-sm align-baseline leading-none p-1 gap-1 bg-[#8882] rounded-sm"
+    class="inline-flex items-center gap-1 rounded-full border border-(--color-border) bg-(--color-primary-hover) px-2 py-0.5 align-baseline text-sm leading-none text-(--color-text-soft)"
   >
     <div v-if="icon" class="text-[12px]" :class="[icon]" />
-    <span class="opacity-70">{{ text }}</span>
+    <span>{{ text }}</span>
   </span>
 </template>

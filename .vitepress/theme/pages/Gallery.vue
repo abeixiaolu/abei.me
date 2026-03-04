@@ -81,28 +81,30 @@ const canGoNext = computed(() => selectedAlbum.value && currentPhotoIndex.value 
 </script>
 
 <template>
-  <section class="h-[calc(100dvh-68px)] px-4 font-family-anwt">
-    <div v-for="album in albums" :key="album.title" class="mb-4">
-      <div class="flex gap-8 py-4 sticky top-0 bg-(--color-bg) z-10">
-        <div class="text-xl font-medium self-baseline">
+  <section class="site-shell py-8 font-family-anwt">
+    <PageHeader />
+
+    <div v-for="album in albums" :key="album.title" class="mb-10">
+      <div class="sticky top-[68px] z-10 mb-4 flex items-center gap-6 border-b border-(--color-border) bg-(--color-bg) py-3 backdrop-blur">
+        <div class="text-lg text-(--color-heading)">
           {{ album.title }}
         </div>
-        <div class="text-sm text-gray-500 self-baseline">
+        <div class="text-sm leading-6 text-(--color-text-soft)">
           {{ album.description }}
         </div>
       </div>
-      <div class="relative w-full columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4">
+      <div class="relative w-full columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4">
         <div
           v-for="(photo, idx) in album.pictures"
           :key="idx"
-          class="mb-4"
-          :class="album.bordered ? 'border-1 border-gray-200' : ''"
+          class="mb-4 cursor-zoom-in overflow-hidden rounded-lg border border-(--color-border) bg-(--color-surface)"
+          :class="album.bordered ? 'p-1' : ''"
           @click="openLightbox(photo, idx)"
         >
           <img
             :src="photo.url"
             :alt="`${album.title} - ${idx + 1}`"
-            class="size-full"
+            class="size-full transition-transform duration-500 hover:scale-[1.02]"
             loading="lazy"
           >
         </div>
@@ -112,10 +114,10 @@ const canGoNext = computed(() => selectedAlbum.value && currentPhotoIndex.value 
     <!-- 灯箱模式 -->
     <div
       v-if="showLightbox && currentPhoto"
-      class="fixed inset-0 z-50 flex items-center justify-center transition-all backdrop-blur-sm duration-300"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm transition-all duration-300"
       @click="closeLightbox"
     >
-      <div class="relative w-full h-full flex items-center justify-center " @click.stop="closeLightbox">
+      <div class="relative flex h-full w-full items-center justify-center" @click.stop="closeLightbox">
         <div class="absolute z-[-1] size-full blur-3xl" :style="{ background: `no-repeat center/cover url(${currentPhoto.url})` }" />
         <img
           :src="currentPhoto.url"
@@ -125,8 +127,7 @@ const canGoNext = computed(() => selectedAlbum.value && currentPhotoIndex.value 
 
         <button
           v-if="canGoPrev"
-          class="absolute left-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60
-                 transition-all duration-300 backdrop-blur-sm transform hover:-translate-x-1"
+          class="absolute left-4 rounded-full border border-white/20 bg-black/30 p-2 text-white transition-all duration-300 hover:-translate-x-1 hover:bg-black/60"
           @click.stop="prevPhoto"
         >
           <i class="i-solar-arrow-left-linear text-2xl" />
@@ -134,16 +135,14 @@ const canGoNext = computed(() => selectedAlbum.value && currentPhotoIndex.value 
 
         <button
           v-if="canGoNext"
-          class="absolute right-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60
-                 transition-all duration-300 backdrop-blur-sm transform hover:translate-x-1"
+          class="absolute right-4 rounded-full border border-white/20 bg-black/30 p-2 text-white transition-all duration-300 hover:translate-x-1 hover:bg-black/60"
           @click.stop="nextPhoto"
         >
           <i class="i-solar-arrow-right-linear text-2xl" />
         </button>
 
         <button
-          class="absolute top-4 right-4 p-2 text-white bg-black/40 rounded-full
-                 hover:bg-black/60 transition-all duration-300 backdrop-blur-sm transform hover:rotate-90"
+          class="absolute right-4 top-4 rounded-full border border-white/20 bg-black/30 p-2 text-white transition-all duration-300 hover:rotate-90 hover:bg-black/60"
           @click.stop="closeLightbox"
         >
           <i class="i-solar-close-circle-linear text-2xl" />

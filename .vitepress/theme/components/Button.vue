@@ -2,7 +2,7 @@
 import { tv } from 'tailwind-variants'
 
 const button = tv({
-  base: ['inline-flex gap-1 items-center justify-center cursor-pointer px-2 py-1 border-1 border-[#8884] dark:border-[#506C59] dark:text-[#506C59] rounded-[2px] text-sm text-[#888D] hover:bg-primary hover:text-white dark:hover:text-black hover:border-primary'],
+  base: ['inline-flex items-center justify-center gap-1 rounded-full border border-(--color-border) px-3 py-1.5 text-sm text-(--color-text-soft) transition-colors hover:border-(--color-primary) hover:text-(--color-heading)'],
 })
 </script>
 

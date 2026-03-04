@@ -6,15 +6,15 @@ const props = defineProps<{
 const sizeClass = computed(() => {
   switch (props.size) {
     case 'sm':
-      return 'shadow-[4px_4px_0_#000] dark:shadow-[4px_4px_0_#506C59]'
+      return 'p-4 md:p-5'
     default:
-      return 'p-4 md:p-8 shadow-[6px_6px_0_#000] dark:shadow-[6px_6px_0_#506C59]'
+      return 'p-5 md:p-8'
   }
 })
 </script>
 
 <template>
-  <div class="border-2 border-black dark:border-[#506C59]" :class="sizeClass">
+  <div class="rounded-xl border border-(--color-border) bg-(--color-surface) shadow-[0_10px_32px_-20px_rgba(0,0,0,0.45)]" :class="sizeClass">
     <slot />
   </div>
 </template>

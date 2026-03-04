@@ -1,19 +1,26 @@
 html,
 body {
   color: var(--color-text);
+  background-color: var(--color-bg);
   text-autospace: normal;
+  font-feature-settings: "kern" 1;
+  line-height: 1.75;
 }
 
 ::selection {
-  background-color: #56905650;
+  background-color: color-mix(in srgb, var(--color-green) 28%, transparent);
 }
 
 .dark ::selection {
-  background-color: #8ebf9d50;
+  background-color: color-mix(in srgb, var(--color-green) 36%, transparent);
+}
+
+a {
+  color: inherit;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 9px;
 }
 
 ::-webkit-scrollbar-track {
@@ -34,4 +41,14 @@ body {
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+.site-shell {
+  margin-inline: auto;
+  width: min(100% - 2rem, var(--site-max-width));
+}
+
+.content-shell {
+  margin-inline: auto;
+  width: min(100%, var(--content-max-width));
 }

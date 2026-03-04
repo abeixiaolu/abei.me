@@ -1,6 +1,8 @@
 <template>
-  <section class="font-family-anwt px-4 mx-auto max-w-screen-md">
+  <section class="site-shell py-8 font-family-anwt">
     <PageHeader />
-    <Content class="prose dark:prose-invert" />
+    <div class="content-shell">
+      <Content class="prose prose-sm sm:prose-base dark:prose-invert" />
+    </div>
   </section>
 </template>

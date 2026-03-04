@@ -9,8 +9,8 @@ async function toggleDark() {
 </script>
 
 <template>
-  <button class="cursor-pointer" @click="toggleDark">
-    <div :class="isDark ? 'i-ph-moon-stars-duotone' : 'i-ph-sun-dim-duotone'" />
+  <button class="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-(--color-text-soft) transition-colors hover:bg-(--color-primary-hover) hover:text-(--color-heading)" @click="toggleDark">
+    <div :class="isDark ? 'i-ph-moon-stars-duotone text-base' : 'i-ph-sun-dim-duotone text-base'" />
   </button>
 </template>
 

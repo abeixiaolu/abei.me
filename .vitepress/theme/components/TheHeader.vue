@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const route = useRoute()
+const elevated = ref(false)
+
 const navList = computed(() => {
   return [
     { name: 'Blog', path: '/blog', active: route.path.startsWith('/blog') },
@@ -9,10 +11,26 @@ const navList = computed(() => {
     { name: 'Gallery', path: '/gallery', active: route.path.startsWith('/gallery') },
   ]
 })
+
+function onScroll() {
+  elevated.value = window.scrollY > 16
+}
+
+onMounted(() => {
+  onScroll()
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+})
 </script>
 
 <template>
-  <header class="sticky top-0 z-20 border-b border-(--color-border) bg-(--color-bg) backdrop-blur">
+  <header
+    class="sticky top-0 z-20 border-b border-(--color-border) transition-all duration-300"
+    :class="elevated ? 'bg-(--color-bg)/84 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.05)]' : 'bg-(--color-bg)'"
+  >
     <div class="site-shell flex items-center justify-between gap-4 py-4 font-family-anwt">
       <a href="/" class="text-[1.45rem] tracking-[0.06em] text-(--color-heading)">
         abei.me

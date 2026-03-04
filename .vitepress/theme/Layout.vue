@@ -14,5 +14,6 @@ const { frontmatter } = useData()
     <Uses v-else-if="frontmatter.layout === 'uses'" />
     <Gallery v-else-if="frontmatter.layout === 'gallery'" />
     <Content v-else />
+    <FloatingTools />
   </div>
 </template>

@@ -5,6 +5,7 @@ body {
   text-autospace: normal;
   font-feature-settings: "kern" 1;
   line-height: 1.75;
+  scroll-behavior: smooth;
 }
 
 ::selection {
@@ -51,4 +52,17 @@ a {
 .content-shell {
   margin-inline: auto;
   width: min(100%, var(--content-max-width));
+}
+
+.reader-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .reader-grid {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 2.25rem;
+  }
 }

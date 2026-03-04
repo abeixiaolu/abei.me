@@ -1,79 +1,84 @@
 ---
-title: "在 Mac mini 上自建 Vaultwarden：Cloudflare Tunnel 零端口暴露实战"
-description: "不折腾路由器端口转发，手机也不用开 VPN，直接用 vault.abei.me 安全访问自建密码库。"
+title: "Mac mini 自建 Vaultwarden"
+description: "不用路由器端口映射，手机直接访问 vault.abei.me，记录完整搭建与安全加固过程。"
 date: 2026-03-04
 ---
 
-你可能也遇到过这个场景：
+这次做自建密码库，我给自己定了三个要求：
 
-想自建密码库，但一想到公网端口、路由器转发、动态 IP、手机还要开 VPN，瞬间就不想弄了。
+- 家庭网络不开放公网端口
+- 手机随时可访问
+- 配置后续容易维护
 
-我这次的目标很朴素：
+最后选了这条路径：Mac mini + Vaultwarden + Cloudflare Tunnel + `vault.abei.me`。
 
-- 不开家庭公网端口
-- 手机直接可用
-- 先跑通，再收口
+架构很直接：
 
-最后方案是：**Mac mini + Vaultwarden + Cloudflare Tunnel + `vault.abei.me`**。
-
-## 一句话理解这套架构
-
-- Vaultwarden 只监听本机：`127.0.0.1:8222`
-- Cloudflare Tunnel 把 `vault.abei.me` 转发到本机这个端口
-- 外部访问的是 Cloudflare，不是你家路由器
+- Vaultwarden 仅监听本机 `127.0.0.1:8222`
+- Cloudflare Tunnel 负责把 `vault.abei.me` 转到本机服务
+- 外部流量先到 Cloudflare，不直接触达家里路由器
 
 > [!TIP]
-> 这套方案最省心的点：不需要做端口映射，也不依赖固定公网 IP。
+> 这样做之后，不需要在路由器上折腾端口映射，也不依赖固定公网 IP。
 
-## 先把 3 个关键名词说清楚
+## 先说几个关键名词
 
-### 1) ADMIN_TOKEN 是什么？
+## ADMIN_TOKEN
 
-它是 Vaultwarden 管理后台（`/admin`）的访问密钥。
+这是 Vaultwarden 管理后台 `/admin` 的访问密钥。
 
-- **它不是** 你登录密码库的主密码
-- **它是** 运维入口的超级钥匙
-- 泄露后风险很高，必须放密码管理器里
+- 不是日常登录密码库用的主密码
+- 用于服务级管理
+- 泄露后风险高，建议马上存进密码库
 
 生成方式：
 
 ```bash
-python3 - <<'PY'
-import secrets
-print(secrets.token_urlsafe(48))
-PY
+python3 -c "import secrets; print(secrets.token_urlsafe(48))"
 ```
 
-### 2) tunnel id 从哪来？
+## tunnel id
 
-执行 `cloudflared tunnel create vaultwarden-abei` 后，Cloudflare 会返回一个 UUID，比如：
+执行下面命令后，Cloudflare 会返回一个 UUID：
+
+```bash
+cloudflared tunnel create vaultwarden-abei
+```
+
+类似这样：
 
 `d4e3af3d-3490-4529-93d0-5f6ab9be0aba`
 
-这就是 tunnel id，后面配置和启动都要用它。
+这串 UUID 就是 tunnel id。  
+后面的 config、DNS 绑定、隧道启动都要用它。
 
-### 3) credentials-file 是什么？
+## credentials-file
 
-`~/.cloudflared/<tunnel-id>.json` 这个文件就是隧道凭证。
+路径一般是：
+
+`~/.cloudflared/<tunnel-id>.json`
+
+这个文件是隧道认证凭证。没有它，隧道无法连接 Cloudflare。
 
 > [!IMPORTANT]
-> 这个 JSON 文件别外传、别提交到 git。它泄露等于隧道控制权泄露。
+> 这个 JSON 文件不要外传，也不要进 git。  
+> 一旦泄露，别人就可能接管你的隧道。
 
-## 手工部署（macOS）
+## 部署步骤
 
-## Step 1：准备容器环境
+## 准备容器环境
 
-如果你用 OrbStack，直接用它的 Docker 就行。  
-如果没有，可用 Colima：
+如果你已经在用 OrbStack，直接走 OrbStack 的 Docker。  
+没有的话，也可以用 Colima：
 
 ```bash
 brew install docker docker-compose colima
 colima start --cpu 2 --memory 4 --disk 40
 ```
 
-## Step 2：启动 Vaultwarden
+## 启动 Vaultwarden
 
-`docker-compose.yml`（核心配置）：
+`docker-compose.yml`：
 
 ```yaml
 services:
@@ -92,10 +97,10 @@ services:
       - "127.0.0.1:8222:80"
 ```
 
-`.env`:
+`.env`：
 
 ```env
-VW_ADMIN_TOKEN=你刚生成的随机字符串
+VW_ADMIN_TOKEN=你生成的随机字符串
 ```
 
 启动：
@@ -110,7 +115,9 @@ docker compose up -d
 curl -I http://127.0.0.1:8222
 ```
 
-## Step 3：配置 Cloudflare Tunnel
+## 配置 Cloudflare Tunnel
+
+安装并登录授权：
 
 ```bash
 brew install cloudflared
@@ -135,44 +142,46 @@ ingress:
 cloudflared tunnel route dns <tunnel-id> vault.abei.me
 ```
 
-运行隧道：
+启动隧道：
 
 ```bash
 cloudflared tunnel run <tunnel-id>
 ```
 
-验证：
+验证访问：
 
 ```bash
 curl -I https://vault.abei.me
 ```
 
-看到 `HTTP 200` 就是通了。
+返回 `HTTP 200` 就可以正常访问。
 
-## 我踩过的坑（你可以直接避开）
+## 我遇到的几个问题
 
-1. **只看到登录页，看不到注册**  
-   多半是 `SIGNUPS_ALLOWED=false`。首次可临时打开注册，建完首个账号立刻关回去。
+1. **只有登录页，没有注册入口**  
+   通常是 `SIGNUPS_ALLOWED=false`。首次部署可临时打开注册，创建首个账号后立即关闭。
 
 2. **Invalid master password**  
-   常见是没注册先登录、邮箱输错、或者连到了别的服务地址。
+   常见原因：没注册就登录、邮箱输错、访问了错误地址。
 
-3. **隧道进程在跑，但域名 530/502**  
-   先查 tunnel 状态，再查本机 `127.0.0.1:8222` 是否可达。
+3. **隧道进程在运行，但域名 530/502**  
+   先看 tunnel 状态，再看本机 `127.0.0.1:8222` 是否可访问。
 
-## 安全收口（上线当天就做）
+## 安全加固清单
 
-- 关闭公开注册（`SIGNUPS_ALLOWED=false`）
-- 管理员账号开启 2FA（TOTP）
+- 关闭公开注册 `SIGNUPS_ALLOWED=false`
+- 管理员账号开启 2FA
 - 定期备份 `./data`
-- `ADMIN_TOKEN` 和 tunnel 凭证 JSON 放进密码库
-- 有空再加 Cloudflare Access（邮箱白名单）
+- `ADMIN_TOKEN` 与隧道凭证放入密码库
+- 增加 Cloudflare Access 邮箱白名单
 
-## 备选方案：用 OpenClaw 自动化搭建
+## 备选方案
 
-如果你不想手敲全流程，可以让 OpenClaw 代跑，自己只负责授权和确认。
+## 用 OpenClaw 自动化完成部署
 
-你可以直接给 OpenClaw 这段指令：
+如果不想手动走完整流程，可以让 OpenClaw 代执行，你只负责授权和关键确认。
+
+可直接给 OpenClaw 这段指令：
 
 ```text
 帮我在本机用 OrbStack + Cloudflare Tunnel 部署 Vaultwarden，
@@ -182,12 +191,8 @@ curl -I https://vault.abei.me
 2) 自动生成强 ADMIN_TOKEN 并写入 .env
 3) cloudflared 完成 tunnel create、route dns、run
 4) 验证 https://vault.abei.me 返回 200
-5) 默认关闭注册并输出备份脚本
+5) 关闭公开注册并输出备份脚本
 ```
 
-## 最后
-
-这套方案不是最花哨，但对个人用户特别友好：
-**暴露面小、维护简单、手机直接能用。**
-
-如果你只是想稳稳地把密码库跑起来，这条路径基本可以直接抄作业。
+这套方案对个人用户很友好：暴露面小，维护压力也低。  
+如果你想长期稳定地用自建密码库，这条路径可以直接照着做。

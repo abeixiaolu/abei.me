@@ -11,6 +11,9 @@ importers:
       '@vueuse/core':
         specifier: ^13.3.0
         version: 13.3.0(vue@3.5.15(typescript@5.8.3))
+      markdown-it-task-lists:
+        specifier: ^2.1.1
+        version: 2.1.1
       powerglitch:
         specifier: ^2.4.0
         version: 2.4.0
@@ -2492,6 +2495,9 @@ packages:
     resolution: {integrity: sha512-RU3cbB/ewujrDpYNdyabvp4CscZ5J/3D71NWbJW+JSA0nplfutIXDMCwtGWlMLwzgBDAYkFMvYGkigq8nWOVdA==}
     peerDependencies:
       markdown-it: '>= 13.0.0'
+
+  markdown-it-task-lists@2.1.1:
+    resolution: {integrity: sha512-TxFAc76Jnhb2OUu+n3yz9RMu4CwGfaT788br6HhEDlvWfdeJcLUsxk1Hgw2yJio0OXsxv7pyIPmvECY7bMbluA==}
 
   markdown-it@14.1.0:
     resolution: {integrity: sha512-a54IwgWPaeBCAAsv13YgmALOF1elABB08FxO9i+r4VFk5Vl4pKokRPeX8u5TCgSsPi6ec1otfLjdOpVcgbpshg==}
@@ -5772,6 +5778,8 @@ snapshots:
   markdown-it-github-alerts@1.0.0(markdown-it@14.1.0):
     dependencies:
       markdown-it: 14.1.0
+
+  markdown-it-task-lists@2.1.1: {}
 
   markdown-it@14.1.0:
     dependencies:

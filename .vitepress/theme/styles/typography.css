@@ -52,4 +52,12 @@
     }
   }
 
+  .task-list-item {
+    list-style: none;
+  }
+
+  .contains-task-list {
+    padding-left: 0;
+  }
+
 }

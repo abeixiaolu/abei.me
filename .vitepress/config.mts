@@ -2,6 +2,8 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import MarkdownItGithubAlerts from 'markdown-it-github-alerts'
+// @ts-expect-error missing types
+import taskLists from 'markdown-it-task-lists'
 import { joinURL, withoutTrailingSlash } from 'ufo'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -54,6 +56,7 @@ export default withMermaid(defineConfig({
     theme: { light: lightTheme, dark: darkTheme },
     config(md) {
       md.use(MarkdownItGithubAlerts)
+      md.use(taskLists)
     },
     gfmAlerts: false,
   },

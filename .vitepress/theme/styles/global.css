@@ -2,6 +2,7 @@ html,
 body {
   color: var(--color-text);
   text-autospace: normal;
+  font-family: "anwt", "Songti SC", "STSong", "SimSun", serif;
 }
 
 ::selection {

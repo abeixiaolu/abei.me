@@ -26,7 +26,7 @@ onMounted(() => {
 
 <template>
   <main class="mx-auto max-w-screen-md px-4">
-    <section class="font-family-anwt ">
+    <section>
       <BorderContainer>
         <div class="flex items-center mb-4 lg:mb-8 avatar-glitch">
           <img src="/avatar.png" alt="Profile Picture" class="h-28 w-28 my-0 border-4 border-black dark:border-[#506C59] rounded-full">

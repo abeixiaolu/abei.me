@@ -13,7 +13,7 @@
   --color-primary: var(--color-green);
   --color-primary-hover: #56905650;
   --color-secondary: var(--color-magenta);
-  --font-family-anwt: "anwt";
+  --font-family-anwt: "anwt", "Songti SC", "STSong", "SimSun", serif;
   --animate-wiggle: wiggle 1s ease-in-out infinite;
   @keyframes wiggle {
     0%,100% {

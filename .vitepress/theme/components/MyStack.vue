@@ -1,6 +1,5 @@
 <template>
   <div class="inline-flex gap-2 flex-wrap align-middle">
-    技术栈：
     <IconTag icon="i-logos-javascript" text="JavaScript" />
     <IconTag icon="i-logos-typescript-icon" text="TypeScript" />
     <IconTag icon="i-logos-vue" text="Vue" />

@@ -81,7 +81,11 @@ const canGoNext = computed(() => selectedAlbum.value && currentPhotoIndex.value 
 </script>
 
 <template>
-  <section class="h-[calc(100dvh-68px)] px-4 font-family-anwt">
+  <section class="font-family-anwt">
+    <div class="page-meta-header">
+      <span>ARCHIVE // GALLERY</span>
+      <span>{{ new Date().getFullYear() }}</span>
+    </div>
     <div v-for="album in albums" :key="album.title" class="mb-4">
       <div class="flex gap-8 py-4 sticky top-0 bg-(--color-bg) z-10">
         <div class="text-xl font-medium self-baseline">
@@ -154,6 +158,20 @@ const canGoNext = computed(() => selectedAlbum.value && currentPhotoIndex.value 
 </template>
 
 <style scoped>
+.page-meta-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+  color: var(--color-text);
+  opacity: 0.45;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  border-bottom: 1px solid var(--color-hairline);
+  padding-bottom: 0.75rem;
+  margin-bottom: 2rem;
+}
+
 img {
   height: auto;
   max-width: 100%;

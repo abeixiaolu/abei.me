@@ -3,8 +3,11 @@ import DraggableCards from '../../../src/demo/DraggableCards/index.vue'
 </script>
 
 <template>
-  <section class="space-y-8 md:space-y-16 px-4 font-family-anwt mx-auto max-w-screen-md">
-    <PageHeader />
+  <section class="space-y-8 md:space-y-16 font-family-anwt">
+    <div class="page-meta-header">
+      <span>ARCHIVE // DEMO</span>
+      <span>{{ new Date().getFullYear() }}</span>
+    </div>
 
     <div class="columns-1 md:columns-2 gap-6">
       <DemoCard
@@ -60,3 +63,19 @@ import DraggableCards from '../../../src/demo/DraggableCards/index.vue'
     </div>
   </section>
 </template>
+
+<style scoped>
+.page-meta-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+  color: var(--color-text);
+  opacity: 0.45;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  border-bottom: 1px solid var(--color-hairline);
+  padding-bottom: 0.75rem;
+  margin-bottom: 2rem;
+}
+</style>

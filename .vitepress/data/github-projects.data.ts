@@ -30,6 +30,8 @@ export default {
       const env = loadEnv('', join(process.cwd(), '.'))
       const octokit = new Octokit({ auth: env.VITE_GITHUB_TOKEN })
 
+      return []
+
       const loadedProjects = await Promise.all(
         projects.map(async (project) => {
           const projects = await Promise.all(

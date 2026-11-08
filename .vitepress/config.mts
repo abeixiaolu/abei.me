@@ -39,6 +39,7 @@ export default withMermaid(
     ],
     srcDir: "src",
     vite: {
+      optimizeDeps: { include: ["mermaid"] },
       server: {
         host: "0.0.0.0",
         allowedHosts: true,

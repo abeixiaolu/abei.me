@@ -8,6 +8,7 @@ import { data } from "../../data/github-projects.data";
       <span>ARCHIVE // PROJECT</span>
       <span>{{ new Date().getFullYear() }}</span>
     </div>
+    <p v-if="!data.length" class="project-empty">这里还没有收录项目。你可以到 <a class="link" href="https://github.com/abeixiaolu" target="_blank" rel="noopener noreferrer">GitHub</a> 看看，或打开其他应用。</p>
     <div class="space-y-10">
       <div v-for="section in data" :key="section.title">
         <StrokeLineText size="sm" :text="section.title" />

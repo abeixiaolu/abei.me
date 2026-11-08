@@ -1,0 +1,20 @@
+{
+  "tool": "Built-in image_gen",
+  "date": "2026-11-08",
+  "accepted_asset": "src/public/textures/pothos-atlas-v2.webp",
+  "geometry": "Leaf silhouette cross-sections are sampled from alpha and stored in .vitepress/theme/scene/pothosContours.ts. Runtime geometry, bending and UV mapping are editable in createPlant.ts.",
+  "generations": [
+    {
+      "asset": "assets/scene/pothos-leaf-v1.webp",
+      "status": "superseded exploration",
+      "source": "/Users/abei/.codex/generated_images/01a1b912-1b35-7961-8160-02bb6a9440ff/exec-56e1d241-a757-48b8-b86b-471f42305d32.png",
+      "prompt": "Use case: photorealistic-natural. Asset type: transparent botanical albedo atlas for real-time 3D foliage. A single mature golden pothos leaf, isolated perfectly on transparent background. Orthographic straight overhead view, flat leaf with its entire face visible, heart shaped broad asymmetric lobes at base at bottom, long pointed tip at top. Leaf fills 88% of square image, short thin petiole bottom center. Real macro botanical photographic detail: deep forest green and irregular subdued yellow-green cream marbling, fine branching veins, waxy cuticle, slight unevenness of edge, two tiny brown edge imperfections. Neutral diffuse cross-polarized lighting with NO cast shadow, NO highlights, NO background, NO pots, no text, no diagram, no illustration, no multiple leaves. Natural realistic sparse golden variegation covering about 20 percent, remaining 80 percent rich dark green. The leaf is vertically aligned, tip at x50% y4%, base at x50% y89%. Actual transparent background, fully opaque leaf surface."
+    },
+    {
+      "asset": "src/public/textures/pothos-atlas-v2.webp",
+      "status": "accepted",
+      "source": "/Users/abei/.codex/generated_images/01a1b912-1b35-7961-8160-02bb6a9440ff/exec-e91e9020-aee4-42cb-a7e5-64af49a513a4.png",
+      "prompt": "Use case: photorealistic-natural. Asset type: square 2x2 botanical albedo texture atlas for real-time 3D golden pothos foliage. Exactly FOUR DIFFERENT real pothos leaves, one perfectly centered in each equal quadrant of a square image. Every leaf points straight up, petiole at bottom, single complete isolated leaf, entire silhouette visible, no overlap between cells, transparent background. All leaves occupy 85% of their cell width and 90% cell height. Top-left: broad mature heart-shaped forest-green leaf with restrained cream marbling along right edge. Top-right: slightly narrower rich green leaf with tiny uneven pale speckles and a curved asymmetrical base. Bottom-left: broad dark green heart-shaped leaf with one irregular muted yellow-green central streak and a small brown damaged tip. Bottom-right: younger medium green elongated heart-shaped leaf with subtle marbled patches. A botanical macro photographic scan: delicate natural vein network, waxy surface microstructure, irregular organic color variation, realistic asymmetric contours. Flat neutral cross-polarized diffuse light, NO specular highlight, NO cast shadows, NO environmental lighting. No text, no grid lines, no borders, no plant pots, no stems connecting cells, no illustration. Actual transparent background and opaque leaves."
+    }
+  ]
+}

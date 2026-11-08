@@ -1,18 +1,16 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="card">
     <div class="img-box">
-      <img src="https://picsum.photos/1920/1080" alt="">
+      <img src="https://picsum.photos/1920/1080" alt="" />
     </div>
     <div class="content">
-      <h2 class="title">
-        AI Flower
-      </h2>
+      <h2 class="title">AI Flower</h2>
       <span class="time">1 hour ago</span>
       <p class="desc">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam laborum autem nobis maxime labore.
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam laborum autem nobis maxime
+        labore.
       </p>
     </div>
   </div>
@@ -46,7 +44,7 @@
     }
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       bottom: -20px;
       width: 100%;
@@ -56,7 +54,7 @@
     }
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       bottom: 20px;
       right: 0;
@@ -65,7 +63,7 @@
       border-radius: 50%;
       background: transparent;
       box-shadow: 36px 39px 0 20px var(--bg);
-  }
+    }
   }
 
   &:hover {

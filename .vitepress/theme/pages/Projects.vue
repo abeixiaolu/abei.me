@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { data } from '../../data/github-projects.data'
+import { data } from "../../data/github-projects.data";
 </script>
 
 <template>

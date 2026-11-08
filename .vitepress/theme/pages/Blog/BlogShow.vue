@@ -1,12 +1,12 @@
 <script setup lang="ts">
-const { frontmatter } = useData()
+const { frontmatter } = useData();
 </script>
 
 <template>
   <article class="blog-show font-family-anwt">
     <div class="show-meta-header">
       <span>ARTICLE // BLOG</span>
-      <span v-if="frontmatter.date">{{ frontmatter.date?.split('T')[0] }}</span>
+      <span v-if="frontmatter.date">{{ frontmatter.date?.split("T")[0] }}</span>
     </div>
 
     <div class="blog-content">

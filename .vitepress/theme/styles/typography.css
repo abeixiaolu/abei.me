@@ -22,9 +22,7 @@
   }
 }
 
-
 .prose {
-
   a:not(h1 a, h2 a, h3 a, h4 a, h5 a, h6 a) {
     @apply link;
   }
@@ -39,7 +37,7 @@
 
   code:not(pre code) {
     background-color: #9992;
-    padding: .2em .3em !important;
+    padding: 0.2em 0.3em !important;
     font-weight: 500 !important;
     color: var(--color-text) !important;
 
@@ -59,5 +57,4 @@
   .contains-task-list {
     padding-left: 0;
   }
-
 }

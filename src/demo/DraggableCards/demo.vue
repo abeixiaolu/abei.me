@@ -5,11 +5,11 @@
       尝试拖动顶部的卡片。当卡片被拖动到一定距离时，它会消失，并且会有一张新卡片补充进来。
       每张卡片的背景色和阴影都会根据图片内容自动调整，以保持视觉和谐。
     </p>
-    
+
     <div class="card-demo">
       <DraggableCards />
     </div>
-    
+
     <div class="demo-instructions">
       <h2>使用说明</h2>
       <ul>
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import DraggableCards from './index.vue'
+import DraggableCards from "./index.vue";
 </script>
 
 <style scoped>

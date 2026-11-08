@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { data } from '../../../data/blog.data'
+import { data } from "../../../data/blog.data";
 
 const newData = computed(() => {
-  const groupedByYear: Map<number, any[]> = new Map()
+  const groupedByYear: Map<number, any[]> = new Map();
   data.forEach((item) => {
-    const year = new Date(item.frontmatter.date).getFullYear()
+    const year = new Date(item.frontmatter.date).getFullYear();
     if (!groupedByYear.has(year)) {
-      groupedByYear.set(year, [])
+      groupedByYear.set(year, []);
     }
-    groupedByYear.get(year)!.push(item)
-  })
-  return groupedByYear
-})
+    groupedByYear.get(year)!.push(item);
+  });
+  return groupedByYear;
+});
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DraggableCards from '../../../src/demo/DraggableCards/index.vue'
+import DraggableCards from "../../../src/demo/DraggableCards/index.vue";
 </script>
 
 <template>
@@ -21,11 +21,7 @@ import DraggableCards from '../../../src/demo/DraggableCards/index.vue'
         <TwitterLikeBtn />
       </DemoCard>
 
-      <DemoCard
-        title="Checkbox"
-        name="Checkbox/Checkbox"
-        class="mb-4 break-inside-avoid"
-      >
+      <DemoCard title="Checkbox" name="Checkbox/Checkbox" class="mb-4 break-inside-avoid">
         <Checkbox />
       </DemoCard>
 
@@ -37,11 +33,7 @@ import DraggableCards from '../../../src/demo/DraggableCards/index.vue'
         <BlurImageCard />
       </DemoCard>
 
-      <DemoCard
-        title="Matrix Rain"
-        name="MatrixRain/MatrixRain"
-        class="mb-4 break-inside-avoid"
-      >
+      <DemoCard title="Matrix Rain" name="MatrixRain/MatrixRain" class="mb-4 break-inside-avoid">
         <MatrixRain />
       </DemoCard>
 
@@ -57,9 +49,7 @@ import DraggableCards from '../../../src/demo/DraggableCards/index.vue'
     </div>
 
     <div class="flex justify-center my-16">
-      <Button href="/" size="md">
-        Back to Home
-      </Button>
+      <Button href="/" size="md"> Back to Home </Button>
     </div>
   </section>
 </template>

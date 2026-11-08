@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import type { ContentData } from 'vitepress'
+import type { ContentData } from "vitepress";
 
 const props = defineProps<{
-  post: ContentData
-}>()
+  post: ContentData;
+}>();
 
 const date = computed(() =>
-  props.post.frontmatter.date.split('T')[0].split('-').slice(1).join('-'),
-)
+  props.post.frontmatter.date.split("T")[0].split("-").slice(1).join("-"),
+);
 </script>
 
 <template>

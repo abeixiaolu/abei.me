@@ -1,20 +1,40 @@
 <script setup lang="ts">
-import { PowerGlitch } from 'powerglitch'
+import { PowerGlitch } from "powerglitch";
 
-const route = useRoute()
+const route = useRoute();
 const navList = computed(() => {
   return [
-    { name: 'Blog', icon: 'i-ph-notepad-duotone', path: '/blog', active: route.path.startsWith('/blog') },
-    { name: 'Project', icon: 'i-ph-sparkle-duotone', path: '/project', active: route.path.startsWith('/project') },
-    { name: 'Demo', icon: 'i-ph-brackets-angle-duotone', path: '/demo', active: route.path.startsWith('/demo') },
-    { name: 'Use', icon: 'i-ph-bag-duotone', path: '/use', active: route.path.startsWith('/use') },
-    { name: 'Gallery', icon: 'i-ph-camera-duotone', path: '/gallery', active: route.path.startsWith('/gallery') },
-  ]
-})
+    {
+      name: "Blog",
+      icon: "i-ph-notepad-duotone",
+      path: "/blog",
+      active: route.path.startsWith("/blog"),
+    },
+    {
+      name: "Project",
+      icon: "i-ph-sparkle-duotone",
+      path: "/project",
+      active: route.path.startsWith("/project"),
+    },
+    {
+      name: "Demo",
+      icon: "i-ph-brackets-angle-duotone",
+      path: "/demo",
+      active: route.path.startsWith("/demo"),
+    },
+    { name: "Use", icon: "i-ph-bag-duotone", path: "/use", active: route.path.startsWith("/use") },
+    {
+      name: "Gallery",
+      icon: "i-ph-camera-duotone",
+      path: "/gallery",
+      active: route.path.startsWith("/gallery"),
+    },
+  ];
+});
 
 onMounted(() => {
-  PowerGlitch.glitch('.logo-glitch')
-})
+  PowerGlitch.glitch(".logo-glitch");
+});
 </script>
 
 <template>
@@ -28,9 +48,13 @@ onMounted(() => {
       </div>
 
       <div class="flex items-center gap-2 sm:gap-4">
-        <a v-for="nav in navList" :key="nav.path" :href="nav.path"
+        <a
+          v-for="nav in navList"
+          :key="nav.path"
+          :href="nav.path"
           class="nav-link flex items-center pb-1 mt-1 border-3 border-transparent border-double"
-          :class="{ 'active-nav': nav.active }">
+          :class="{ 'active-nav': nav.active }"
+        >
           <span :class="nav.icon" />
         </a>
         <ThemeBtn />
@@ -52,7 +76,7 @@ onMounted(() => {
 }
 
 .logo-text::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;

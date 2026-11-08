@@ -1,16 +1,16 @@
 export interface Photo {
-  id: string
-  src: string
-  alt: string
-  date?: string
-  description?: string
+  id: string;
+  src: string;
+  alt: string;
+  date?: string;
+  description?: string;
 }
 
 export interface Album {
-  id: string
-  title: string
-  date: string
-  description: string
-  cover: string
-  photos: Photo[]
+  id: string;
+  title: string;
+  date: string;
+  description: string;
+  cover: string;
+  photos: Photo[];
 }

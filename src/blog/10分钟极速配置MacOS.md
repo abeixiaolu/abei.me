@@ -56,10 +56,13 @@ defaults write -g com.apple.trackpad.scrolling -float 0.3125
 ## Homebrew以及常用软件安装
 
 1. 安装Homebrew
+
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
+
 2. 安装常用软件
+
 ```bash
 # 命令行软件
 brew install git bat eza fnm pnpm zoxide zsh-autosuggestions zsh-syntax-highlighting stow starship
@@ -71,6 +74,7 @@ brew install --cask calendr
 ```
 
 3. ssh key生成与配置
+
 ```bash
 # 生成ssh key
 ssh-keygen -t ed25519 -C "xiaoluabei@gmail.com"
@@ -79,8 +83,10 @@ pbcopy < ~/.ssh/id_ed25519.pub
 ```
 
 ## 使用stow来管理你的配置文件
+
 如果你还没用过，强烈建议看这个教程：[How To Easily Manage Your Dotfiles With GNU Stow](https://www.youtube.com/watch?v=06x3ZhwrrwA)。
 我已经配置过了，对应的配置在我的[dotfiles仓库](https://github.com/abeixiaolu/dotfiles)，可以直接克隆下来使用。
+
 ```bash
 cd ~
 
@@ -90,31 +96,40 @@ cd dotfiles
 
 stow .
 ```
+
 然后重启终端，打开ghostty，大功告成！
 ![Beautiful Terminal](/imgs/my-terminal.png)
 
 ## Raycast配置
+
 免费版的Raycast已经足够好用了，我一般会进行如下设置：
+
 - 快捷键设置为`command + space`，你需要提前在系统设置->键盘->快捷键->聚焦中取消掉Spotlight的快捷键。
 - 进入设置，在Advanced面板中开启Hyper Key。然后使用Hyper Key来作为快速切换键用于切换软件、窗口管理等。
 - 其它我基本没有做什么设置了，常用的功能有计算器、Quicklinks、剪贴板历史、窗口管理等。
-![Raycast Settings](/imgs/raycast-settings.png)
+  ![Raycast Settings](/imgs/raycast-settings.png)
 
 ## 输入法配置
+
 我使用的是微信输入法，配置如下：
+
 1. 下载并安装微信输入法：[微信输入法下载地址](https://ime.weixin.qq.com/)，按指引设置即可。
 2. 我会用PlistEdit Pro来移除掉默认的ABC输入法，开启微信输入法的shift切换中英文功能。
-    1. `sudo open ~/Library/Preferences/com.apple.HIToolbox.plist`
-    2. 在 `AppleEnabledInputSources` 项中找到包含 ABC 的组，右键删除并 `Ctrl + s` 保存。
+   1. `sudo open ~/Library/Preferences/com.apple.HIToolbox.plist`
+   2. 在 `AppleEnabledInputSources` 项中找到包含 ABC 的组，右键删除并 `Ctrl + s` 保存。
 3. 重启MacOS。
 
 ## 开发配置
+
 我使用的是vscode，所以我的配置都使用它的自动同步，很好用。同步完成后，cursor自动导入vscode配置即可。另外我的node版本管理使用fnm，安装好后执行：
+
 ```bash
 fnm install --lts
 fnm default [lts版本号]
 ```
+
 然后我全局的npm包使用pnpm安装，我全局只用这个包：
+
 ```bash
 pnpm i -g @antfu/ni
 ```
@@ -122,16 +137,20 @@ pnpm i -g @antfu/ni
 至此，10分钟极速配置MacOS完成！希望这篇文章能帮助你快速搭建一个高效的开发环境。祝大家工作顺利，愉快coding！
 
 ## 额外的个人向操作
+
 1. 工作相关文件夹：`mkdir -p ~/Documents/workspace`，及其git配置：`vim ~/Documents/workspace/.gitconfig`。
+
 ```bash
 [user]
   name = shenmengping
   email = shenmengping@xxx.com
 ```
+
 2. 个人文件夹：`mkdir -p ~/Documents/ispace`。
 3. 遇到软件提示已损坏（破解软件），我现在基本都付费或者开源代替了😅：`sudo spctl --master-disable`。
 4. Homebrew更新和清理：`brew update && brew upgrade && brew cleanup`。
 5. 当系统某些文件的图标被 webstorm、cursor 等软件修改时，你卸载了这个软件，但是文件图标仍然是该软件，则可以运行以下命令进行恢复：
+
 ```bash
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill
 ```

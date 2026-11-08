@@ -58,6 +58,7 @@ Chrome 浏览器凭借其强大的扩展生态，让我们可以轻松定制功�
 ```
 
 这文件啥意思呢？
+
 - `manifest_version: 3`：Chrome 现在推荐用版本 3，规则更现代。
 - `name`和`description`：插件的名字和简介，随手取个明白的。
 - `permissions`：告诉 Chrome 我们需要啥权限，比如访问当前标签页和调用翻译 API 的网络权限。
@@ -75,27 +76,27 @@ Chrome 浏览器凭借其强大的扩展生态，让我们可以轻松定制功�
 新建 `content.js`，写上这些代码：
 
 ```javascript
-document.addEventListener('mouseup', () => {
-  const selectedText = window.getSelection().toString().trim()
+document.addEventListener("mouseup", () => {
+  const selectedText = window.getSelection().toString().trim();
   if (selectedText) {
-    chrome.runtime.sendMessage({ action: 'translate', text: selectedText })
+    chrome.runtime.sendMessage({ action: "translate", text: selectedText });
   }
-})
+});
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'showTranslation') {
-    const div = document.createElement('div')
-    div.style.position = 'fixed'
-    div.style.top = '10px'
-    div.style.right = '10px'
-    div.style.backgroundColor = 'white'
-    div.style.padding = '10px'
-    div.style.border = '1px solid black'
-    div.style.zIndex = '9999'
-    div.textContent = request.translation
-    document.body.appendChild(div)
+  if (request.action === "showTranslation") {
+    const div = document.createElement("div");
+    div.style.position = "fixed";
+    div.style.top = "10px";
+    div.style.right = "10px";
+    div.style.backgroundColor = "white";
+    div.style.padding = "10px";
+    div.style.border = "1px solid black";
+    div.style.zIndex = "9999";
+    div.textContent = request.translation;
+    document.body.appendChild(div);
   }
-})
+});
 ```
 
 - **监听鼠标松开**：用 `mouseup` 事件，鼠标一松就看看你选了啥文字。
@@ -108,26 +109,29 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 ```javascript
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'translate') {
-    const apiKey = 'YOUR_API_KEY' // 替换成你自己的密钥
-    const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`
+  if (request.action === "translate") {
+    const apiKey = "YOUR_API_KEY"; // 替换成你自己的密钥
+    const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
     const data = {
       q: request.text,
-      target: 'en' // 翻译成英文
-    }
+      target: "en", // 翻译成英文
+    };
     fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     })
-      .then(response => response.json())
+      .then((response) => response.json())
       .then((result) => {
-        const translatedText = result.data.translations[0].translatedText
-        chrome.tabs.sendMessage(sender.tab.id, { action: 'showTranslation', translation: translatedText })
+        const translatedText = result.data.translations[0].translatedText;
+        chrome.tabs.sendMessage(sender.tab.id, {
+          action: "showTranslation",
+          translation: translatedText,
+        });
       })
-      .catch(error => console.error('翻译失败:', error))
+      .catch((error) => console.error("翻译失败:", error));
   }
-})
+});
 ```
 
 - **监听消息**：收到内容脚本的“translate”请求后，干活。
@@ -148,34 +152,36 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 用 IndexedDB 做个小数据库，存生词。改 `background.js`，加这些代码：
 
 ```javascript
-const DB_NAME = 'VocabularyDB'
-const STORE_NAME = 'words'
+const DB_NAME = "VocabularyDB";
+const STORE_NAME = "words";
 
 function openDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, 1)
+    const request = indexedDB.open(DB_NAME, 1);
     request.onupgradeneeded = (event) => {
-      const db = event.target.result
+      const db = event.target.result;
       if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, { keyPath: 'original' })
+        db.createObjectStore(STORE_NAME, { keyPath: "original" });
       }
-    }
-    request.onsuccess = event => resolve(event.target.result)
-    request.onerror = event => reject(event.target.error)
-  })
+    };
+    request.onsuccess = (event) => resolve(event.target.result);
+    request.onerror = (event) => reject(event.target.error);
+  });
 }
 
 function addWord(original, translation) {
-  openDB().then((db) => {
-    const transaction = db.transaction([STORE_NAME], 'readwrite')
-    const store = transaction.objectStore(STORE_NAME)
-    store.put({ original, translation })
-  }).catch(error => console.error('存储失败:', error))
+  openDB()
+    .then((db) => {
+      const transaction = db.transaction([STORE_NAME], "readwrite");
+      const store = transaction.objectStore(STORE_NAME);
+      store.put({ original, translation });
+    })
+    .catch((error) => console.error("存储失败:", error));
 }
 
 // 加到消息监听里
-if (request.action === 'addToVocabulary') {
-  addWord(request.original, request.translation)
+if (request.action === "addToVocabulary") {
+  addWord(request.original, request.translation);
 }
 ```
 
@@ -188,93 +194,81 @@ if (request.action === 'addToVocabulary') {
 
 ```javascript
 function highlightWords(vocabulary) {
-  if (isHighlighting)
-    return
+  if (isHighlighting) return;
 
   // 提取生词的原始文本
-  const words = vocabulary.map(item => item.original).filter(Boolean)
-  if (!words.length)
-    return
+  const words = vocabulary.map((item) => item.original).filter(Boolean);
+  if (!words.length) return;
 
-  isHighlighting = true
+  isHighlighting = true;
 
   try {
     // 创建一个正则表达式匹配所有单词
-    const escapedWords = words.map(word =>
-      word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    )
-    const regex = new RegExp(`\\b(${escapedWords.join('|')})\\b`, 'gi')
-    console.log('regex: ', regex)
+    const escapedWords = words.map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    const regex = new RegExp(`\\b(${escapedWords.join("|")})\\b`, "gi");
+    console.log("regex: ", regex);
 
     // 使用TreeWalker遍历文本节点
-    const walker = document.createTreeWalker(
-      document.body,
-      NodeFilter.SHOW_TEXT,
-      {
-        acceptNode(node) {
-          const parent = node.parentNode
-          // 跳过已处理的节点和特殊标签
-          if (
-            !parent
-            || parent.nodeName === 'SCRIPT'
-            || parent.nodeName === 'STYLE'
-            || parent.nodeName === 'MARK'
-            || parent.id === 'translation-popup'
-            || highlightedNodes.has(parent)
-          ) {
-            return NodeFilter.FILTER_REJECT
-          }
-          return NodeFilter.FILTER_ACCEPT
-        },
-      }
-    )
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        const parent = node.parentNode;
+        // 跳过已处理的节点和特殊标签
+        if (
+          !parent ||
+          parent.nodeName === "SCRIPT" ||
+          parent.nodeName === "STYLE" ||
+          parent.nodeName === "MARK" ||
+          parent.id === "translation-popup" ||
+          highlightedNodes.has(parent)
+        ) {
+          return NodeFilter.FILTER_REJECT;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
 
-    let textNode
-    const nodesToProcess = []
+    let textNode;
+    const nodesToProcess = [];
 
     // 收集需要处理的节点
     while ((textNode = walker.nextNode())) {
       if (regex.test(textNode.textContent)) {
-        nodesToProcess.push(textNode)
+        nodesToProcess.push(textNode);
       }
     }
 
     // 处理收集到的节点
     nodesToProcess.forEach((node) => {
-      const text = node.textContent
-      const container = document.createElement('span')
-      let lastIndex = 0
-      regex.lastIndex = 0
+      const text = node.textContent;
+      const container = document.createElement("span");
+      let lastIndex = 0;
+      regex.lastIndex = 0;
 
-      let result
-      let processedText = ''
+      let result;
+      let processedText = "";
 
       while ((result = regex.exec(text)) !== null) {
         // 添加匹配前的文本
-        processedText += text.slice(lastIndex, result.index)
+        processedText += text.slice(lastIndex, result.index);
         // 添加带高亮的匹配文本
-        const title = vocabulary.find(
-          item => item.original === result[0]
-        ).translation
-        processedText += `<mark title="${title}" class="abei-highlighted-word">${result[0]}</mark>`
-        lastIndex = regex.lastIndex
+        const title = vocabulary.find((item) => item.original === result[0]).translation;
+        processedText += `<mark title="${title}" class="abei-highlighted-word">${result[0]}</mark>`;
+        lastIndex = regex.lastIndex;
       }
 
       // 添加剩余文本
-      processedText += text.slice(lastIndex)
+      processedText += text.slice(lastIndex);
 
-      container.innerHTML = processedText
+      container.innerHTML = processedText;
       if (node.parentNode) {
-        node.parentNode.replaceChild(container, node)
-        highlightedNodes.add(container)
+        node.parentNode.replaceChild(container, node);
+        highlightedNodes.add(container);
       }
-    })
-  }
-  catch (error) {
-    console.error('高亮处理出错：', error)
-  }
-  finally {
-    isHighlighting = false
+    });
+  } catch (error) {
+    console.error("高亮处理出错：", error);
+  } finally {
+    isHighlighting = false;
   }
 }
 ```
@@ -307,6 +301,7 @@ function highlightWords(vocabulary) {
 ## 总结：收获与下一步
 
 到这步，你已经做出了一个挺像样的划词翻译插件！它能翻译文字、存生词、还会在页面上高亮提醒。过程中你接触了：
+
 - **manifest.json**：扩展的“说明书”。
 - **内容脚本**：跟网页互动的“前台”。
 - **背景脚本**：处理逻辑的“后台”。

@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { data as galleryData } from '../../data/gallery.data'
+import { computed, ref } from "vue";
+import { data as galleryData } from "../../data/gallery.data";
 
 interface Album {
-  title: string
-  description: string
-  bordered?: boolean
-  pictures: Picture[]
+  title: string;
+  description: string;
+  bordered?: boolean;
+  pictures: Picture[];
 }
 
 interface Picture {
-  url: string
-  width: number
-  height: number
+  url: string;
+  width: number;
+  height: number;
 }
 
 // 影集数据
@@ -25,59 +25,59 @@ const albums = computed(() => {
           url: picture,
           width: 0,
           height: 0,
-        } satisfies Picture
+        } satisfies Picture;
       }),
-    } as Album
-  })
-})
+    } as Album;
+  });
+});
 
 // 当前查看的相册
-const selectedAlbum = ref<Album>(albums.value[0])
+const selectedAlbum = ref<Album>(albums.value[0]);
 // 当前查看的照片索引
-const currentPhotoIndex = ref(0)
+const currentPhotoIndex = ref(0);
 // 是否显示大图
-const showLightbox = ref(false)
+const showLightbox = ref(false);
 
 // 打开灯箱查看大图
 function openLightbox(photo: Picture, index: number) {
-  selectedAlbum.value = albums.value.find(album => album.pictures.includes(photo))!
-  currentPhotoIndex.value = index
-  showLightbox.value = true
-  document.body.style.overflow = 'hidden'
+  selectedAlbum.value = albums.value.find((album) => album.pictures.includes(photo))!;
+  currentPhotoIndex.value = index;
+  showLightbox.value = true;
+  document.body.style.overflow = "hidden";
 }
 
 // 关闭灯箱
 function closeLightbox() {
-  showLightbox.value = false
-  document.body.style.overflow = ''
+  showLightbox.value = false;
+  document.body.style.overflow = "";
 }
 
 // 查看上一张照片
 function prevPhoto() {
-  if (!selectedAlbum.value || currentPhotoIndex.value <= 0)
-    return
+  if (!selectedAlbum.value || currentPhotoIndex.value <= 0) return;
 
-  currentPhotoIndex.value = currentPhotoIndex.value - 1
+  currentPhotoIndex.value = currentPhotoIndex.value - 1;
 }
 
 // 查看下一张照片
 function nextPhoto() {
   if (!selectedAlbum.value || currentPhotoIndex.value >= selectedAlbum.value.pictures.length - 1)
-    return
+    return;
 
-  currentPhotoIndex.value = currentPhotoIndex.value + 1
+  currentPhotoIndex.value = currentPhotoIndex.value + 1;
 }
 
 // 当前大图
 const currentPhoto = computed(() => {
-  if (!selectedAlbum.value)
-    return null
-  return selectedAlbum.value.pictures[currentPhotoIndex.value]
-})
+  if (!selectedAlbum.value) return null;
+  return selectedAlbum.value.pictures[currentPhotoIndex.value];
+});
 
 // 是否可以前进/后退
-const canGoPrev = computed(() => currentPhotoIndex.value > 0)
-const canGoNext = computed(() => selectedAlbum.value && currentPhotoIndex.value < selectedAlbum.value.pictures.length - 1)
+const canGoPrev = computed(() => currentPhotoIndex.value > 0);
+const canGoNext = computed(
+  () => selectedAlbum.value && currentPhotoIndex.value < selectedAlbum.value.pictures.length - 1,
+);
 </script>
 
 <template>
@@ -95,7 +95,9 @@ const canGoNext = computed(() => selectedAlbum.value && currentPhotoIndex.value 
           {{ album.description }}
         </div>
       </div>
-      <div class="relative w-full columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4">
+      <div
+        class="relative w-full columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4"
+      >
         <div
           v-for="(photo, idx) in album.pictures"
           :key="idx"
@@ -108,7 +110,7 @@ const canGoNext = computed(() => selectedAlbum.value && currentPhotoIndex.value 
             :alt="`${album.title} - ${idx + 1}`"
             class="size-full"
             loading="lazy"
-          >
+          />
         </div>
       </div>
     </div>
@@ -119,18 +121,23 @@ const canGoNext = computed(() => selectedAlbum.value && currentPhotoIndex.value 
       class="fixed inset-0 z-50 flex items-center justify-center transition-all backdrop-blur-sm duration-300"
       @click="closeLightbox"
     >
-      <div class="relative w-full h-full flex items-center justify-center " @click.stop="closeLightbox">
-        <div class="absolute z-[-1] size-full blur-3xl" :style="{ background: `no-repeat center/cover url(${currentPhoto.url})` }" />
+      <div
+        class="relative w-full h-full flex items-center justify-center"
+        @click.stop="closeLightbox"
+      >
+        <div
+          class="absolute z-[-1] size-full blur-3xl"
+          :style="{ background: `no-repeat center/cover url(${currentPhoto.url})` }"
+        />
         <img
           :src="currentPhoto.url"
           class="max-h-[90vh] max-w-[90vw] object-contain transition-transform duration-500"
           loading="lazy"
-        >
+        />
 
         <button
           v-if="canGoPrev"
-          class="absolute left-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60
-                 transition-all duration-300 backdrop-blur-sm transform hover:-translate-x-1"
+          class="absolute left-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60 transition-all duration-300 backdrop-blur-sm transform hover:-translate-x-1"
           @click.stop="prevPhoto"
         >
           <i class="i-solar-arrow-left-linear text-2xl" />
@@ -138,16 +145,14 @@ const canGoNext = computed(() => selectedAlbum.value && currentPhotoIndex.value 
 
         <button
           v-if="canGoNext"
-          class="absolute right-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60
-                 transition-all duration-300 backdrop-blur-sm transform hover:translate-x-1"
+          class="absolute right-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60 transition-all duration-300 backdrop-blur-sm transform hover:translate-x-1"
           @click.stop="nextPhoto"
         >
           <i class="i-solar-arrow-right-linear text-2xl" />
         </button>
 
         <button
-          class="absolute top-4 right-4 p-2 text-white bg-black/40 rounded-full
-                 hover:bg-black/60 transition-all duration-300 backdrop-blur-sm transform hover:rotate-90"
+          class="absolute top-4 right-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60 transition-all duration-300 backdrop-blur-sm transform hover:rotate-90"
           @click.stop="closeLightbox"
         >
           <i class="i-solar-close-circle-linear text-2xl" />

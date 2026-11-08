@@ -1,38 +1,48 @@
 <script lang="ts" setup>
 const socials = [
-  { href: 'https://x.com/xiaoluabei', icon: 'i-mdi-twitter-circle', name: 'Twitter' },
-  { href: 'https://github.com/abeixiaolu', icon: 'i-mdi-github', name: 'GitHub' },
-  { href: 'https://bsky.app/profile/xlabei.bsky.social', icon: 'i-fa6-brands-square-bluesky text-[15px]', name: 'BlueSky' },
-  { href: 'https://music.163.com/#/user/home?id=130837120', icon: 'i-simple-icons-neteasecloudmusic text-[15px]', name: '网易云' },
-]
+  { href: "https://x.com/xiaoluabei", icon: "i-mdi-twitter-circle", name: "Twitter" },
+  { href: "https://github.com/abeixiaolu", icon: "i-mdi-github", name: "GitHub" },
+  {
+    href: "https://bsky.app/profile/xlabei.bsky.social",
+    icon: "i-fa6-brands-square-bluesky text-[15px]",
+    name: "BlueSky",
+  },
+  {
+    href: "https://music.163.com/#/user/home?id=130837120",
+    icon: "i-simple-icons-neteasecloudmusic text-[15px]",
+    name: "网易云",
+  },
+];
 
-const isNavOpen = ref(false)
-let touchStartX = 0
-let touchStartY = 0
+const isNavOpen = ref(false);
+let touchStartX = 0;
+let touchStartY = 0;
 
-function closeNav() { isNavOpen.value = false }
+function closeNav() {
+  isNavOpen.value = false;
+}
 
 function onTouchStart(e: TouchEvent) {
-  touchStartX = e.touches[0].clientX
-  touchStartY = e.touches[0].clientY
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
 }
 function onTouchEnd(e: TouchEvent) {
-  const dx = e.changedTouches[0].clientX - touchStartX
-  const dy = e.changedTouches[0].clientY - touchStartY
-  if (Math.abs(dx) < Math.abs(dy)) return
-  const halfScreen = window.innerWidth / 2
-  if (dx > halfScreen) isNavOpen.value = true
-  if (dx < -halfScreen) isNavOpen.value = false
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) < Math.abs(dy)) return;
+  const halfScreen = window.innerWidth / 2;
+  if (dx > halfScreen) isNavOpen.value = true;
+  if (dx < -halfScreen) isNavOpen.value = false;
 }
 
 onMounted(() => {
-  document.addEventListener('touchstart', onTouchStart, { passive: true })
-  document.addEventListener('touchend', onTouchEnd, { passive: true })
-})
+  document.addEventListener("touchstart", onTouchStart, { passive: true });
+  document.addEventListener("touchend", onTouchEnd, { passive: true });
+});
 onUnmounted(() => {
-  document.removeEventListener('touchstart', onTouchStart)
-  document.removeEventListener('touchend', onTouchEnd)
-})
+  document.removeEventListener("touchstart", onTouchStart);
+  document.removeEventListener("touchend", onTouchEnd);
+});
 </script>
 
 <template>
@@ -44,9 +54,7 @@ onUnmounted(() => {
 
     <!-- Left nav column -->
     <nav class="nav-col" :class="{ 'nav-col--open': isNavOpen }">
-      <div class="nav-identity">
-        阿北
-      </div>
+      <div class="nav-identity">阿北</div>
       <div class="nav-links">
         <a href="/blog" class="nav-link" @click="closeNav">卷宗 / BLOG</a>
         <a href="/project" class="nav-link" @click="closeNav">法器 / PROJECT</a>
@@ -54,9 +62,7 @@ onUnmounted(() => {
         <a href="/use" class="nav-link" @click="closeNav">装备 / USES</a>
         <a href="/gallery" class="nav-link" @click="closeNav">游记 / GALLERY</a>
       </div>
-      <div class="nav-sys">
-        SYS.001
-      </div>
+      <div class="nav-sys">SYS.001</div>
       <ThemeBtn class="opacity-50 hover:opacity-100 transition-opacity" />
     </nav>
 
@@ -67,9 +73,7 @@ onUnmounted(() => {
           <Content class="prose dark:prose-invert" />
         </div>
       </div>
-      <div class="stamp-seal">
-        印
-      </div>
+      <div class="stamp-seal">印</div>
     </section>
 
     <!-- Right content column -->
@@ -84,9 +88,7 @@ onUnmounted(() => {
       </div>
 
       <div class="socials-block">
-        <div class="block-label">
-          NETWORK // 01
-        </div>
+        <div class="block-label">NETWORK // 01</div>
         <div class="socials-list">
           <a
             v-for="(social, index) in socials"
@@ -102,9 +104,7 @@ onUnmounted(() => {
         </div>
       </div>
     </aside>
-    <div class="sys-coord" aria-hidden="true">
-      X:00.0 Y:00.0 // SYS.REC
-    </div>
+    <div class="sys-coord" aria-hidden="true">X:00.0 Y:00.0 // SYS.REC</div>
   </div>
 </template>
 
@@ -125,7 +125,11 @@ onUnmounted(() => {
   padding: 2.5rem 0;
   justify-content: space-between;
   overflow: hidden;
-  background: linear-gradient(to right, color-mix(in srgb, var(--color-bg) 80%, transparent), transparent);
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--color-bg) 80%, transparent),
+    transparent
+  );
 }
 
 .nav-identity {
@@ -157,12 +161,14 @@ onUnmounted(() => {
   color: var(--color-text);
   opacity: 0.5;
   text-decoration: none;
-  transition: opacity 0.2s ease, color 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease;
   position: relative;
 }
 
 .nav-link::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: -6px;
@@ -284,7 +290,11 @@ onUnmounted(() => {
   overflow-y: auto;
   scrollbar-width: none;
   backdrop-filter: blur(2px);
-  background: linear-gradient(to left, color-mix(in srgb, var(--color-bg) 92%, transparent), color-mix(in srgb, var(--color-bg) 50%, transparent));
+  background: linear-gradient(
+    to left,
+    color-mix(in srgb, var(--color-bg) 92%, transparent),
+    color-mix(in srgb, var(--color-bg) 50%, transparent)
+  );
 }
 
 .content-col::-webkit-scrollbar {
@@ -379,13 +389,19 @@ onUnmounted(() => {
 .nav-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   z-index: 99;
   backdrop-filter: blur(2px);
 }
 
-.fade-enter-active, .fade-leave-active { transition: opacity 0.25s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 
 @media (max-width: 768px) {
   .home-root {

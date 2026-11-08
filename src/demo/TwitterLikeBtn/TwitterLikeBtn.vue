@@ -1,6 +1,6 @@
 <template>
   <label for="like-btn" class="animate-on-click">
-    <input id="like-btn" type="checkbox" class="hidden">
+    <input id="like-btn" type="checkbox" class="hidden" />
     <div class="heart-box">
       <div role="img" alt="interactive heart animation" class="heart" />
     </div>
@@ -25,7 +25,7 @@
 }
 
 .heart {
-  background-image: url('./heart-sprite.png');
+  background-image: url("./heart-sprite.png");
   width: 100px;
   height: 100px;
   background-size: 2900px 100px;

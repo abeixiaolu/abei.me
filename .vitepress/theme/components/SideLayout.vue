@@ -1,45 +1,50 @@
 <script setup lang="ts">
-const route = useRoute()
+const route = useRoute();
 
 const navList = [
-  { label: '卷宗 / BLOG', path: '/blog' },
-  { label: '法器 / PROJECT', path: '/project' },
-  { label: '演示 / DEMO', path: '/demo' },
-  { label: '装备 / USES', path: '/use' },
-  { label: '游记 / GALLERY', path: '/gallery' },
-]
+  { label: "卷宗 / BLOG", path: "/blog" },
+  { label: "法器 / PROJECT", path: "/project" },
+  { label: "演示 / DEMO", path: "/demo" },
+  { label: "装备 / USES", path: "/use" },
+  { label: "游记 / GALLERY", path: "/gallery" },
+];
 
-const isOpen = ref(false)
-let touchStartX = 0
-let touchStartY = 0
+const isOpen = ref(false);
+let touchStartX = 0;
+let touchStartY = 0;
 
-function closeNav() { isOpen.value = false }
+function closeNav() {
+  isOpen.value = false;
+}
 
 function onTouchStart(e: TouchEvent) {
-  touchStartX = e.touches[0].clientX
-  touchStartY = e.touches[0].clientY
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
 }
 
 function onTouchEnd(e: TouchEvent) {
-  const dx = e.changedTouches[0].clientX - touchStartX
-  const dy = e.changedTouches[0].clientY - touchStartY
-  if (Math.abs(dx) < Math.abs(dy)) return // vertical scroll, ignore
-  const halfScreen = window.innerWidth / 2
-  if (dx > halfScreen) isOpen.value = true
-  if (dx < -halfScreen) isOpen.value = false
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) < Math.abs(dy)) return; // vertical scroll, ignore
+  const halfScreen = window.innerWidth / 2;
+  if (dx > halfScreen) isOpen.value = true;
+  if (dx < -halfScreen) isOpen.value = false;
 }
 
-watch(() => route.path, () => closeNav())
+watch(
+  () => route.path,
+  () => closeNav(),
+);
 
 onMounted(() => {
-  document.addEventListener('touchstart', onTouchStart, { passive: true })
-  document.addEventListener('touchend', onTouchEnd, { passive: true })
-})
+  document.addEventListener("touchstart", onTouchStart, { passive: true });
+  document.addEventListener("touchend", onTouchEnd, { passive: true });
+});
 
 onUnmounted(() => {
-  document.removeEventListener('touchstart', onTouchStart)
-  document.removeEventListener('touchend', onTouchEnd)
-})
+  document.removeEventListener("touchstart", onTouchStart);
+  document.removeEventListener("touchend", onTouchEnd);
+});
 </script>
 
 <template>
@@ -59,7 +64,8 @@ onUnmounted(() => {
           :href="nav.path"
           class="side-link"
           :class="{ 'side-link--active': route.path.startsWith(nav.path) }"
-        >{{ nav.label }}</a>
+          >{{ nav.label }}</a
+        >
       </div>
       <div class="side-sys">SYS.001</div>
       <ThemeBtn class="opacity-50 hover:opacity-100 transition-opacity" />
@@ -88,7 +94,11 @@ onUnmounted(() => {
   align-items: center;
   padding: 2.5rem 0;
   justify-content: space-between;
-  background: linear-gradient(to right, color-mix(in srgb, var(--color-bg) 80%, transparent), transparent);
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--color-bg) 80%, transparent),
+    transparent
+  );
 }
 
 .side-identity {
@@ -126,12 +136,14 @@ onUnmounted(() => {
   color: var(--color-text);
   opacity: 0.5;
   text-decoration: none;
-  transition: opacity 0.2s ease, color 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease;
   position: relative;
 }
 
 .side-link::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: -6px;
@@ -169,9 +181,16 @@ onUnmounted(() => {
   backdrop-filter: blur(2px);
 }
 
-.side-content::-webkit-scrollbar { width: 4px; }
-.side-content::-webkit-scrollbar-track { background: transparent; }
-.side-content::-webkit-scrollbar-thumb { background: var(--color-hairline); border-radius: 2px; }
+.side-content::-webkit-scrollbar {
+  width: 4px;
+}
+.side-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.side-content::-webkit-scrollbar-thumb {
+  background: var(--color-hairline);
+  border-radius: 2px;
+}
 
 .side-sys-coord {
   position: fixed;
@@ -190,13 +209,19 @@ onUnmounted(() => {
 .nav-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
   z-index: 99;
   backdrop-filter: blur(1px);
 }
 
-.fade-enter-active, .fade-leave-active { transition: opacity 0.25s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 
 /* ── Mobile ── */
 @media (max-width: 768px) {

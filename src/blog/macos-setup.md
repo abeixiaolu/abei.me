@@ -7,6 +7,7 @@ date: 2025-01-17
 ## 系统设置
 
 在终端运行以下命令：
+
 ```bash
 # dock栏设置
 defaults write com.apple.dock autohide -bool false
@@ -53,10 +54,12 @@ defaults write com.apple.Safari WebKitDeveloperExtras -bool true
 defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
 defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -bool true
 ```
+
 > [!TIP]
 > 执行完记得注销重新登录
 >
 > 备份时需要递归删除某个目录下的所有`node_modules`目录，记录一下命令：
+>
 > ```bash
 > find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
 > ```
@@ -121,87 +124,88 @@ Pixpin
 1. 拷贝[线上配置目录](https://github.com/abeixiaolu/.config)到本地。
 2. 安装 [starship](https://starship.rs/): `curl -sS https://starship.rs/install.sh | sh`
 3. zsh 配置
-    ```bash
-    eval "$(starship init zsh)"
-    eval "$(zoxide init zsh)"
+   ```bash
+   eval "$(starship init zsh)"
+   eval "$(zoxide init zsh)"
 
-    export WEZTERM_CONFIG_DIR="$HOME/.config/wezterm"
-    export BAT_THEME="Dracula"
+   export WEZTERM_CONFIG_DIR="$HOME/.config/wezterm"
+   export BAT_THEME="Dracula"
 
-    # history setup
-    HISTFILE=$HOME/.zhistory
-    SAVEHIST=1000
-    HISTSIZE=999
-    setopt share_history
-    setopt hist_expire_dups_first
+   # history setup
+   HISTFILE=$HOME/.zhistory
+   SAVEHIST=1000
+   HISTSIZE=999
+   setopt share_history
+   setopt hist_expire_dups_first
 
-    # autosuggestions and syntax highlighting
-    source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+   # autosuggestions and syntax highlighting
+   source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+   source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-    # fnm
-    eval "$(fnm env --use-on-cd --shell zsh)"
+   # fnm
+   eval "$(fnm env --use-on-cd --shell zsh)"
 
-    # pnpm
-    export PNPM_HOME="/Users/abei/Library/pnpm"
-    case ":$PATH:" in
-      *":$PNPM_HOME:"*) ;;
-      *) export PATH="$PNPM_HOME:$PATH" ;;
-    esac
-    # pnpm end
+   # pnpm
+   export PNPM_HOME="/Users/abei/Library/pnpm"
+   case ":$PATH:" in
+     *":$PNPM_HOME:"*) ;;
+     *) export PATH="$PNPM_HOME:$PATH" ;;
+   esac
+   # pnpm end
 
-    alias bz="rm -rf dist && rm -rf dist.zip && nr build:test && zip -r dist.zip dist"
-    alias cat="bat"
-    alias c="cursor"
-    alias ws="cd ~/Documents/workspace"
-    alias ss="cd ~/Documents/studyspace"
-    alias i="cd ~/Documents/studyspace/i"
-    alias d="nr dev"
-    alias dt="nr dev:test"
-    alias b="nr build"
-    alias gaa="git add ."
-    alias gcvm="git commit --no-verify -m"
-    alias gcm="git commit -m"
-    alias gpl="git pull"
-    alias gps="git push"
-    alias gco="git checkout"
-    alias gcb="git checkout -b"
-    alias gst="git status"
-    alias ls="eza --icons=always --long --all"
-    alias cd="z"
-    ```
+   alias bz="rm -rf dist && rm -rf dist.zip && nr build:test && zip -r dist.zip dist"
+   alias cat="bat"
+   alias c="cursor"
+   alias ws="cd ~/Documents/workspace"
+   alias ss="cd ~/Documents/studyspace"
+   alias i="cd ~/Documents/studyspace/i"
+   alias d="nr dev"
+   alias dt="nr dev:test"
+   alias b="nr build"
+   alias gaa="git add ."
+   alias gcvm="git commit --no-verify -m"
+   alias gcm="git commit -m"
+   alias gpl="git pull"
+   alias gps="git push"
+   alias gco="git checkout"
+   alias gcb="git checkout -b"
+   alias gst="git status"
+   alias ls="eza --icons=always --long --all"
+   alias cd="z"
+   ```
 4. fnm 安装 node
-    ```bash
-    fnm install --lts
-    fnm default 22
-    ```
+   ```bash
+   fnm install --lts
+   fnm default 22
+   ```
 5. git 配置
-    ```bash
-    git config --global user.name "abei"
-    git config --global user.email "abeixiaolu@gmail.com"
-    git config --global core.ignorecase false
-    git config --global includeIf.gitdir:/Users/abei/Documents/workspace/.path /Users/abei/Documents/workspace/.gitconfig
-    ```
-    - `mkdir -p ~/Documents/workspace`
-    - `mkdir -p ~/Documents/studyspace`
-    - `vim ~/Documents/workspace/.gitconfig`
-        ```bash
-        [user]
-          name = shenmengping
-          email = shenmengping@gupo.onaliyun.com
-        ```
+   ```bash
+   git config --global user.name "abei"
+   git config --global user.email "abeixiaolu@gmail.com"
+   git config --global core.ignorecase false
+   git config --global includeIf.gitdir:/Users/abei/Documents/workspace/.path /Users/abei/Documents/workspace/.gitconfig
+   ```
+   - `mkdir -p ~/Documents/workspace`
+   - `mkdir -p ~/Documents/studyspace`
+   - `vim ~/Documents/workspace/.gitconfig`
+     ```bash
+     [user]
+       name = shenmengping
+       email = shenmengping@gupo.onaliyun.com
+     ```
 6. 从 iCloud 上恢复一些必要文件例如 `.ssh, .logseq` 目录。记得要修改目录和文件的权限。
-    ```bash
-    chmod 700 ~/.ssh
-    chmod 600 ~/.ssh/id_rsa
-    chmod 644 ~/.ssh/id_rsa.pub
-    eval "$(ssh-agent -s)"  # 启动SSH Agent
-    ssh-add ~/.ssh/id_rsa   # 添加私钥
-    ```
+   ```bash
+   chmod 700 ~/.ssh
+   chmod 600 ~/.ssh/id_rsa
+   chmod 644 ~/.ssh/id_rsa.pub
+   eval "$(ssh-agent -s)"  # 启动SSH Agent
+   ssh-add ~/.ssh/id_rsa   # 添加私钥
+   ```
 
 ## vscode｜cursor 配置
 
 安装依赖采用脚本安装：
+
 ```sh
 #!/usr/bin/env bash
 
@@ -212,6 +216,7 @@ done
 
 cursor --list-extensions
 ```
+
 需要在同级目录放置一个 `extensions.txt` 文件，里面存放的是 `code --list-extensions` 的输出内容。下面是我用到的一些扩展：
 
 ```bash
@@ -257,6 +262,7 @@ yzhang.markdown-all-in-one
 ```
 
 我还会修改一些默认快捷键 `cmd+shift+p` 打开命令面板，搜索 `Open Keyboard Shortcuts` 打开快捷键配置文件：
+
 ```json
 [
   {
@@ -438,32 +444,37 @@ yzhang.markdown-all-in-one
 1. 禁用 macOS 默认输入法，仅采用微信输入法。可以参考这篇文章：[macOS 禁用自带的 ABC 输入法](https://rokcso.com/p/macos-remove-abc/)。
 
 2. 遇到软件提示已损坏，先打开允许任何来源：
-    ```bash
-    sudo spctl --master-disable
-    ```
-    然后针对这个软件运行：
-    ```bash
-    # 地址可以从访达中拖入终端
-    xattr -cr /Applications/WeChat.app
-    ```
-    如果仍然打不开，则需要打开**系统设置 – 隐私和安全性，“安全性” 下面出现提示，点击 “仍要打开”**，当然该操作仅需要一次，以后可以正常打开。
+
+   ```bash
+   sudo spctl --master-disable
+   ```
+
+   然后针对这个软件运行：
+
+   ```bash
+   # 地址可以从访达中拖入终端
+   xattr -cr /Applications/WeChat.app
+   ```
+
+   如果仍然打不开，则需要打开**系统设置 – 隐私和安全性，“安全性” 下面出现提示，点击 “仍要打开”**，当然该操作仅需要一次，以后可以正常打开。
 
 3. homebrew 更新所有已安装软件：
-    ```bash
-    brew update && brew upgrade && brew cleanup
-    ```
+   ```bash
+   brew update && brew upgrade && brew cleanup
+   ```
 4. 开启允许任何来源软件，然后到设置中选择任何来源：
-    ```bash
-    sudo spctl --master-enable
-    ```
+   ```bash
+   sudo spctl --master-enable
+   ```
 5. 当系统某些文件的图标被 webstorm、cursor 等软件修改时，你卸载了这个软件，但是文件图标仍然是该软件，则可以运行以下命令进行恢复：
-    ```bash
-    /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill
-    ```
+   ```bash
+   /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill
+   ```
 
 ## 结束
 
 自己整体跑了一遍这个流程，整体配置下来还是很快的。常用的在用户家目录下的配置我一般会复制一份到 `iCloud` 中，这样复制出来改改权限基本就可以用了。
 不过也有几个痛点：
+
 1. raycast 配置拷贝出来后，再拷贝回去好像他并不会读取，需要重新配置。当然我基本上就是几个插件和快捷键，问题不大。
 2. 不知道有没有办法自动同步几个目录到 `iCloud` 中，这样我就可以不用每次手动同步了，之后有时间可以研究一下这个。

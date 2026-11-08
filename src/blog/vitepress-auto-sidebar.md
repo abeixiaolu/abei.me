@@ -22,96 +22,92 @@ date: 2025-01-03
 提取 `frontmatter` 信息为对象：
 
 ```ts
-export function extractFrontmatter(
-  content: string,
-): Record<string, any> | null {
-  const frontmatterMatch = content.match(/---\n([\s\S]*?)\n---/)
+export function extractFrontmatter(content: string): Record<string, any> | null {
+  const frontmatterMatch = content.match(/---\n([\s\S]*?)\n---/);
   if (!frontmatterMatch) {
-    return null
+    return null;
   }
 
-  const frontmatterString = frontmatterMatch[1]
-  const frontmatterLines = frontmatterString
-    .split('\n')
-    .filter(line => line.trim() !== '')
-  const frontmatter: Record<string, any> = {}
+  const frontmatterString = frontmatterMatch[1];
+  const frontmatterLines = frontmatterString.split("\n").filter((line) => line.trim() !== "");
+  const frontmatter: Record<string, any> = {};
 
   frontmatterLines.forEach((line) => {
-    const [key, value] = line.split(':').map(part => part.trim())
+    const [key, value] = line.split(":").map((part) => part.trim());
     if (key && value) {
-      frontmatter[key] = value
+      frontmatter[key] = value;
     }
-  })
+  });
 
-  return frontmatter
+  return frontmatter;
 }
 ```
 
 输出侧边栏配置信息：
 
 ```ts
-import { readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
-import fg from 'fast-glob'
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import fg from "fast-glob";
 
 export function getComponentList() {
   const components: string[] = fg
-    .sync(resolve(__dirname, '../../components/**/*.md'))
-    .filter(path => path !== resolve(__dirname, '../../components/index.md'))
+    .sync(resolve(__dirname, "../../components/**/*.md"))
+    .filter((path) => path !== resolve(__dirname, "../../components/index.md"));
   return components.map((comp) => {
-    const fileContent = readFileSync(comp, 'utf-8')
-    const frontmatter = extractFrontmatter(fileContent)
-    const name = comp.split('/').pop()!.split('.')[0]
+    const fileContent = readFileSync(comp, "utf-8");
+    const frontmatter = extractFrontmatter(fileContent);
+    const name = comp.split("/").pop()!.split(".")[0];
     return {
       text: frontmatter?.nameCN,
       desc: frontmatter?.name,
       group: frontmatter?.group,
       link: name,
-    }
-  })
+    };
+  });
 }
 ```
 
 在 `.vitepress/config.ts` 文件中使用后，就可以在 `Sidebar` 组件中使用这些信息了，此处采用了 [Naive UI](https://www.naiveui.com/zh-CN/os-theme/components/menu) 的 `Menu` 组件，所以格式化为目标数据格式。
 
 ```ts
-const { sidebarGroups, hasSidebar } = useSidebar()
+const { sidebarGroups, hasSidebar } = useSidebar();
 
 const options = computed(() => {
-  const groupedOptions: any = {}
+  const groupedOptions: any = {};
 
   sidebarGroups.value[0].items?.forEach((item: any) => {
-    const groupKey = item.group || 'default'
+    const groupKey = item.group || "default";
     if (!groupedOptions[groupKey]) {
       groupedOptions[groupKey] = {
         label: groupKey,
         key: groupKey,
-        type: 'group',
+        type: "group",
         children: [],
-      }
+      };
     }
     groupedOptions[groupKey].children.push({
       label: () =>
-        h(
-          VPLink,
-          { href: item.link as any, target: item.target, rel: item.rel },
-          () => item.text,
-        ),
+        h(VPLink, { href: item.link as any, target: item.target, rel: item.rel }, () => item.text),
       key: item.link,
       extra: () => item.desc,
-    })
-  })
+    });
+  });
 
-  const menuOptions = Object.values(groupedOptions)
-    .map((item: any) => ({ ...item, label: `${item.label}(${item.children.length})` }))
-  const defaultGroupIndex = menuOptions.findIndex((item: any) => item.key === 'default' && item.type === 'group')
+  const menuOptions = Object.values(groupedOptions).map((item: any) => ({
+    ...item,
+    label: `${item.label}(${item.children.length})`,
+  }));
+  const defaultGroupIndex = menuOptions.findIndex(
+    (item: any) => item.key === "default" && item.type === "group",
+  );
   if (defaultGroupIndex !== -1) {
-    const defaultGroup = menuOptions.splice(defaultGroupIndex, 1)
-    menuOptions.unshift(...defaultGroup[0].children)
+    const defaultGroup = menuOptions.splice(defaultGroupIndex, 1);
+    menuOptions.unshift(...defaultGroup[0].children);
   }
 
-  return menuOptions
-})
+  return menuOptions;
+});
 ```
 
 ## 大功告成

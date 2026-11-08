@@ -14,6 +14,7 @@ date: 2025-01-20
 #### 逐条修改
 
 1. 如果要修改最近一次的 commit：
+
 ```bash
 git commit --amend --author="新名字 <新邮箱>"
 ```
@@ -26,12 +27,14 @@ git rebase -i HEAD~3  # 修改最近3个commit，数字可以根据需要调整
 
 然后在打开的编辑器中，将需要修改的 commit 前面的 pick 改为 edit，保存退出。
 对每个标记为 edit 的 commit，执行：
+
 ```bash
 git commit --amend --author="新名字 <新邮箱>" --no-edit
 git rebase --continue
 ```
 
 最后，执行：
+
 ```bash
 git push --force
 ```
@@ -60,6 +63,7 @@ fi
 ```
 
 然后在你想要修改的 git 仓库目录下执行：
+
 ```bash
 ~/git-change-author.sh
 ```
@@ -69,6 +73,7 @@ fi
 ## 开了翻墙推送报错
 
 遇到如下错误，只需要把 ssh 的 remote地址修改为 https 的即可。
+
 ```bash
 artsmp.me on  main [⇡] is 📦 v1.0.0 via ⬢ v22.13.0 took 4m12s
 ○ gps
@@ -80,6 +85,7 @@ and the repository exists.
 ```
 
 逐条运行下面的命令：
+
 ```bash
 # 查看自己的 remote 地址和名称
 git remote -v
@@ -99,11 +105,12 @@ git push --set-upstream [名称] main
 1. 比如当前你想要重新合并到 master 的分支是 feat/aaa。
 2. 首先，从 master 分支拉取新分支 feat/bbb 并切换到新分支。
 3. 然后找到 revert 的那一条 commit，执行 `git revert -m 1 commitID`
-3. 然后再执行 `git merge feat/aaa`。
+4. 然后再执行 `git merge feat/aaa`。
 
 > -m 1的意思是：“以 merge 的第一个父分支（通常是 master）为主线，把当时合并进来的另一个分支的内容反向恢复出来。”
 
 错误操作流程：
+
 ```
 1. feat/5890 分支 pr 合并到 master
 2. master 合并 pr 后部署发现有问题
@@ -112,7 +119,9 @@ git push --set-upstream [名称] main
 5. 修改结束后，我又再一次提 pr 把 feat/5890-2 合并到 master 了。
 6. 合并完成后发现代码还是丢失，虽然有提交记录。
 ```
+
 正确恢复流程：
+
 ```
 git checkout master
 git pull

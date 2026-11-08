@@ -13,8 +13,8 @@ date: 2025-04-19
    @Injectable()
    export class AuthGuard implements CanActivate {
      canActivate(context: ExecutionContext): boolean {
-       const request = context.switchToHttp().getRequest()
-       return this.validateRequest(request)
+       const request = context.switchToHttp().getRequest();
+       return this.validateRequest(request);
      }
    }
    ```
@@ -23,8 +23,8 @@ date: 2025-04-19
    @Injectable()
    export class LoggingInterceptor implements NestInterceptor {
      intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-       console.log('Before...')
-       return next.handle().pipe(tap(() => console.log('After...')))
+       console.log("Before...");
+       return next.handle().pipe(tap(() => console.log("After...")));
      }
    }
    ```
@@ -34,19 +34,19 @@ date: 2025-04-19
    export class ValidationPipe implements PipeTransform {
      transform(value: any, metadata: ArgumentMetadata) {
        if (!value) {
-         throw new BadRequestException('Value is required')
+         throw new BadRequestException("Value is required");
        }
-       return value
+       return value;
      }
    }
    ```
 4. Controllers: 处理 HTTP 请求的组件，接收请求、调用服务层处理业务逻辑、返回响应
    ```ts
-   @Controller('users')
+   @Controller("users")
    export class UsersController {
      @Get()
      findAll() {
-       return []
+       return [];
      }
    }
    ```
@@ -56,14 +56,14 @@ date: 2025-04-19
    @Catch(HttpException)
    export class HttpExceptionFilter implements ExceptionFilter {
      catch(exception: HttpException, host: ArgumentsHost) {
-       const ctx = host.switchToHttp()
-       const response = ctx.getResponse()
-       const status = exception.getStatus()
+       const ctx = host.switchToHttp();
+       const response = ctx.getResponse();
+       const status = exception.getStatus();
 
        response.status(status).json({
          statusCode: status,
          message: exception.message,
-       })
+       });
      }
    }
    ```
@@ -88,7 +88,7 @@ date: 2025-04-19
 @Injectable()
 export class KitchenLogger {
   log(message: string) {
-    console.log(`[厨房日志] ${message}`)
+    console.log(`[厨房日志] ${message}`);
   }
 }
 
@@ -98,19 +98,19 @@ export class ChefService {
   constructor(private readonly logger: KitchenLogger) {}
 
   cook(food: string) {
-    this.logger.log(`正在烹饪: ${food}`)
-    return `美味的${food}`
+    this.logger.log(`正在烹饪: ${food}`);
+    return `美味的${food}`;
   }
 }
 
 // 服务员（Controller）
-@Controller('restaurant')
+@Controller("restaurant")
 export class WaiterController {
   constructor(private readonly chef: ChefService) {}
 
-  @Post('order')
-  takeOrder(@Body('food') food: string) {
-    return this.chef.cook(food)
+  @Post("order")
+  takeOrder(@Body("food") food: string) {
+    return this.chef.cook(food);
   }
 }
 ```
@@ -136,51 +136,51 @@ nestjs 主要使用依赖注入来保证组件之间的解耦，通过 `@Injecta
 可以通过下面的方法拿到测试时的一些信息：
 
 ```ts
-import { INestApplication } from '@nestjs/common'
-import { Test, TestingModule } from '@nestjs/testing'
-import * as request from 'supertest'
-import { App } from 'supertest/types'
-import { AppModule } from './../src/app.module'
-import { AppService } from './../src/app.service'
+import { INestApplication } from "@nestjs/common";
+import { Test, TestingModule } from "@nestjs/testing";
+import * as request from "supertest";
+import { App } from "supertest/types";
+import { AppModule } from "./../src/app.module";
+import { AppService } from "./../src/app.service";
 
-describe('AppController (e2e)', () => {
-  let app: INestApplication<App>
-  let server: App
-  let appService: AppService
+describe("AppController (e2e)", () => {
+  let app: INestApplication<App>;
+  let server: App;
+  let appService: AppService;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile()
+    }).compile();
 
     // 创建 NestJS 应用实例
-    app = moduleFixture.createNestApplication()
+    app = moduleFixture.createNestApplication();
     // 获取 http server
-    server = app.getHttpServer()
+    server = app.getHttpServer();
     // 获取服务实例
-    appService = app.get(AppService)
+    appService = app.get(AppService);
     // 初始化应用
-    await app.init()
-  })
+    await app.init();
+  });
 
-  describe('GET /', () => {
+  describe("GET /", () => {
     // ......
 
-    it('should return random emoji and browser when index and user-agent are provided', () => {
+    it("should return random emoji and browser when index and user-agent are provided", () => {
       // 调用服务实例
-      const emojis = appService.getEmojis()
+      const emojis = appService.getEmojis();
       // 调用 http server 验证响应结果
       return request(server)
-        .get('/')
-        .set('x-api-key', 'SECRET')
-        .set('user-agent', 'Chrome')
+        .get("/")
+        .set("x-api-key", "SECRET")
+        .set("user-agent", "Chrome")
         .expect(({ body }) => {
-          expect(emojis).toContain(body.data.emoji)
-          expect(body.data.browser).toBe('Chrome')
-        })
-    })
-  })
-})
+          expect(emojis).toContain(body.data.emoji);
+          expect(body.data.browser).toBe("Chrome");
+        });
+    });
+  });
+});
 ```
 
 ## 使用 github action 和 railway 部署项目
@@ -262,7 +262,7 @@ on:
       - main
   # 当创建或更新 pull request 时触发
   pull_request:
-    branches: ['*'] # 对所有分支的 PR 都触发
+    branches: ["*"] # 对所有分支的 PR 都触发
 
 # 定义要执行的任务
 jobs:
@@ -329,5 +329,5 @@ jobs:
 
 2. 添加 Railway 的 token。
 
-    - 生成 token 在[这个页面](https://railway.com/account/tokens)
-    - 添加 token 到 github 项目下的 Settings/Secrets and variables/Actions 中，名称为 `RAILWAY_TOKEN`。
+   - 生成 token 在[这个页面](https://railway.com/account/tokens)
+   - 添加 token 到 github 项目下的 Settings/Secrets and variables/Actions 中，名称为 `RAILWAY_TOKEN`。

@@ -1,69 +1,82 @@
 <script setup lang="ts">
-import TerminalHeader from "../../components/TerminalHeader.vue";
+import { computed, ref } from "vue";
 import { data } from "../../../data/blog.data";
-
-const newData = computed(() => {
-  const groupedByYear: Map<number, any[]> = new Map();
-  data.forEach((item) => {
-    const year = new Date(item.frontmatter.date).getFullYear();
-    if (!groupedByYear.has(year)) {
-      groupedByYear.set(year, []);
-    }
-    groupedByYear.get(year)!.push(item);
-  });
-  return groupedByYear;
+const categories = ["全部", "技术", "生活", "随笔"];
+const category = ref("全部");
+const query = ref("");
+const filteredPosts = computed(() => {
+  const search = query.value.trim().toLocaleLowerCase();
+  return data.filter(
+    (post) =>
+      (category.value === "全部" || post.frontmatter.category === category.value) &&
+      (!search ||
+        `${post.frontmatter.title} ${post.frontmatter.description ?? ""}`
+          .toLocaleLowerCase()
+          .includes(search)),
+  );
 });
+const years = computed(() => {
+  const grouped = new Map<string, typeof data>();
+  for (const post of filteredPosts.value) {
+    const year = String(post.frontmatter.date).slice(0, 4);
+    const entries = grouped.get(year) ?? [];
+    entries.push(post);
+    grouped.set(year, entries);
+  }
+  return grouped;
+});
+function resetFilters() {
+  category.value = "全部";
+  query.value = "";
+}
 </script>
 
 <template>
-  <section class="terminal-page">
-    <TerminalHeader
-      command="ls ./notes"
-      title="文字日志"
-      description="关于代码、生活，以及尚未想明白的事。"
-      :meta="`${data.length} FILES`"
-    />
-
-    <div v-for="[year, blogs] in newData" :key="year" class="year-section">
-      <div class="year-label">
-        <span>{{ year }}/</span
-        ><span>{{ blogs.length }} {{ blogs.length === 1 ? "entry" : "entries" }}</span>
+  <section class="pixel-blog">
+    <div class="page-breadcrumb"><a href="/">首页</a><span>/</span><span>博客</span></div>
+    <header class="pixel-page-heading">
+      <h1>文字日志</h1>
+      <p>关于代码、生活，以及尚未想明白的事。</p>
+    </header>
+    <div class="blog-toolbar">
+      <div class="blog-filters" aria-label="文章分类">
+        <button
+          v-for="item in categories"
+          :key="item"
+          type="button"
+          :aria-pressed="category === item"
+          @click="category = item"
+        >
+          {{ item }}
+        </button>
       </div>
-      <div class="articles-list">
-        <BlogItem v-for="blog in blogs" :key="blog.url" :post="blog" />
-      </div>
+      <label class="blog-search"
+        ><span class="sr-only">搜索文章</span
+        ><input v-model="query" type="search" placeholder="搜索文章" /><i
+          class="i-pixelarticons-search"
+          aria-hidden="true"
+        ></i
+      ></label>
     </div>
-
-    <div class="back-btn">
-      <Button href="/" size="md">cd ~ / 返回桌面</Button>
+    <p class="search-results" aria-live="polite">
+      {{
+        query || category !== "全部"
+          ? `找到 ${filteredPosts.length} 篇文章`
+          : `共 ${data.length} 篇，慢慢看。`
+      }}
+    </p>
+    <section v-for="[year, posts] in years" :key="year" class="blog-year">
+      <h2>{{ year }}</h2>
+      <BlogItem v-for="post in posts" :key="post.url" :post="post" />
+    </section>
+    <div v-if="!filteredPosts.length" class="blog-empty">
+      <span class="i-pixelarticons-notes" aria-hidden="true"></span>
+      <h2>这一页还空着。</h2>
+      <p>换个关键词，或看看全部文章。</p>
+      <button type="button" class="pixel-button" @click="resetFilters">显示全部文章</button>
     </div>
+    <a class="back-to-desk" href="/"
+      ><i class="i-pixelarticons-arrow-left" aria-hidden="true"></i> 返回桌面</a
+    >
   </section>
 </template>
-
-<style scoped>
-.year-section {
-  margin-bottom: 3rem;
-}
-
-.year-label {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.65rem;
-  letter-spacing: 0.2rem;
-  color: var(--color-text);
-  opacity: 0.35;
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
-}
-
-.articles-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.back-btn {
-  display: flex;
-  justify-content: center;
-  margin: 3rem 0;
-}
-</style>

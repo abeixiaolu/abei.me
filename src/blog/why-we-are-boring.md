@@ -1,4 +1,5 @@
 ---
+category: 随笔
 title: 《我们为何无聊》读书笔记
 description: 我们为什么无聊 | 读书笔记
 date: 2025-01-16

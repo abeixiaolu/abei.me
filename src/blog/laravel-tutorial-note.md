@@ -1,4 +1,5 @@
 ---
+category: 技术
 title: "Laravel 学习笔记"
 description: "Laravel ｜ Tutorial ｜ 笔记"
 date: 2025-02-12

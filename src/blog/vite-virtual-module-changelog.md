@@ -1,4 +1,5 @@
 ---
+category: 技术
 title: Vite 虚拟模块入门：自动生成 Changelog
 description: vite | virtual module | auto generate changelog | tutorial
 date: 2025-01-06

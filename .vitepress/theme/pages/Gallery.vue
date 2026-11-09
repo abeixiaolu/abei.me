@@ -167,7 +167,6 @@ const canGoNext = computed(
       </div>
     </div>
 
-    <!-- Keep the lightbox outside the transformed CRT screen. -->
     <Teleport to="body">
       <div
         v-if="showLightbox && currentPhoto"

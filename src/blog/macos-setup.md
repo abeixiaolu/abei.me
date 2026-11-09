@@ -1,4 +1,5 @@
 ---
+category: 技术
 title: "我的 MacOS 配置"
 description: "MacOS ｜ Setup ｜ 配置"
 date: 2025-01-17

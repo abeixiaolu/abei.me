@@ -1,4 +1,5 @@
 ---
+category: 技术
 title: 10分钟极速配置MacOS
 description: MacOS ｜ Setup ｜ 配置
 date: 2025-10-30

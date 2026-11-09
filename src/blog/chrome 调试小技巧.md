@@ -1,4 +1,5 @@
 ---
+category: 技术
 title: "Chrome 调试小技巧"
 description: "Chrome ｜ 调试"
 date: 2025-05-09

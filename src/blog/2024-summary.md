@@ -1,4 +1,5 @@
 ---
+category: 生活
 title: 2024 年终总结
 description: 个人成长｜生活情感｜2025 年计划｜年终设备清单
 date: 2024-12-31

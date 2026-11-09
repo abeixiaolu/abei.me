@@ -1,4 +1,5 @@
 ---
+category: 技术
 title: "Mac mini 自建 Vaultwarden"
 description: "不用路由器端口映射，手机直接访问 vault.abei.me，记录完整搭建与安全加固过程。"
 date: 2026-03-04

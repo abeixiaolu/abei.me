@@ -1,4 +1,5 @@
 ---
+category: 技术
 title: "NestJS 基础知识"
 description: "NestJS ｜ Basic"
 date: 2025-04-19

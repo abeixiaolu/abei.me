@@ -1,4 +1,5 @@
 ---
+category: 技术
 title: 如何从零开发一款划词翻译的 Chrome 插件
 description: 如何开发一个 Chrome 扩展
 date: 2025-04-02

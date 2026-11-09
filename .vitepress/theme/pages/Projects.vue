@@ -28,7 +28,7 @@ import { data } from "../../data/github-projects.data";
     </div>
 
     <div class="back-btn">
-      <Button href="/" size="md">cd ~ / 返回桌面</Button>
+      <Button href="/" size="md">返回桌面</Button>
     </div>
   </section>
 </template>

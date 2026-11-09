@@ -9,7 +9,7 @@ const { frontmatter } = useData();
       <span v-if="frontmatter.date">{{ frontmatter.date?.split("T")[0] }}</span>
     </div>
 
-    <a class="terminal-backlink" href="/blog">← notes / 返回日志目录</a>
+    <a class="terminal-backlink" href="/blog">← 返回博客目录</a>
     <div class="blog-content">
       <h1 class="show-title">
         {{ frontmatter.title }}
@@ -18,7 +18,7 @@ const { frontmatter } = useData();
     </div>
 
     <div class="back-btn">
-      <Button href="/blog">cd ../notes / 返回日志</Button>
+      <Button href="/blog">返回博客目录</Button>
     </div>
   </article>
 </template>

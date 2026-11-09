@@ -1,4 +1,5 @@
 ---
+category: 技术
 title: Tmux 入门
 description: terminal | tmux | tutorial
 date: 2025-09-25

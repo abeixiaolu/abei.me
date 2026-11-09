@@ -1,4 +1,5 @@
 ---
+category: 技术
 title: VitePress 自动生成侧边栏
 description: vitepress | auto generate sidebar
 date: 2025-01-03

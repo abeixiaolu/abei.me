@@ -1,4 +1,5 @@
 ---
+category: 技术
 title: "Git 小技巧"
 description: "Git ｜ 小技巧"
 date: 2025-01-20

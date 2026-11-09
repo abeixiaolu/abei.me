@@ -5,10 +5,10 @@ defineProps<{ command: string; title: string; description: string; meta?: string
 <template>
   <header class="terminal-header">
     <div class="terminal-command">
-      <span>abei@desk:~</span><span aria-hidden="true">$</span> {{ command }}
+      <a href="/">首页</a><span aria-hidden="true">/</span><span>{{ title }}</span>
     </div>
     <div class="terminal-heading">
-      <h1>{{ title }}<span aria-hidden="true">_</span></h1>
+      <h1>{{ title }}</h1>
       <span v-if="meta" class="terminal-meta">{{ meta }}</span>
     </div>
     <p>{{ description }}</p>

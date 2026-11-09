@@ -38,6 +38,7 @@ module.exports = {
   plugins: [
     iconsPlugin({
       collections: getIconCollections([
+        "pixelarticons",
         "logos",
         "solar",
         "simple-icons",

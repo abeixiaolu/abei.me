@@ -7,7 +7,7 @@ import DraggableCards from "../../../src/demo/DraggableCards/index.vue";
   <section class="space-y-8 md:space-y-16 terminal-page">
     <TerminalHeader
       command="./playground"
-      title="实验终端"
+      title="像素实验室"
       description="小程序、交互试验，还有一些纯粹出于好奇的代码。"
       meta="5 EXPERIMENTS"
     />
@@ -52,7 +52,7 @@ import DraggableCards from "../../../src/demo/DraggableCards/index.vue";
     </div>
 
     <div class="flex justify-center my-16">
-      <Button href="/" size="md"> cd ~ / 返回桌面 </Button>
+      <Button href="/" size="md"> 返回桌面 </Button>
     </div>
   </section>
 </template>

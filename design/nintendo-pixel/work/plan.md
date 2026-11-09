@@ -8,7 +8,7 @@
 - [x] 5. Verify on the matching surface.
 - [x] 6. Rebase into small, ordered commits. Stack follow-ups. Assets and implementation are separate ordered commits. No rebase was needed.
 - [x] 7. If the design is contested, `interrogate` before shipping. skip: both candidates recommended the selected design.
-- [ ] 8. Run **Opening a PR**.
+- [x] 8. Run **Opening a PR**. Opened https://github.com/abeixiaolu/abei.me/pull/1. Branch pushed, not merged or deployed.
 
 ## Throughput checkpoint
 - [x] Blocking first steps. Inspect routing, content, current styles, and approved images. Select one state owner before implementation.

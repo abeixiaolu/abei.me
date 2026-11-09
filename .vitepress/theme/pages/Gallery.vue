@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import TerminalHeader from "../components/TerminalHeader.vue";
 import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 import { data as galleryData } from "../../data/gallery.data";
 
@@ -37,25 +38,39 @@ const selectedAlbum = ref<Album>(albums.value[0]);
 const currentPhotoIndex = ref(0);
 // 是否显示大图
 const showLightbox = ref(false);
-let previousOverflow = '';
+let previousOverflow = "";
 const lightbox = ref<HTMLElement>();
 let previousFocus: HTMLElement | null = null;
 function onLightboxKey(event: KeyboardEvent) {
   if (!showLightbox.value) return;
-  if (event.key === 'Escape') { event.preventDefault(); closeLightbox(); }
-  if (event.key === 'Tab') {
-    const buttons = Array.from(lightbox.value?.querySelectorAll<HTMLButtonElement>('button') || []);
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeLightbox();
+  }
+  if (event.key === "Tab") {
+    const buttons = Array.from(lightbox.value?.querySelectorAll<HTMLButtonElement>("button") || []);
     const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
     event.preventDefault();
-    const next = index < 0 ? (event.shiftKey ? buttons.length - 1 : 0) : (index + (event.shiftKey ? -1 : 1) + buttons.length) % buttons.length;
+    const next =
+      index < 0
+        ? event.shiftKey
+          ? buttons.length - 1
+          : 0
+        : (index + (event.shiftKey ? -1 : 1) + buttons.length) % buttons.length;
     buttons[next]?.focus();
   }
-  if (event.key === 'ArrowLeft') { event.preventDefault(); prevPhoto(); }
-  if (event.key === 'ArrowRight') { event.preventDefault(); nextPhoto(); }
+  if (event.key === "ArrowLeft") {
+    event.preventDefault();
+    prevPhoto();
+  }
+  if (event.key === "ArrowRight") {
+    event.preventDefault();
+    nextPhoto();
+  }
 }
-onMounted(() => window.addEventListener('keydown', onLightboxKey, true));
+onMounted(() => window.addEventListener("keydown", onLightboxKey, true));
 onUnmounted(() => {
-  window.removeEventListener('keydown', onLightboxKey, true);
+  window.removeEventListener("keydown", onLightboxKey, true);
   if (showLightbox.value) document.body.style.overflow = previousOverflow;
 });
 
@@ -116,23 +131,23 @@ const canGoNext = computed(
 </script>
 
 <template>
-  <section class="font-family-anwt">
-    <div class="page-meta-header">
-      <span>ARCHIVE // GALLERY</span>
-      <span>{{ new Date().getFullYear() }}</span>
-    </div>
+  <section class="terminal-page">
+    <TerminalHeader
+      command="ls ./frames"
+      title="影像档案"
+      description="从现实世界采集的光线、街道与片刻。"
+      :meta="`${albums.length} ALBUMS`"
+    />
     <div v-for="album in albums" :key="album.title" class="mb-4">
-      <div class="flex gap-8 py-4 sticky top-0 bg-(--color-bg) z-10">
-        <div class="text-xl font-medium self-baseline">
-          {{ album.title }}
+      <div class="album-heading">
+        <div class="album-title">
+          {{ album.title }}/ <small>{{ album.pictures.length }} FRAMES</small>
         </div>
-        <div class="text-sm text-gray-500 self-baseline">
+        <div class="album-description">
           {{ album.description }}
         </div>
       </div>
-      <div
-        class="gallery-grid"
-      >
+      <div class="gallery-grid">
         <button
           type="button"
           v-for="(photo, idx) in album.pictures"
@@ -154,78 +169,75 @@ const canGoNext = computed(
 
     <!-- Keep the lightbox outside the transformed CRT screen. -->
     <Teleport to="body">
-    <div
-      v-if="showLightbox && currentPhoto"
-      ref="lightbox"
-      role="dialog"
-      aria-modal="true"
-      aria-label="查看照片"
-      class="fixed inset-0 z-50 flex items-center justify-center transition-all backdrop-blur-sm duration-300"
-      @click="closeLightbox"
-    >
       <div
-        class="relative w-full h-full flex items-center justify-center"
-        @click.stop="closeLightbox"
+        v-if="showLightbox && currentPhoto"
+        ref="lightbox"
+        role="dialog"
+        aria-modal="true"
+        aria-label="查看照片"
+        class="terminal-lightbox fixed inset-0 z-50 flex items-center justify-center transition-all backdrop-blur-sm duration-300"
+        @click="closeLightbox"
       >
         <div
-          class="absolute z-[-1] size-full blur-3xl"
-          :style="{ background: `no-repeat center/cover url(${currentPhoto.url})` }"
-        />
-        <img
-          :src="currentPhoto.url"
-          :alt="`${selectedAlbum.title} - ${currentPhotoIndex + 1}`"
-          class="max-h-[90vh] max-w-[90vw] object-contain transition-transform duration-500"
-          loading="lazy"
-        />
-
-        <button
-          v-if="canGoPrev"
-          aria-label="上一张照片"
-          class="absolute left-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60 transition-all duration-300 backdrop-blur-sm transform hover:-translate-x-1"
-          @click.stop="prevPhoto"
-        >
-          <i class="i-solar-arrow-left-linear text-2xl" />
-        </button>
-
-        <button
-          v-if="canGoNext"
-          aria-label="下一张照片"
-          class="absolute right-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60 transition-all duration-300 backdrop-blur-sm transform hover:translate-x-1"
-          @click.stop="nextPhoto"
-        >
-          <i class="i-solar-arrow-right-linear text-2xl" />
-        </button>
-
-        <button
-          aria-label="关闭照片"
-          class="absolute top-4 right-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60 transition-all duration-300 backdrop-blur-sm transform hover:rotate-90"
+          class="relative w-full h-full flex items-center justify-center"
           @click.stop="closeLightbox"
         >
-          <i class="i-solar-close-circle-linear text-2xl" />
-        </button>
+          <div
+            class="absolute z-[-1] size-full blur-3xl"
+            :style="{ background: `no-repeat center/cover url(${currentPhoto.url})` }"
+          />
+          <img
+            :src="currentPhoto.url"
+            :alt="`${selectedAlbum.title} - ${currentPhotoIndex + 1}`"
+            class="max-h-[90vh] max-w-[90vw] object-contain transition-transform duration-500"
+            loading="lazy"
+          />
+
+          <button
+            v-if="canGoPrev"
+            aria-label="上一张照片"
+            class="absolute left-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60 transition-all duration-300 backdrop-blur-sm transform hover:-translate-x-1"
+            @click.stop="prevPhoto"
+          >
+            <i class="i-solar-arrow-left-linear text-2xl" />
+          </button>
+
+          <button
+            v-if="canGoNext"
+            aria-label="下一张照片"
+            class="absolute right-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60 transition-all duration-300 backdrop-blur-sm transform hover:translate-x-1"
+            @click.stop="nextPhoto"
+          >
+            <i class="i-solar-arrow-right-linear text-2xl" />
+          </button>
+
+          <button
+            aria-label="关闭照片"
+            class="absolute top-4 right-4 p-2 text-white bg-black/40 rounded-full hover:bg-black/60 transition-all duration-300 backdrop-blur-sm transform hover:rotate-90"
+            @click.stop="closeLightbox"
+          >
+            <i class="i-solar-close-circle-linear text-2xl" />
+          </button>
+        </div>
       </div>
-    </div>
     </Teleport>
   </section>
 </template>
 
 <style scoped>
-.gallery-grid { columns: 180px; column-gap: 16px; }
-.gallery-thumbnail { display: block; width: 100%; padding: 0; margin: 0 0 16px; break-inside: avoid; background: transparent; cursor: zoom-in; }
-.page-meta-header {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--font-mono, monospace);
-  font-size: 0.7rem;
-  color: var(--color-text);
-  opacity: 0.45;
-  text-transform: uppercase;
-  letter-spacing: 0.1rem;
-  border-bottom: 1px solid var(--color-hairline);
-  padding-bottom: 0.75rem;
-  margin-bottom: 2rem;
+.gallery-grid {
+  columns: 180px;
+  column-gap: 16px;
 }
-
+.gallery-thumbnail {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0 0 16px;
+  break-inside: avoid;
+  background: transparent;
+  cursor: zoom-in;
+}
 img {
   height: auto;
   max-width: 100%;

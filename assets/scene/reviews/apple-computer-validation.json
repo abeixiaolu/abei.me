@@ -1,0 +1,38 @@
+{
+  "native_reopen": "PASS",
+  "packed_source_images": 3,
+  "editable_text_and_modifiers": "PASS",
+  "embedded_export_images": 3,
+  "textured_mesh_uvs": "PASS",
+  "preview_excluded_from_export": "PASS",
+  "clean_reimport": "PASS",
+  "native_bounds": [
+    [
+      -1.9815000295639038,
+      1.9815000295639038
+    ],
+    [
+      -2.299999952316284,
+      1.5499999523162842
+    ],
+    [
+      0.23999999463558197,
+      3.859999895095825
+    ]
+  ],
+  "reimport_bounds": [
+    [
+      -1.9815000295639038,
+      1.9815000295639038
+    ],
+    [
+      -2.299999952316284,
+      1.5499999523162842
+    ],
+    [
+      0.23999999463558197,
+      3.859999895095825
+    ]
+  ],
+  "maximum_bound_error": 0.0
+}

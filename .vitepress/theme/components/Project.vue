@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="flex flex-col hover:bg-gray-500/10 px-4 py-1 group">
+  <div class="terminal-project">
     <a :href="project.url" target="_blank" class="link">
       {{
         project.name
@@ -16,7 +16,7 @@ defineProps<{
           .join(" ")
       }}
     </a>
-    <p class="text-sm opacity-50">
+    <p class="project-description">
       {{ project.description }}
     </p>
   </div>

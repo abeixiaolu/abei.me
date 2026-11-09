@@ -64,7 +64,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid #e6b46e; outline-offs
 .recent-list a:hover { color: #8f4d35; }
 @media (min-width: 701px) {
   .desk-scene > .device-screen { display: none; }
-  .scene-app .desk-scene > .device-screen { display: flex; position: fixed; z-index: 3; border: 0; border-radius: 2%; transform-origin: 0 0; }
+  .scene-app .desk-scene > .device-screen { display: flex; position: fixed; z-index: 3; border: 0; border-radius: var(--crt-corner-radius, 2%); transform-origin: 0 0; }
   .scene-expanded::after { content: ''; position: fixed; inset: 0; z-index: 5; background: #0c1115bf; backdrop-filter: blur(6px); }
   .scene-expanded .desk-scene > .device-screen, .scene-fallback .desk-scene > .device-screen {
     display: flex; position: fixed; z-index: 6; left: 50% !important; top: 50% !important; width: min(900px, calc(100vw - 64px)) !important; height: calc(100svh - 120px) !important; transform: translate(-50%, -50%) !important; border: 7px solid #343d38; border-radius: 12px; box-shadow: 0 25px 100px #0009;

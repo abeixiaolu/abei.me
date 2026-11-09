@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import TerminalHeader from "../../components/TerminalHeader.vue";
 import { data } from "../../../data/blog.data";
 
 const newData = computed(() => {
@@ -15,40 +16,31 @@ const newData = computed(() => {
 </script>
 
 <template>
-  <section class="font-family-anwt">
-    <div class="blog-meta-header">
-      <span>ARCHIVE // BLOG</span>
-      <span>{{ new Date().getFullYear() }}</span>
-    </div>
+  <section class="terminal-page">
+    <TerminalHeader
+      command="ls ./notes"
+      title="文字日志"
+      description="关于代码、生活，以及尚未想明白的事。"
+      :meta="`${data.length} FILES`"
+    />
 
     <div v-for="[year, blogs] in newData" :key="year" class="year-section">
-      <div class="year-label">{{ year }}</div>
+      <div class="year-label">
+        <span>{{ year }}/</span
+        ><span>{{ blogs.length }} {{ blogs.length === 1 ? "entry" : "entries" }}</span>
+      </div>
       <div class="articles-list">
         <BlogItem v-for="blog in blogs" :key="blog.url" :post="blog" />
       </div>
     </div>
 
     <div class="back-btn">
-      <Button href="/" size="md">Back to Home</Button>
+      <Button href="/" size="md">cd ~ / 返回桌面</Button>
     </div>
   </section>
 </template>
 
 <style scoped>
-.blog-meta-header {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--font-mono, monospace);
-  font-size: 0.7rem;
-  color: var(--color-text);
-  opacity: 0.45;
-  text-transform: uppercase;
-  letter-spacing: 0.1rem;
-  border-bottom: 1px solid var(--color-hairline);
-  padding-bottom: 0.75rem;
-  margin-bottom: 2.5rem;
-}
-
 .year-section {
   margin-bottom: 3rem;
 }

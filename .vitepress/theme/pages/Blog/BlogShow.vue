@@ -3,12 +3,13 @@ const { frontmatter } = useData();
 </script>
 
 <template>
-  <article class="blog-show font-family-anwt">
+  <article class="blog-show terminal-page">
     <div class="show-meta-header">
-      <span>ARTICLE // BLOG</span>
+      <span>READ / NOTES</span>
       <span v-if="frontmatter.date">{{ frontmatter.date?.split("T")[0] }}</span>
     </div>
 
+    <a class="terminal-backlink" href="/blog">← notes / 返回日志目录</a>
     <div class="blog-content">
       <h1 class="show-title">
         {{ frontmatter.title }}
@@ -17,7 +18,7 @@ const { frontmatter } = useData();
     </div>
 
     <div class="back-btn">
-      <Button href="/blog">Back to Blog</Button>
+      <Button href="/blog">cd ../notes / 返回日志</Button>
     </div>
   </article>
 </template>

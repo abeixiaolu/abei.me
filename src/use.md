@@ -3,26 +3,21 @@ layout: uses
 title: Uses
 description: Some of my favorite tools and gear.
 ---
-
-<StrokeLineText size="sm" text="Editor" />
+## editor / 编辑器
 
 - [Cursor](https://www.cursor.com/) and [Windsurf](https://codeium.com/windsurf) with minimal settings
 - Font: [MesloLGL Nerd Font](https://www.nerdfonts.com/font-downloads), [Dank Mono](https://philpl.gumroad.com/l/dank-mono)
 - [Theme: Xiaolu Abei](https://github.com/abeixiaolu/xiaoluabei-vscode-theme)
 - Icons: [City Lights](https://marketplace.visualstudio.com/items?itemName=Yummygum.city-lights-icon-vsc) and [Carbon Icons](https://marketplace.visualstudio.com/items?itemName=antfu.icons-carbon).
 
----
-
-<StrokeLineText size="sm" text="Terminal" />
+## shell / 命令行
 
 - [Ghostty](https://ghostty.org/) running with [Starship prompt](https://starship.rs/) on zsh.
 - [Font: Berkeley Mono](https://www.nerdfonts.com/font-downloads)
 - [Theme: Xiaolu Abei](https://github.com/abeixiaolu/xiaoluabei-vscode-theme)
 - Terminal Tools: [zoxide](https://github.com/ajeetdsouza/zoxide), [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions), [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting), [fnm](https://github.com/Schniz/fnm), [bat](https://github.com/sharkdp/bat), [eza](https://github.com/eza-community/eza).
 
----
-
-<StrokeLineText size="sm" text="Desktop Apps" />
+## apps / 桌面应用
 
 - [Raycast](https://www.raycast.com/) for everything.
 - [Zen Browser](https://zen-browser.app/): but still use [Google Chrome](https://www.google.com/chrome/) as developer tools.
@@ -33,9 +28,7 @@ description: Some of my favorite tools and gear.
 - [AppCleaner](https://freemacsoft.net/appcleaner/): uninstaller.
 - [Karabiner](https://karabiner-elements.pqrs.org/): keyboard manager, use caps lock as hyper key.
 
----
-
-<StrokeLineText size="sm" text="Hardware" />
+## hardware / 硬件
 
 - Computer: MacBook Pro 14" M1 Pro 16GB
 - Phone: iPhone 15 Pro 256GB
@@ -45,13 +38,3 @@ description: Some of my favorite tools and gear.
 - Monitor: INNOCN 27" 4K 144Hz
 - Keyboard: Nuphy Halo 75
 - Mouse: Logitech MX Master 2s
-
-<style scoped>
-@import '../.vitepress/theme/styles/app.css';
-ul {
-  list-style-type: '➻';
-  li::marker {
-    font-size: 1em;
-  }
-}
-</style>

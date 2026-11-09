@@ -15,6 +15,14 @@ import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUniformsLib.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { onMounted, onUnmounted, ref, watch } from "vue";
+const computerScreen = {
+  width: 2.62,
+  height: 2,
+  centerY: 2.5,
+  frontZ: 0.31,
+  curvature: 0.045,
+  cornerRadius: 0.12,
+};
 const props = defineProps<{ focused: boolean }>();
 const emit = defineEmits<{ open: [path: string]; ready: []; failed: [] }>();
 const canvas = ref<HTMLCanvasElement>();
@@ -191,19 +199,6 @@ onMounted(() => {
     }
   });
   wearRoughness.colorSpace = THREE.NoColorSpace;
-  const polymerPatina = canvasMap(512, 512, (c) => {
-    c.fillStyle = "#ffffff";
-    c.fillRect(0, 0, 512, 512);
-    for (let i = 0; i < 14; i++) {
-      const x = rng(i + 713) * 512,
-        y = rng(i + 999) * 512;
-      const g = c.createRadialGradient(x, y, 0, x, y, 100);
-      g.addColorStop(0, "#8d816e16");
-      g.addColorStop(1, "#ffffff00");
-      c.fillStyle = g;
-      c.fillRect(x - 100, y - 100, 200, 200);
-    }
-  });
   black.bumpMap = plasticMap;
   black.bumpScale = 0.0003;
   black.roughness = 0.68;
@@ -340,81 +335,38 @@ onMounted(() => {
   box("oak desktop", 13.8, 0.24, 5.5, wood, 0, 0.12, 0.2, scene, 0.07);
   box("desk front apron", 13.3, 0.48, 0.14, wood, 0, -0.18, 2.82);
   for (const x of [-6.2, 6.2]) box("desk leg", 0.22, 3, 0.35, wood, x, -1.4, 1.8);
-  // CRT and VCR are separate assemblies. Native monitor.blend is retained as editable source.
   const monitor = new THREE.Group();
-  monitor.position.set(0, 0.44, 0);
-  monitor.scale.set(0.7, 0.82, 0.82);
+  monitor.name = "Apple II computer";
   scene.add(monitor);
   let alive = true;
   new GLTFLoader().load(
-    "/models/monitor.glb?v=2",
+    "/models/monitor.glb?v=apple-ii-2",
     (g) => {
-      if (!alive) {
-        g.scene.traverse((o) => {
-          if (o instanceof THREE.Mesh) {
-            o.geometry.dispose();
-            (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => m.dispose());
+      const modelTextures = new Set<THREE.Texture>();
+      const modelMaterials = new Set<THREE.Material>();
+      g.scene.traverse((object) => {
+        if (!(object instanceof THREE.Mesh)) return;
+        object.castShadow = object.receiveShadow = true;
+        if (/^Preview[ _]CRT[ _]glass$/i.test(object.name)) object.visible = false;
+        for (const mat of Array.isArray(object.material) ? object.material : [object.material]) {
+          modelMaterials.add(mat);
+          for (const value of Object.values(mat)) {
+            if (value instanceof THREE.Texture) modelTextures.add(value);
           }
-        });
-        return;
-      }
-      const sharedMaterials = new Map<THREE.Material, THREE.Material>();
-      g.scene.traverse((o) => {
-        if (o instanceof THREE.Mesh) {
-          if (/Pedestal/i.test(o.name)) o.visible = false;
-          o.castShadow = true;
-          o.receiveShadow = true;
-          const isArray = Array.isArray(o.material);
-          const mats = isArray ? o.material : [o.material];
-          const mapped = mats.map((m) => {
-            const cached = sharedMaterials.get(m);
-            if (cached) return cached;
-            const n = m.clone();
-            if (n instanceof THREE.MeshStandardMaterial) {
-              if (/ABS/i.test(n.name)) {
-                n.color.set("#414238");
-                n.roughness = 0.6;
-                n.metalness = 0;
-                n.bumpMap = plasticMap;
-                n.bumpScale = 0.00035;
-                n.roughnessMap = wearRoughness;
-                n.map = polymerPatina;
-              } else if (/Faceplate/i.test(n.name)) {
-                n.color.set("#3b3d35");
-                n.roughness = 0.43;
-                n.metalness = 0;
-                n.bumpMap = plasticMap;
-                n.bumpScale = 0.00025;
-                n.roughnessMap = wearRoughness;
-                n.map = polymerPatina;
-              } else if (/rubber/i.test(n.name)) {
-                n.color.set("#101411");
-                n.roughness = 0.92;
-                n.metalness = 0;
-              } else if (/bezel/i.test(n.name)) {
-                n.color.set("#181d19");
-                n.roughness = 0.3;
-                n.metalness = 0.05;
-              } else if (/fasteners/i.test(n.name)) {
-                n.color.set("#797d75");
-                n.roughness = 0.27;
-                n.metalness = 0.85;
-              } else if (/Buttons/i.test(n.name)) {
-                n.color.set("#363b34");
-                n.roughness = 0.4;
-                n.metalness = 0;
-              } else if (/markings/i.test(n.name)) {
-                n.color.set("#b3b09a");
-                n.roughness = 0.85;
-              }
-            }
-            sharedMaterials.set(m, n);
-            return n;
-          });
-          o.material = isArray ? mapped : mapped[0];
         }
       });
-      sharedMaterials.forEach((_value, key) => key.dispose());
+      if (!alive) {
+        g.scene.traverse((object) => {
+          if (object instanceof THREE.Mesh) object.geometry.dispose();
+        });
+        modelMaterials.forEach((mat) => mat.dispose());
+        modelTextures.forEach((texture) => texture.dispose());
+        return;
+      }
+      modelTextures.forEach((texture) => {
+        texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        textures.push(texture);
+      });
       mergeStaticMeshes(g.scene);
       monitor.add(g.scene);
       renderer.shadowMap.needsUpdate = true;
@@ -422,118 +374,70 @@ onMounted(() => {
     },
     undefined,
     () => {
+      if (!alive) return;
       failed.value = true;
       emit("failed");
     },
   );
-  const vcrCase = material("#30332e", 0.5, 0.35);
-  vcrCase.roughnessMap = wearRoughness;
-  vcrCase.map = polymerPatina;
-  box("VCR deck", 4.15, 0.59, 2.2, vcrCase, 0, 0.54, 0.1, scene, 0.06);
-  box("VCR fascia", 4.05, 0.43, 0.1, material("#1c2423"), 0, 0.53, 1.24);
-  box("tape insertion door", 2.15, 0.18, 0.03, black, -0.65, 0.58, 1.31);
-  decal("VCR logo", "ABEI / Hi-Fi", 0.85, 0.15, -1.45, 0.36, 1.305, "#202626", "#b5b7a5", 25);
-  const display = decal(
-    "fluorescent time",
-    "▶  00:23:08",
-    1.05,
-    0.23,
-    1.2,
-    0.59,
-    1.31,
-    "#152723",
-    "#8fe7c8",
-    40,
-  );
-  display.position.z = 1.36;
-  box("VCR display surround", 1.16, 0.28, 0.045, material("#101614", 0.3), 1.2, 0.59, 1.326);
-  box("VCR door top lip", 2.15, 0.018, 0.025, material("#484b41", 0.45, 0.2), -0.65, 0.68, 1.322);
-  box("VCR door lower seam", 2.15, 0.012, 0.025, rubber, -0.65, 0.485, 1.322);
-  box("VCR lid seam", 4.02, 0.012, 0.025, rubber, 0, 0.8, 1.2);
-  for (const x of [-1.87, 1.87])
-    for (const y of [0.36, 0.71]) {
-      const screw = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.023, 0.023, 0.012, 16),
-        material("#77786a", 0.3, 0.8),
-      );
-      screw.name = "VCR fastener";
-      screw.rotation.x = Math.PI / 2;
-      screw.position.set(x, y, 1.302);
-      scene.add(screw);
-      box("VCR screw slot", 0.024, 0.004, 0.003, rubber, x, y, 1.31);
-    }
-  (display.material as THREE.MeshStandardMaterial).emissive.set("#69ad92");
-  (display.material as THREE.MeshStandardMaterial).emissiveMap = (
-    display.material as THREE.MeshStandardMaterial
-  ).map;
-  (display.material as THREE.MeshStandardMaterial).emissiveIntensity = 0.7;
-  for (let i = 0; i < 5; i++)
-    box("VCR transport key", 0.13, 0.05, 0.035, brass, 0.7 + i * 0.23, 0.36, 1.33);
-  const vcrGroup = new THREE.Group();
-  scene.add(vcrGroup);
-  // Attaching children mutates scene.children, so iterate over a snapshot.
-  // eslint-disable-next-line unicorn/no-useless-spread
-  for (const part of [...scene.children]) {
-    if (part.name.startsWith("VCR") || part.name === "tape insertion door" || part === display)
-      vcrGroup.attach(part);
-  }
-  vcrGroup.scale.x = 0.87;
-  mergeStaticMeshes(vcrGroup);
-  const screenW = 2.604,
-    screenH = 1.927,
-    screenY = 2.4244,
-    screenZ = 0.21;
-  const screenTex = canvasMap(1200, 888, (c) => {
-    c.fillStyle = "#173d8f";
-    c.fillRect(0, 0, 1200, 888);
-    c.strokeStyle = "#4470b8";
-    c.lineWidth = 1;
-    for (let i = 0; i < 32; i++) {
-      c.beginPath();
-      c.moveTo(0, 360 + i * 14);
-      for (let x = 0; x <= 1200; x += 12)
-        c.lineTo(x, 490 + i * 6 + Math.sin(x * 0.006 + i * 0.12) * 60);
-      c.stroke();
-    }
-    c.fillStyle = "#dddcc7";
-    c.font = "28px monospace";
-    c.fillText("▶ PLAY   /   ABEI PERSONAL CHANNEL", 70, 80);
-    c.font = "bold 140px sans-serif";
-    c.fillText("你好，我是", 65, 278);
-    c.fillText("阿北。", 65, 430);
-    c.font = "26px monospace";
-    c.fillText("THOUGHTS, PROJECTS & EVERYDAY LIFE", 70, 505);
-    c.font = "24px monospace";
-    c.fillText("CH 01                   HANGZHOU", 70, 808);
-    const vignette = c.createRadialGradient(600, 440, 180, 600, 440, 710);
+  const { width: screenW, height: screenH, centerY: screenY, frontZ: screenZ } = computerScreen;
+  const screenTex = canvasMap(1200, 916, (c) => {
+    const glow = c.createRadialGradient(600, 430, 40, 600, 450, 740);
+    glow.addColorStop(0, "#173329");
+    glow.addColorStop(1, "#07140f");
+    c.fillStyle = glow;
+    c.fillRect(0, 0, 1200, 916);
+    c.fillStyle = "#89b999";
+    c.font = "27px monospace";
+    c.fillText("ABEI PERSONAL COMPUTER", 78, 94);
+    c.fillText("64K SYSTEM READY", 78, 143);
+    c.fillStyle = "#b6e5ba";
+    c.font = "bold 132px sans-serif";
+    c.fillText("你好，我是", 72, 350);
+    c.fillText("阿北。", 72, 508);
+    c.fillRect(438, 488, 65, 13);
+    c.fillStyle = "#8fb99a";
+    c.font = "27px monospace";
+    c.fillText("NOTES, PROJECTS & EVERYDAY LIFE", 78, 607);
+    c.strokeStyle = "#6c927552";
+    c.lineWidth = 2;
+    c.beginPath();
+    c.moveTo(78, 678);
+    c.lineTo(1122, 678);
+    c.stroke();
+    c.fillStyle = "#b0d6ad";
+    c.font = "32px sans-serif";
+    c.fillText("点击屏幕，进入我的桌面", 78, 755);
+    c.fillStyle = "#739781";
+    c.font = "23px monospace";
+    c.fillText("] HELLO, WORLD.              HANGZHOU", 78, 840);
+    const vignette = c.createRadialGradient(600, 450, 210, 600, 450, 740);
     vignette.addColorStop(0, "#00000000");
-    vignette.addColorStop(0.78, "#00000004");
-    vignette.addColorStop(1, "#00000075");
+    vignette.addColorStop(0.7, "#00000008");
+    vignette.addColorStop(1, "#00000065");
     c.fillStyle = vignette;
-    c.fillRect(0, 0, 1200, 888);
-    for (let y = 0; y < 888; y += 4) {
-      c.fillStyle = "#00000018";
-      c.fillRect(0, y, 1200, 1);
-    }
+    c.fillRect(0, 0, 1200, 916);
+    c.fillStyle = "#00000022";
+    for (let y = 0; y < 916; y += 4) c.fillRect(0, y, 1200, 1);
   });
   const phosphorGeometry = new THREE.PlaneGeometry(screenW, screenH, 40, 30);
   const phosphorVertices = phosphorGeometry.attributes.position;
   for (let i = 0; i < phosphorVertices.count; i++) {
     const x = phosphorVertices.getX(i) / (screenW / 2),
       y = phosphorVertices.getY(i) / (screenH / 2);
-    phosphorVertices.setZ(i, 0.045 * (1 - x * x) * (1 - y * y));
+    phosphorVertices.setZ(i, computerScreen.curvature * (1 - x * x) * (1 - y * y));
   }
   phosphorGeometry.computeVertexNormals();
   const screen = new THREE.Mesh(phosphorGeometry, new THREE.MeshBasicMaterial({ map: screenTex }));
   screen.position.set(0, screenY, screenZ);
   screen.userData.path = "/blog";
   scene.add(screen);
-  const glassMask = canvasMap(128, 128, (c) => {
+  const glassMask = canvasMap(524, 400, (c) => {
+    c.scale(524 / screenW, 400 / screenH);
     c.fillStyle = "#000";
-    c.fillRect(0, 0, 128, 128);
+    c.fillRect(0, 0, screenW, screenH);
     c.fillStyle = "#fff";
     c.beginPath();
-    c.roundRect(0, 0, 128, 128, 5);
+    c.roundRect(0, 0, screenW, screenH, computerScreen.cornerRadius);
     c.fill();
   });
   glassMask.colorSpace = THREE.NoColorSpace;
@@ -545,7 +449,7 @@ onMounted(() => {
   for (let i = 0; i < glassVertices.count; i++) {
     const x = glassVertices.getX(i) / (screenW / 2),
       y = glassVertices.getY(i) / (screenH / 2);
-    glassVertices.setZ(i, 0.075 * (1 - x * x) * (1 - y * y));
+    glassVertices.setZ(i, computerScreen.curvature * (1 - x * x) * (1 - y * y));
   }
   crtGlassGeometry.computeVertexNormals();
   const crtGlass = new THREE.Mesh(
@@ -671,7 +575,7 @@ onMounted(() => {
   roomBounce.position.set(-3.5, 2.7, 1);
   roomBounce.lookAt(-2, 3, -3.6);
   scene.add(roomBounce);
-  const screenLight = new THREE.RectAreaLight("#537fd9", 1.6, 2.4, 1.8);
+  const screenLight = new THREE.RectAreaLight("#89bc96", 0.8, screenW, screenH);
   screenLight.position.set(0, screenY, screenZ + 0.1);
   screenLight.lookAt(0, screenY, 5);
   scene.add(screenLight);
@@ -689,7 +593,7 @@ onMounted(() => {
   ];
   for (let stack = 0; stack < 2; stack++)
     for (let i = 0; i < 5; i++) {
-      const x = 2.85 + stack * 1.8 + (rng(i + stack * 33) - 0.5) * 0.29,
+      const x = 3.1 + stack * 1.8 + (rng(i + stack * 33) - 0.5) * 0.29,
         y = 0.38 + i * 0.225,
         z = stack ? -0.7 : 0.1;
       const [label, path, color] = apps[i];
@@ -781,7 +685,6 @@ onMounted(() => {
       (sleeve.material as THREE.MeshStandardMaterial).map = carton;
       (sleeve.material as THREE.MeshStandardMaterial).color.set("#ffffff");
     }
-  // Phone, cup with handle, writing pad, pencil, remote and floppy disks give the desk human scale.
   const { book, telephone } = createStillLife(scene, textures);
   mergeStaticMeshes(book);
   mergeStaticMeshes(telephone);
@@ -807,7 +710,7 @@ onMounted(() => {
     [0, 0.07],
   ].map(([r, y]) => new THREE.Vector2(r, y));
   const mug = new THREE.Mesh(new THREE.LatheGeometry(cupProfile, 96), ceramic);
-  mug.position.set(-1.9, 0.245, 1.9);
+  mug.position.set(-2.5, 0.245, 2.4);
   mug.castShadow = mug.receiveShadow = true;
   scene.add(mug);
   cyl(
@@ -816,13 +719,13 @@ onMounted(() => {
     0.292,
     0.008,
     new THREE.MeshPhysicalMaterial({ color: "#1c120b", roughness: 0.12, clearcoat: 1 }),
-    -1.9,
+    -2.5,
     0.79,
-    1.9,
+    2.4,
   );
   const handle = new THREE.Mesh(new THREE.TorusGeometry(0.205, 0.055, 16, 40), ceramic);
   handle.scale.y = 1.12;
-  handle.position.set(-2.23, 0.59, 1.9);
+  handle.position.set(-2.83, 0.59, 2.4);
   handle.castShadow = handle.receiveShadow = true;
   scene.add(handle);
   box("notebook cover", 1.6, 0.06, 1.25, material("#6b7660"), -3.6, 0.28, 1.7);
@@ -857,18 +760,6 @@ onMounted(() => {
     0.028,
     material("#bd9555"),
   );
-  box("remote", 1.5, 0.12, 0.42, black, 1.2, 0.34, 2.05);
-  for (let i = 0; i < 18; i++)
-    box(
-      "remote button",
-      0.09,
-      0.035,
-      0.06,
-      i === 0 ? material("#9a3f2c") : rubber,
-      0.65 + (i % 6) * 0.2,
-      0.417,
-      1.95 + Math.floor(i / 6) * 0.1,
-    );
   for (let i = 0; i < 2; i++) {
     box("floppy", 0.76, 0.045, 0.77, material("#414d55"), 6.0 + i * 0.25, 0.28 + i * 0.055, 2.15);
     box("floppy label", 0.57, 0.006, 0.3, paper, 6.0 + i * 0.25, 0.306 + i * 0.055, 2.32);
@@ -948,10 +839,10 @@ onMounted(() => {
   let profileFrames = 0;
   if (profiling) renderer.info.autoReset = false;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const look = new THREE.Vector3(0, 3.1, -0.2),
+  const look = new THREE.Vector3(0, 2.5, -0.2),
     dest = new THREE.Vector3(),
     target = new THREE.Vector3();
-  camera.position.set(0, 4.1, 12.5);
+  camera.position.set(0, 4.8, 12.5);
   const panel = el.parentElement?.querySelector<HTMLElement>(".device-screen");
   setFocused = (v) => {
     focused = v;
@@ -1040,6 +931,10 @@ onMounted(() => {
     panel.style.top = "0";
     panel.style.width = `${w}px`;
     panel.style.height = `${h}px`;
+    panel.style.setProperty(
+      "--crt-corner-radius",
+      `${(computerScreen.cornerRadius / screenW) * w}px`,
+    );
     panel.style.transformOrigin = "0 0";
     panel.style.transform = `matrix3d(${m.join(",")})`;
   }
@@ -1074,7 +969,7 @@ onMounted(() => {
     const homeZ = aspect < 1.4 ? 16 : 11.1;
     dest.set(
       focused || reduce ? 0 : mouseX * 0.12,
-      focused ? screenY : 4.0 + (reduce ? 0 : mouseY * 0.05),
+      focused ? screenY : 4.8 + (reduce ? 0 : mouseY * 0.05),
       focused
         ? screenZ +
             Math.max(
@@ -1083,7 +978,7 @@ onMounted(() => {
             )
         : homeZ,
     );
-    target.set(0, focused ? screenY : 3.0, focused ? screenZ : -0.2);
+    target.set(0, focused ? screenY : 2.5, focused ? screenZ : -0.2);
     const alpha = reduce ? 1 : 1 - Math.exp(-dt * 5);
     camera.position.lerp(dest, alpha);
     look.lerp(target, alpha);

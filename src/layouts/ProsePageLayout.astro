@@ -1,5 +1,5 @@
 ---
-import Lcd from "../components/Lcd.astro";
+import StnHeader from "../components/StnHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 
 const { frontmatter } = Astro.props;
@@ -7,17 +7,14 @@ const {
   title,
   description,
   caption,
+  meta,
   lede,
 } = frontmatter;
 ---
 
 <BaseLayout title={title} description={description}>
   <section>
-    <Lcd size="lg">
-      {caption && <p class="hw-caption">{caption}</p>}
-      <h1 class="hw-title">{title}</h1>
-      {lede && <p class="hw-lede">{lede}</p>}
-    </Lcd>
+    <StnHeader caption={caption} meta={meta} title={title} lede={lede} />
 
     <div class="hw-prose mt-8">
       <slot />

@@ -1,9 +1,9 @@
 ---
 layout: ../layouts/ProjectsPageLayout.astro
-title: Projects
-description: 开源与个人项目。
+title: Project
+description: Open source and personal work.
 caption: Catalog
-lede: 开源与个人项目。
+lede: Open source and personal work.
 groups:
   - title: Personal
     projects:

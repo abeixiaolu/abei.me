@@ -170,7 +170,7 @@
 
 /* —— 列表 —— */
 .hw-prose :where(ul, ol) {
-  padding-left: 1.55em;
+  padding-left: 1.85em;
   color: var(--hw-muted);
 }
 
@@ -224,11 +224,11 @@
 }
 
 .hw-prose :where(ol > li)::before {
-  content: counter(hw-ol, decimal-leading-zero);
+  content: counter(hw-ol, decimal-leading-zero) ".";
   position: absolute;
   top: 0;
-  left: -2.05em;
-  width: 1.7em;
+  left: -2.35em;
+  width: 2em;
   text-align: right;
   color: var(--hw-key);
   font-family: var(--hw-mono);
@@ -445,6 +445,18 @@
   text-shadow: 0 1px 0 rgb(255 255 255 / 0.85);
 }
 
+/* 居中告示框内：列表整体居中，序号贴着条目文字（勿绝对定位到全宽左缘） */
+.hw-prose :where(.markdown-alert) :where(ul, ol) {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  text-align: left;
+}
+
+.hw-prose :where(.markdown-alert) :where(li) {
+  text-align: left;
+}
+
 .hw-prose :where(.markdown-alert > :last-child) {
   margin-bottom: 0;
 }
@@ -492,7 +504,7 @@
   font-family: var(--hw-mono);
   font-size: 13.5px;
   line-height: 1.7;
-  color: #e7e7e3;
+  color: #dbd7ca;
   border: 10px solid transparent;
   border-radius: var(--radius-lcd);
   corner-shape: squircle;
@@ -511,6 +523,23 @@
     0 14px 22px -12px rgba(0, 0, 0, 0.55);
 }
 
+/* Serein Dark：LCD 框内始终用深色语法色，不盖住 hardware 背景 */
+.hw-prose :where(pre.astro-code),
+.hw-prose :where(pre.astro-code) span {
+  color: var(--shiki-dark, #dbd7ca);
+  background-color: transparent !important;
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+  text-decoration: var(--shiki-dark-text-decoration);
+}
+
+/* 覆盖全局深色 ::selection：LCD 内用更醒目的浅选区（主题 #eeeeee 提不透明度） */
+.hw-prose :where(pre)::selection,
+.hw-prose :where(pre) *::selection {
+  background-color: rgba(238, 238, 238, 0.42) !important;
+  color: #f2efe4 !important;
+}
+
 .hw-prose :where(pre code) {
   font-family: inherit;
   font-size: inherit;
@@ -521,7 +550,7 @@
   margin: 0;
   box-shadow: none;
   border-radius: 0;
-  text-shadow: 0 0 8px rgba(231, 231, 227, 0.12);
+  text-shadow: 0 0 8px rgba(219, 215, 202, 0.12);
 }
 
 /* —— 表格 —— */

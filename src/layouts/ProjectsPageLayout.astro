@@ -1,6 +1,6 @@
 ---
 import Badge from "../components/Badge.astro";
-import Lcd from "../components/Lcd.astro";
+import StnHeader from "../components/StnHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 
 interface Project {
@@ -19,12 +19,14 @@ const {
   title,
   description,
   caption,
+  meta,
   lede,
   groups = [],
 } = frontmatter as {
   title: string;
   description?: string;
   caption?: string;
+  meta?: string;
   lede?: string;
   groups?: ProjectGroup[];
 };
@@ -40,15 +42,19 @@ function isRepo(url: string) {
 function padIndex(n: number) {
   return String(n).padStart(2, "0");
 }
+
+const totalPads = groups.reduce((sum, g) => sum + g.projects.length, 0);
+const headerMeta = meta ?? `MODE ${padIndex(totalPads)}`;
 ---
 
 <BaseLayout title={title} description={description}>
   <section>
-    <Lcd size="lg">
-      {caption && <p class="hw-caption">{caption}</p>}
-      <h1 class="hw-title">{title}</h1>
-      {lede && <p class="hw-lede">{lede}</p>}
-    </Lcd>
+    <StnHeader
+      caption={caption}
+      meta={headerMeta}
+      title={title}
+      lede={lede}
+    />
 
     <div class="mt-8 space-y-8">
       {

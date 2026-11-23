@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import ItemList from "../../components/ItemList.astro";
-import Lcd from "../../components/Lcd.astro";
+import StnHeader from "../../components/StnHeader.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const allPosts = await getCollection("blog");
@@ -27,15 +27,14 @@ function formatDate(date: Date) {
     day: "2-digit",
   });
 }
+
+const lede = "Notes, tutorials, and asides.";
+const meta = `MODE ${String(posts.length).padStart(2, "0")}`;
 ---
 
-<BaseLayout title="Blog" description="技术笔记、教程与碎碎念。">
+<BaseLayout title="Blog" description={lede}>
   <section>
-    <Lcd size="lg">
-      <p class="hw-caption">Index</p>
-      <h1 class="hw-title">Blog</h1>
-      <p class="hw-lede">技术笔记、教程与碎碎念。</p>
-    </Lcd>
+    <StnHeader caption="Index" meta={meta} title="Blog" lede={lede} />
 
     <ItemList class="mt-8">
       <div class="hw-item-list-head" aria-hidden="true">

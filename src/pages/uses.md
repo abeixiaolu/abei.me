@@ -1,9 +1,9 @@
 ---
 layout: ../layouts/ProsePageLayout.astro
-title: Uses
-description: 日常使用的工具与装备。
+title: Use
+description: Tools and gear I use daily.
 caption: Gear
-lede: 日常使用的工具与装备。
+lede: Tools and gear I use daily.
 ---
 
 #### EDITOR

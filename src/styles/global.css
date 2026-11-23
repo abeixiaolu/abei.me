@@ -10,7 +10,8 @@
     url("/fonts/SarasaGothicSC-Regular.woff2") format("woff2");
   font-weight: 300 400;
   font-style: normal;
-  font-display: swap;
+  /* optional：有缓存则首屏即用；来不及则整页不换字，避免导航抽动 */
+  font-display: optional;
 }
 
 @font-face {
@@ -20,7 +21,7 @@
     url("/fonts/SarasaGothicSC-SemiBold.woff2") format("woff2");
   font-weight: 500 700;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -30,7 +31,7 @@
     url("/fonts/BerkeleyMonoVariable.ttf") format("truetype");
   font-weight: 100 900;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 /* SPEC-01 / Hardware 风格 token

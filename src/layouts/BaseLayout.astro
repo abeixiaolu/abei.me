@@ -18,6 +18,27 @@ const pageTitle = title === "abei" ? "abei" : `${title} · abei`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link
+      rel="preload"
+      href="/fonts/BerkeleyMonoVariable.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/SarasaGothicSC-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/SarasaGothicSC-SemiBold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <title>{pageTitle}</title>
   </head>
   <body class="min-h-dvh">

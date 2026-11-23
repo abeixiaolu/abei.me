@@ -1090,7 +1090,8 @@ a {
 
 .hw-reading-readout {
   display: block;
-  min-width: 2.4ch;
+  /* 固定三位数宽（含字距），避免到 100 时盒子被撑开 */
+  width: 3.2ch;
   margin: 0;
   padding: 0;
   border: 0;

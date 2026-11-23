@@ -28,6 +28,18 @@ const {
   lede?: string;
   groups?: ProjectGroup[];
 };
+
+function isRepo(url: string) {
+  try {
+    return new URL(url).hostname.includes("github.com");
+  } catch {
+    return false;
+  }
+}
+
+function padIndex(n: number) {
+  return String(n).padStart(2, "0");
+}
 ---
 
 <BaseLayout title={title} description={description}>
@@ -42,40 +54,59 @@ const {
       {
         groups.map((group) => (
           <div>
-            <div class="mb-3 flex items-center gap-2">
+            <div class="mb-3 flex items-center justify-between gap-3">
               <Badge>{group.title}</Badge>
+              <span class="font-mono text-[9px] uppercase tracking-[0.14em] text-dim">
+                Bank · {padIndex(group.projects.length)} pads
+              </span>
             </div>
-            <ul class="grid gap-2 sm:grid-cols-1">
-              {group.projects.map((project) => (
-                <li>
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="hw-key"
-                  >
-                    <span class="hw-key-pad flex items-start justify-between gap-4">
-                      <span class="min-w-0">
-                        <span class="inline-flex items-center gap-2 font-medium">
-                          <span
-                            class="i-carbon-logo-github text-base opacity-70"
-                            aria-hidden="true"
-                          />
-                          {project.name}
+
+            <div class="hw-pad-bank">
+              <ul class="hw-pad-grid">
+                {group.projects.map((project, i) => {
+                  const repo = isRepo(project.url);
+                  return (
+                    <li>
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="hw-key hw-pad"
+                      >
+                        <span class="hw-key-pad hw-pad-face">
+                          <span class="hw-pad-meta">
+                            <span class="hw-pad-index">{padIndex(i + 1)}</span>
+                            <span class="hw-pad-status">
+                              <span
+                                class="hw-pad-led"
+                                data-tone={repo ? "repo" : "live"}
+                                aria-hidden="true"
+                              />
+                              <span>{repo ? "Repo" : "Live"}</span>
+                            </span>
+                          </span>
+
+                          <span class="hw-pad-title">
+                            <span
+                              class:list={[
+                                "shrink-0 text-base opacity-70",
+                                repo
+                                  ? "i-carbon-logo-github"
+                                  : "i-carbon-direction-right-01-filled",
+                              ]}
+                              aria-hidden="true"
+                            />
+                            {project.name}
+                          </span>
+
+                          <span class="hw-pad-desc">{project.description}</span>
                         </span>
-                        <span class="mt-1.5 block text-[12px] leading-relaxed text-dim">
-                          {project.description}
-                        </span>
-                      </span>
-                      <span
-                        class="i-carbon-arrow-up-right mt-0.5 shrink-0 text-dim"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
         ))
       }

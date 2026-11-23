@@ -28,6 +28,7 @@ alwaysApply: true
 | 33 | Alert | `src/components/Alert.astro`（Markdown `> [!TIP]` 等） |
 | 34 | Badge | `src/components/Badge.astro`（分组标签等） |
 | 36 | Breadcrumb | `src/components/Breadcrumb.astro`（文章顶栏路径） |
+| 41 | Scroll area | 全局滚动条（`global.css`：细轨 + key 色拇指） |
 | 55 | Navbar | Header 亚克力条 + LED |
 | 56 | LCD | `src/components/Lcd.astro`（列表页 caption / title / lede） |
 | 51 | Item list | `src/components/ItemList.astro`（Blog 列表） |

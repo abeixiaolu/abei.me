@@ -4,11 +4,21 @@
 @config "../../tailwind.config.cjs";
 
 @font-face {
-  font-family: "ChillRoundF";
+  font-family: "Sarasa Gothic SC";
   src:
-    local("ChillRoundF"),
-    url("/fonts/ChillRoundF.ttf") format("truetype");
-  font-weight: 100 900;
+    local("Sarasa Gothic SC"),
+    url("/fonts/SarasaGothicSC-Regular.woff2") format("woff2");
+  font-weight: 300 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sarasa Gothic SC";
+  src:
+    local("Sarasa Gothic SC"),
+    url("/fonts/SarasaGothicSC-SemiBold.woff2") format("woff2");
+  font-weight: 500 700;
   font-style: normal;
   font-display: swap;
 }
@@ -25,9 +35,9 @@
 
 /* SPEC-01 / Hardware 风格 token
  * 圆角：--corner-scale + 角色半径（与组件库一致）
- * 字体：英文 → Berkeley Mono；中文 → ChillRoundF（按字符回退） */
+ * 字体：英文 → Berkeley Mono；中文 → 更纱黑体 SC（按字符回退） */
 @theme {
-  --font-sans: "Berkeley Mono Variable", "ChillRoundF", "PingFang SC",
+  --font-sans: "Berkeley Mono Variable", "Sarasa Gothic SC", "PingFang SC",
     "Hiragino Sans GB", "Noto Sans SC", sans-serif;
   --font-mono: "Berkeley Mono Variable", "SF Mono", "JetBrains Mono", ui-monospace,
     Menlo, Consolas, monospace;

@@ -18,7 +18,7 @@ alwaysApply: true
 ## 字体
 
 - 英文（拉丁字符）：一律 `Berkeley Mono Variable`（正文与 UI 相同，靠字体栈按字符回退）
-- 中文：`ChillRoundF`
+- 中文：`Sarasa Gothic SC`（更纱黑体）
 - 标签 / 代码 / UI 铭牌：明确指定 `--font-mono`
 
 ## 已落地对照

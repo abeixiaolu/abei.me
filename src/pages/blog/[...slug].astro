@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import Breadcrumb from "../../components/Breadcrumb.astro";
+import ReadingProgress from "../../components/ReadingProgress.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
@@ -24,6 +25,7 @@ function formatDate(date: Date) {
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
+  <ReadingProgress />
   <article>
     <header class="hw-article-head">
       <div class="hw-article-bar">

@@ -32,3 +32,4 @@ alwaysApply: true
 | 55 | Navbar | Header 亚克力条 + LED |
 | 56 | LCD | `src/components/Lcd.astro`（列表页 caption / title / lede） |
 | 51 | Item list | `src/components/ItemList.astro`（Blog 列表） |
+| 06 | Flat knob | `src/components/ReadingProgress.astro`（右下角悬浮阅读进度） |

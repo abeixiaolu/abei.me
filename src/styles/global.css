@@ -1014,6 +1014,192 @@ a {
   }
 }
 
+/* —— SPEC-01 · FlatKnob：右下角悬浮阅读进度 —— */
+.hw-reading-progress {
+  --progress: 0;
+  --lit: 0;
+  --turn: -135deg;
+  position: fixed;
+  right: max(12px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 40;
+  pointer-events: none;
+}
+
+.hw-reading-progress[hidden] {
+  display: none;
+}
+
+.hw-reading-toy {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  min-width: 76px;
+  padding: 10px 12px 12px;
+  border-radius: var(--radius-panel);
+  corner-shape: squircle;
+  background: linear-gradient(180deg, #f7f7f4, #ecece8);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 0 0 1px rgb(0 0 0 / 0.05),
+    0 1px 0 #d8d8d2,
+    0 10px 22px -10px hsl(var(--shadow-color) / calc(0.32 * var(--shadow-k)));
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+}
+
+.hw-reading-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.hw-reading-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.hw-reading-led {
+  flex-shrink: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-led-off);
+  box-shadow: inset 0 0.5px 1px rgb(0 0 0 / 0.25);
+  transition:
+    background 160ms,
+    box-shadow 160ms;
+}
+
+.hw-reading-led[data-lit="true"],
+.hw-reading-progress[data-complete] .hw-reading-led {
+  background: var(--color-key);
+  box-shadow: 0 0 6px 1px color-mix(in oklab, var(--color-key) 55%, transparent);
+}
+
+.hw-reading-label {
+  font: 500 7.5px/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8a8984;
+}
+
+.hw-reading-readout {
+  display: block;
+  min-width: 2.4ch;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: 500 11px/1 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  text-align: right;
+  color: var(--color-ink);
+  background: transparent;
+}
+
+.hw-reading-dial {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+}
+
+/* 270° 刻度环：未读灰、已读 key 色 */
+.hw-reading-dial::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from -135deg,
+    var(--color-key) calc(var(--lit) * 270deg),
+    #c4c4be 0 270deg,
+    transparent 0
+  );
+  mask: radial-gradient(
+    circle,
+    transparent 21px,
+    #000 22px,
+    #000 24.5px,
+    transparent 25.5px
+  );
+  transition: background 80ms var(--ease-settle);
+}
+
+.hw-reading-cap {
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: #f8f8f5;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 2px 0 color-mix(in oklab, #f8f8f5 70%, #000),
+    0 5px 8px rgb(0 0 0 / calc(0.12 * var(--shadow-k)));
+  rotate: var(--turn);
+  transition: rotate 80ms var(--ease-settle);
+}
+
+.hw-reading-cap::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  width: 2.5px;
+  height: 9px;
+  border-radius: calc(2px * var(--corner-scale));
+  background: var(--color-ink);
+  translate: -50% 0;
+}
+
+@media (max-width: 640px) {
+  .hw-reading-progress {
+    right: max(10px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  .hw-reading-toy {
+    min-width: 68px;
+    padding: 8px 10px 10px;
+    gap: 6px;
+  }
+
+  .hw-reading-dial {
+    width: 44px;
+    height: 44px;
+  }
+
+  .hw-reading-dial::before {
+    mask: radial-gradient(
+      circle,
+      transparent 17px,
+      #000 18px,
+      #000 20.5px,
+      transparent 21.5px
+    );
+  }
+
+  .hw-reading-cap {
+    inset: 7px;
+  }
+
+  .hw-reading-cap::after {
+    top: 2px;
+    height: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hw-reading-dial::before,
+  .hw-reading-cap {
+    transition: none;
+  }
+}
+
 /* —— 页脚 —— */
 .hw-footer {
   border-top: 1px dashed rgb(0 0 0 / 0.12);

@@ -4,8 +4,9 @@ import { navItems } from "../data/nav";
 const pathname = Astro.url.pathname;
 ---
 
-<header class="hw-nav">
-  <a href="/" class="hw-brand">
+{/* persist：导航不进 VT 快照，避免圆角外冒白底；LED 用 FLIP 跳动 */}
+<header class="hw-nav" transition:persist="hw-nav">
+  <a href="/diary" class="hw-brand">
     <strong>abei</strong>
     <span>/me</span>
   </a>
@@ -19,6 +20,7 @@ const pathname = Astro.url.pathname;
             href={item.href}
             class="hw-nav-link"
             aria-current={active ? "page" : undefined}
+            data-nav-href={item.href}
           >
             <span class="hw-led" aria-hidden="true" />
             <span>{item.label}</span>
@@ -26,5 +28,121 @@ const pathname = Astro.url.pathname;
         );
       })
     }
+    <span class="hw-led hw-led--active" data-hw-nav-led aria-hidden="true"></span>
   </nav>
 </header>
+
+<script>
+  declare global {
+    interface Window {
+      __hwNavBound?: boolean;
+    }
+  }
+
+  function readMs(value: string, fallback: number) {
+    const v = value.trim();
+    if (!v) return fallback;
+    if (v.endsWith("ms")) return parseFloat(v) || fallback;
+    if (v.endsWith("s")) return (parseFloat(v) || 0) * 1000 || fallback;
+    return parseFloat(v) || fallback;
+  }
+
+  function preferReduceMotion() {
+    return matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  function isActivePath(pathname: string, href: string) {
+    return pathname === href || pathname.startsWith(`${href}/`);
+  }
+
+  function syncCurrent(pathname = location.pathname) {
+    document.querySelectorAll<HTMLAnchorElement>(".hw-nav-link").forEach((link) => {
+      const href = link.dataset.navHref || link.getAttribute("href") || "";
+      if (isActivePath(pathname, href)) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+  }
+
+  function placeLed(animate: boolean) {
+    const nav = document.querySelector<HTMLElement>(".hw-nav-links");
+    const led = document.querySelector<HTMLElement>("[data-hw-nav-led]");
+    const slot = document.querySelector<HTMLElement>(
+      '.hw-nav-link[aria-current="page"] .hw-led',
+    );
+    if (!nav || !led || !slot) {
+      if (led) led.style.opacity = "0";
+      return;
+    }
+
+    led.style.opacity = "1";
+    const navRect = nav.getBoundingClientRect();
+    const slotRect = slot.getBoundingClientRect();
+    const x = slotRect.left - navRect.left + nav.scrollLeft;
+    const y = slotRect.top - navRect.top;
+
+    if (!animate || preferReduceMotion()) {
+      led.style.transform = "";
+      led.style.left = `${x}px`;
+      led.style.top = `${y}px`;
+      return;
+    }
+
+    const prev = led.getBoundingClientRect();
+    led.style.transform = "";
+    led.style.left = `${x}px`;
+    led.style.top = `${y}px`;
+    const next = led.getBoundingClientRect();
+    const dx = prev.left - next.left;
+    const dy = prev.top - next.top;
+    if (dx === 0 && dy === 0) return;
+
+    const root = getComputedStyle(document.documentElement);
+    const duration = readMs(root.getPropertyValue("--badge-slide-dur"), 260);
+    const easing =
+      root.getPropertyValue("--badge-pop-ease").trim() ||
+      "cubic-bezier(0.34, 1.36, 0.64, 1)";
+
+    led.animate(
+      [
+        { transform: `translate(${dx}px, ${dy}px)` },
+        { transform: "translate(0, 0)" },
+      ],
+      { duration, easing },
+    );
+  }
+
+  function syncNav(animate: boolean) {
+    syncCurrent();
+    placeLed(animate);
+  }
+
+  let booted = false;
+
+  const boot = () => {
+    const animate = booted;
+    booted = true;
+    requestAnimationFrame(() => syncNav(animate));
+  };
+
+  if (!window.__hwNavBound) {
+    window.__hwNavBound = true;
+    // 含首屏；ClientRouter 每次导航也会再触发
+    document.addEventListener("astro:page-load", boot);
+
+    // 点击时先跳 LED，再等页面 VT
+    document.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const link = target.closest<HTMLAnchorElement>("a.hw-nav-link");
+      if (!link || link.getAttribute("aria-current") === "page") return;
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+      const href = link.dataset.navHref || link.getAttribute("href");
+      if (!href) return;
+
+      syncCurrent(href);
+      placeLed(true);
+    });
+  }
+</script>

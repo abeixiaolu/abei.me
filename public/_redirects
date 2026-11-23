@@ -1,0 +1,2 @@
+# Cloudflare Pages：HTTP 级跳转，避免静态 HTML 中间页被 ClientRouter 换入
+/    /diary    301

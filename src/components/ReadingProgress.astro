@@ -99,7 +99,12 @@ const { target = "article" } = Astro.props;
     window.addEventListener("resize", onScroll);
   }
 
-  document
-    .querySelectorAll<HTMLElement>(".hw-reading-progress")
-    .forEach(initReadingProgress);
+  const boot = () => {
+    document
+      .querySelectorAll<HTMLElement>(".hw-reading-progress")
+      .forEach(initReadingProgress);
+  };
+
+  boot();
+  document.addEventListener("astro:page-load", boot);
 </script>

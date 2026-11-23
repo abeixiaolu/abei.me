@@ -89,6 +89,8 @@ html {
   font-size: 15px;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* 预留滚动条槽，避免有无溢出页面切换时抖动 */
+  scrollbar-gutter: stable;
 }
 
 body {

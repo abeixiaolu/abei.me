@@ -77,7 +77,7 @@ const pageReveal = {
       <main class="flex-1 py-8 sm:py-10" transition:animate={pageReveal}>
         <slot />
       </main>
-      <footer class="hw-footer" transition:animate={pageReveal}>
+      <footer class="hw-footer" transition:animate="none">
         <p>© {new Date().getFullYear()} abei</p>
       </footer>
     </div>

@@ -133,11 +133,11 @@
   --panel-translate-y: 100px;
   --panel-blur: 2px;
   --panel-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  /* Page side-by-side */
-  --page-slide-dur: 200ms;
-  --page-fade-dur: 200ms;
-  --page-slide-distance: 8px;
-  --page-blur: 3px;
+  /* Page side-by-side（站点切换偏轻：短位移、无 blur，避免拖沓） */
+  --page-slide-dur: 160ms;
+  --page-fade-dur: 160ms;
+  --page-slide-distance: 6px;
+  --page-blur: 0px;
   --page-stagger: 0ms;
   --page-exit-enabled: 1;
   --page-slide-ease: cubic-bezier(0.22, 1, 0.36, 1);

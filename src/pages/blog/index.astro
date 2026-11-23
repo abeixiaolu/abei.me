@@ -1,0 +1,61 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const allPosts = await getCollection("blog");
+const seriesRoots = new Set(
+  allPosts
+    .filter((post) => post.data.series)
+    .map((post) => post.id.replace(/\/index$/, "")),
+);
+
+const posts = allPosts
+  .filter((post) => !post.data.hidden)
+  .filter((post) => {
+    // 系列子文章归入系列，不在列表单独展示
+    const root = post.id.split("/")[0];
+    return !(post.id.includes("/") && seriesRoots.has(root));
+  })
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+}
+---
+
+<BaseLayout
+  title="Blog"
+  description="技术笔记、教程与碎碎念。"
+>
+  <section>
+    <h1 class="text-3xl font-semibold tracking-tight">Blog</h1>
+    <p class="mt-2 text-muted">技术笔记、教程与碎碎念。</p>
+
+    <ul class="mt-10 divide-y divide-line border-y border-line">
+      {
+        posts.map((post) => (
+          <li>
+            <a
+              href={`/blog/${post.id}`}
+              class="group flex flex-col gap-1 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
+            >
+              <span class="font-medium group-hover:text-accent">
+                {post.data.title}
+              </span>
+              <time
+                datetime={post.data.date.toISOString()}
+                class="shrink-0 font-mono text-sm text-muted"
+              >
+                {formatDate(post.data.date)}
+              </time>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

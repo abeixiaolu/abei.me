@@ -1,7 +1,7 @@
-.vitepress/cache
 node_modules
+dist
+.astro
+.env
+.DS_Store
 components.d.ts
 auto-imports.d.ts
-dist
-.env
-og

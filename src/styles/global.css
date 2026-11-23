@@ -1,0 +1,22 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@config "../../tailwind.config.cjs";
+
+@theme {
+  --font-sans: "IBM Plex Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC",
+    sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-ink: #1c1917;
+  --color-paper: #fafaf9;
+  --color-muted: #78716c;
+  --color-line: #e7e5e4;
+  --color-accent: #0f766e;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-paper text-ink font-sans antialiased;
+}

@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { projectGroups } from "../../data/projects";
+---
+
+<BaseLayout
+  title="Projects"
+  description="开源与个人项目。"
+>
+  <section>
+    <h1 class="text-3xl font-semibold tracking-tight">Projects</h1>
+    <p class="mt-2 text-muted">开源与个人项目。</p>
+
+    <div class="mt-10 space-y-10">
+      {
+        projectGroups.map((group) => (
+          <div>
+            <h2 class="mb-4 font-mono text-sm uppercase tracking-wider text-muted">
+              {group.title}
+            </h2>
+            <ul class="space-y-3">
+              {group.projects.map((project) => (
+                <li>
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex items-start justify-between gap-4 rounded-lg border border-line px-4 py-3 transition-colors hover:border-accent/40 hover:bg-white"
+                  >
+                    <span>
+                      <span class="inline-flex items-center gap-2 font-medium group-hover:text-accent">
+                        <span class="i-simple-icons-github text-base" aria-hidden="true" />
+                        {project.name}
+                      </span>
+                      <span class="mt-1 block text-sm text-muted">
+                        {project.description}
+                      </span>
+                    </span>
+                    <span
+                      class="i-ph-arrow-up-right mt-1 shrink-0 text-muted group-hover:text-accent"
+                      aria-hidden="true"
+                    />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

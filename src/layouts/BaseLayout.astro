@@ -1,0 +1,40 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "阿北的个人站点" } = Astro.props;
+const pageTitle = title === "abei" ? "abei" : `${title} · abei`;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>{pageTitle}</title>
+  </head>
+  <body class="min-h-dvh">
+    <div class="mx-auto flex min-h-dvh max-w-3xl flex-col px-5 py-8 sm:px-8">
+      <Header />
+      <main class="flex-1 py-10">
+        <slot />
+      </main>
+      <footer class="border-t border-line py-6 text-sm text-muted">
+        <p>© {new Date().getFullYear()} abei</p>
+      </footer>
+    </div>
+  </body>
+</html>

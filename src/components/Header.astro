@@ -1,0 +1,33 @@
+---
+import { navItems } from "../data/nav";
+
+const pathname = Astro.url.pathname;
+---
+
+<header class="flex items-center justify-between gap-4">
+  <a href="/blog" class="font-medium tracking-tight text-ink hover:text-accent">
+    abei
+  </a>
+  <nav class="flex items-center gap-1 sm:gap-2">
+    {
+      navItems.map((item) => {
+        const active =
+          pathname === item.href || pathname.startsWith(`${item.href}/`);
+        return (
+          <a
+            href={item.href}
+            class:list={[
+              "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
+              active
+                ? "bg-ink text-paper"
+                : "text-muted hover:bg-line/70 hover:text-ink",
+            ]}
+          >
+            <span class:list={[item.icon, "text-base"]} aria-hidden="true" />
+            <span>{item.label}</span>
+          </a>
+        );
+      })
+    }
+  </nav>
+</header>

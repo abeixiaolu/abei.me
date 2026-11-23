@@ -1,9 +1,0 @@
-.markdown-alert.markdown-alert-important {
-  background-color: var(--color-important-bg);
-}
-.markdown-alert.markdown-alert-tip {
-  background-color: var(--color-tip-bg);
-}
-.markdown-alert.markdown-alert-note {
-  background-color: var(--color-note-bg);
-}

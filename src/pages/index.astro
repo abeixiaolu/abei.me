@@ -2,12 +2,12 @@
   <head>
     <meta charset="UTF-8" />
     {/* 静态站不用 Astro.redirect：其 HTML 中间页有 2s 延迟，且会被 ClientRouter 当成正文换入 */}
-    <meta http-equiv="refresh" content="0;url=/diary" />
-    <link rel="canonical" href="/diary" />
+    <meta http-equiv="refresh" content="0;url=/diary/" />
+    <link rel="canonical" href="/diary/" />
     <meta name="robots" content="noindex" />
     <title>abei</title>
     <script is:inline>
-      location.replace("/diary");
+      location.replace("/diary/");
     </script>
   </head>
   <body></body>

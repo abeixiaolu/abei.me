@@ -1,20 +1,19 @@
 ---
-import { navItems } from "../data/nav";
+import { isNavActive, navItems } from "../data/nav";
 
 const pathname = Astro.url.pathname;
 ---
 
 {/* persist：导航不进 VT 快照，避免圆角外冒白底；LED 用 FLIP 跳动 */}
 <header class="hw-nav" transition:persist="hw-nav">
-  <a href="/diary" class="hw-brand">
+  <a href="/diary/" class="hw-brand">
     <strong>abei</strong>
     <span>/me</span>
   </a>
   <nav class="hw-nav-links" aria-label="主导航">
     {
       navItems.map((item) => {
-        const active =
-          pathname === item.href || pathname.startsWith(`${item.href}/`);
+        const active = isNavActive(pathname, item.href);
         return (
           <a
             href={item.href}
@@ -52,7 +51,9 @@ const pathname = Astro.url.pathname;
   }
 
   function isActivePath(pathname: string, href: string) {
-    return pathname === href || pathname.startsWith(`${href}/`);
+    const path = pathname.replace(/\/$/, "") || "/";
+    const base = href.replace(/\/$/, "") || "/";
+    return path === base || path.startsWith(`${base}/`);
   }
 
   function syncCurrent(pathname = location.pathname) {

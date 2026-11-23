@@ -4,12 +4,7 @@ const { iconsPlugin, getIconCollections } = require("@egoist/tailwindcss-icons")
 module.exports = {
   plugins: [
     iconsPlugin({
-      collections: getIconCollections([
-        "pixelarticons",
-        "simple-icons",
-        "ph",
-        "mdi",
-      ]),
+      collections: getIconCollections(["carbon"]),
       extraProperties: {
         display: "inline-block",
         "vertical-align": "middle",

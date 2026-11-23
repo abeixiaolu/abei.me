@@ -1,27 +1,29 @@
 ---
+import Lcd from "../../components/Lcd.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout
-  title="Uses"
-  description="日常使用的工具与装备。"
->
+<BaseLayout title="Uses" description="日常使用的工具与装备。">
   <section>
-    <h1 class="text-3xl font-semibold tracking-tight">Uses</h1>
-    <p class="mt-2 text-muted">日常使用的工具与装备。</p>
+    <Lcd size="lg">
+      <p class="hw-caption">Gear</p>
+      <h1 class="hw-title">Uses</h1>
+      <p class="hw-lede">日常使用的工具与装备。</p>
+    </Lcd>
 
-    <div class="prose prose-stone mt-10 max-w-none prose-a:text-accent">
+    <div class="hw-prose mt-8">
       <h2>editor / 编辑器</h2>
       <ul>
         <li>
           <a href="https://www.cursor.com/">Cursor</a>
-          and
+          {" "}and{" "}
           <a href="https://codeium.com/windsurf">Windsurf</a>
-          with minimal settings
+          {" "}with minimal settings
         </li>
         <li>
-          Font:
-          <a href="https://www.nerdfonts.com/font-downloads">MesloLGL Nerd Font</a>,
+          Font:{" "}
+          <a href="https://www.nerdfonts.com/font-downloads">MesloLGL Nerd Font</a>
+          ,{" "}
           <a href="https://philpl.gumroad.com/l/dank-mono">Dank Mono</a>
         </li>
         <li>
@@ -30,13 +32,13 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
           </a>
         </li>
         <li>
-          Icons:
+          Icons:{" "}
           <a
             href="https://marketplace.visualstudio.com/items?itemName=Yummygum.city-lights-icon-vsc"
           >
             City Lights
           </a>
-          and
+          {" "}and{" "}
           <a
             href="https://marketplace.visualstudio.com/items?itemName=antfu.icons-carbon"
           >
@@ -49,9 +51,9 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       <ul>
         <li>
           <a href="https://ghostty.org/">Ghostty</a>
-          running with
+          {" "}running with{" "}
           <a href="https://starship.rs/">Starship prompt</a>
-          on zsh.
+          {" "}on zsh.
         </li>
         <li>
           <a href="https://www.nerdfonts.com/font-downloads">
@@ -64,16 +66,16 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
           </a>
         </li>
         <li>
-          Terminal Tools:
-          <a href="https://github.com/ajeetdsouza/zoxide">zoxide</a>,
+          Terminal Tools:{" "}
+          <a href="https://github.com/ajeetdsouza/zoxide">zoxide</a>,{" "}
           <a href="https://github.com/zsh-users/zsh-autosuggestions">
             zsh-autosuggestions
-          </a>,
+          </a>,{" "}
           <a href="https://github.com/zsh-users/zsh-syntax-highlighting">
             zsh-syntax-highlighting
-          </a>,
-          <a href="https://github.com/Schniz/fnm">fnm</a>,
-          <a href="https://github.com/sharkdp/bat">bat</a>,
+          </a>,{" "}
+          <a href="https://github.com/Schniz/fnm">fnm</a>,{" "}
+          <a href="https://github.com/sharkdp/bat">bat</a>,{" "}
           <a href="https://github.com/eza-community/eza">eza</a>.
         </li>
       </ul>
@@ -82,34 +84,37 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       <ul>
         <li>
           <a href="https://www.raycast.com/">Raycast</a>
-          for everything.
+          {" "}for everything.
         </li>
         <li>
-          <a href="https://zen-browser.app/">Zen Browser</a>: but still use
+          <a href="https://zen-browser.app/">Zen Browser</a>
+          : but still use{" "}
           <a href="https://www.google.com/chrome/">Google Chrome</a>
-          as developer tools.
+          {" "}as developer tools.
         </li>
         <li>
-          <a href="https://github.com/jordanbaird/Ice">Ice</a>: menubar manager.
+          <a href="https://github.com/jordanbaird/Ice">Ice</a>
+          : menubar manager.
         </li>
         <li>
           <a href="https://logseq.com/">Logseq</a>
-          for knowledge management.
+          {" "}for knowledge management.
         </li>
         <li>
-          <a href="https://www.mowglii.com/itsycal/">Itsycal</a>: menubar
-          calendar.
+          <a href="https://www.mowglii.com/itsycal/">Itsycal</a>
+          : menubar calendar.
         </li>
         <li>
-          <a href="https://iina.io/">IINA</a>: media player.
+          <a href="https://iina.io/">IINA</a>
+          : media player.
         </li>
         <li>
-          <a href="https://freemacsoft.net/appcleaner/">AppCleaner</a>:
-          uninstaller.
+          <a href="https://freemacsoft.net/appcleaner/">AppCleaner</a>
+          : uninstaller.
         </li>
         <li>
-          <a href="https://karabiner-elements.pqrs.org/">Karabiner</a>: keyboard
-          manager, use caps lock as hyper key.
+          <a href="https://karabiner-elements.pqrs.org/">Karabiner</a>
+          : keyboard manager, use caps lock as hyper key.
         </li>
       </ul>
 

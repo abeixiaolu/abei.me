@@ -1,0 +1,33 @@
+---
+description: SPEC-01/Hardware 组件库约定（本站 UI 唯一参照）
+alwaysApply: true
+---
+
+# SPEC-01 / Hardware
+
+「组件库」一律指 [SPEC-01/HARDWARE](https://spec-01.vercel.app/)。
+
+## 使用原则
+
+- 需要控件时，优先对照站点上的编号组件（如 `33 Alert`、`34 Badge`、`55 Navbar`）实现外观。
+- 库中没有对应组件时，按同一套 hardware 视觉语言（铭牌、LED、括号线、金属按键、LCD、点阵/细线纸面）自造。
+- 实现前应核对官网对应编号面板的真实样式，不要凭印象或旧 CSS 分支臆造。
+- 图标只用 Carbon。
+- 圆角使用组件库 token：`--corner-scale`（默认 `1`，支持 `corner-shape: squircle` 时为 `2`），以及角色半径 `--radius-key` / `--radius-nav` / `--radius-panel` / `--radius-card` / `--radius-tray` / `--radius-badge` / `--radius-chip` / `--radius-lcd` 等。不要再写死统一 `3px`。
+
+## 字体
+
+- 英文（拉丁字符）：一律 `Berkeley Mono Variable`（正文与 UI 相同，靠字体栈按字符回退）
+- 中文：`ChillRoundF`
+- 标签 / 代码 / UI 铭牌：明确指定 `--font-mono`
+
+## 已落地对照
+
+| 编号 | 组件 | 本站用法 |
+|------|------|----------|
+| 33 | Alert | `src/components/Alert.astro`（Markdown `> [!TIP]` 等） |
+| 34 | Badge | `src/components/Badge.astro`（分组标签等） |
+| 36 | Breadcrumb | `src/components/Breadcrumb.astro`（文章顶栏路径） |
+| 55 | Navbar | Header 亚克力条 + LED |
+| 56 | LCD | `src/components/Lcd.astro`（列表页 caption / title / lede） |
+| 51 | Item list | `src/components/ItemList.astro`（Blog 列表） |

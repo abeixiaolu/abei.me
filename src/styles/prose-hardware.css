@@ -1,0 +1,656 @@
+/* 自 Typora hardware.css 适配的 Markdown 排版（作用域：.hw-prose） */
+
+.hw-prose {
+  --hw-paper: #eeeeec;
+  --hw-metal: #e5e5e3;
+  --hw-hair: #d2d2d0;
+  --hw-ink: #181817;
+  --hw-dim: #6b6b69;
+  --hw-muted: #4c4c4b;
+  --hw-key: #1b1b19;
+  --hw-key-edge: #080808;
+  --hw-key-soft: rgba(27, 27, 25, 0.16);
+  --hw-panel: #f9f9f8;
+  --hw-screw: #b9b9b3;
+  --hw-mono: var(--font-mono);
+  --hw-sans: var(--font-sans);
+  --hw-raised:
+    inset 0 1px 0 #fff,
+    inset 0 0 0 1px #d9d9d7,
+    0 2px 2px rgba(0, 0, 0, 0.08),
+    0 8px 18px rgba(0, 0, 0, 0.08);
+  --hw-inset:
+    inset 0 1px 2px rgba(0, 0, 0, 0.22),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.45);
+  --hw-screws:
+    radial-gradient(circle at 3px 3px, var(--hw-screw) 2px, transparent 2.5px) 0 0 / 7px 7px
+      no-repeat,
+    radial-gradient(circle at 3px 3px, var(--hw-screw) 2px, transparent 2.5px) 100% 0 / 7px 7px
+      no-repeat,
+    radial-gradient(circle at 3px 3px, var(--hw-screw) 2px, transparent 2.5px) 0 100% / 7px 7px
+      no-repeat,
+    radial-gradient(circle at 3px 3px, var(--hw-screw) 2px, transparent 2.5px) 100% 100% / 7px 7px
+      no-repeat;
+
+  color: var(--hw-ink);
+  font-family: var(--hw-sans);
+  font-size: 15px;
+  line-height: 1.75;
+  max-width: none;
+}
+
+.hw-prose > :first-child {
+  margin-top: 0;
+}
+
+.hw-prose > :last-child {
+  margin-bottom: 0;
+}
+
+/* —— 标题 —— */
+.hw-prose :where(h1, h2, h3, h4, h5, h6) {
+  position: relative;
+  color: var(--hw-ink);
+  font-family: var(--hw-sans);
+  font-weight: 400;
+  cursor: text;
+  margin-top: 1.75em;
+  margin-bottom: 0.65em;
+  scroll-margin-top: 5rem;
+}
+
+.hw-prose :where(h1) {
+  font-size: 26px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  padding-bottom: 0.48em;
+  border-bottom: 1px solid var(--hw-hair);
+  margin-bottom: 0.55em;
+}
+
+.hw-prose :where(h2) {
+  display: block;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--hw-ink);
+  line-height: 1.35;
+  margin-top: 2.2em;
+}
+
+.hw-prose :where(h3) {
+  font-size: 19px;
+  line-height: 1.4;
+  letter-spacing: 0;
+  margin-top: 1.5em;
+}
+
+.hw-prose :where(h4) {
+  font-size: 17px;
+  line-height: 1.45;
+  margin-top: 1.6em;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.hw-prose :where(h5) {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-top: 1.5em;
+}
+
+.hw-prose :where(h6) {
+  font-size: 15px;
+  line-height: 1.5;
+  margin-top: 1.4em;
+}
+
+.hw-prose :where(h1, h2, h3, h4, h5, h6) :where(code) {
+  font-size: inherit;
+}
+
+/* —— 正文 —— */
+.hw-prose :where(p, blockquote, ul, ol, dl, table) {
+  margin: 0.85em 0;
+}
+
+.hw-prose :where(p) {
+  color: var(--hw-muted);
+  font-size: 1em;
+}
+
+.hw-prose :where(a) {
+  color: var(--hw-ink);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: rgba(0, 0, 0, 0.28);
+  text-underline-offset: 4px;
+}
+
+.hw-prose :where(a):hover {
+  color: var(--hw-key);
+  text-decoration-color: var(--hw-key);
+}
+
+.hw-prose :where(strong) {
+  font-weight: 600;
+  color: var(--hw-ink);
+}
+
+.hw-prose :where(em) {
+  font-style: italic;
+  color: var(--hw-muted);
+}
+
+.hw-prose :where(del) {
+  color: var(--hw-dim);
+}
+
+.hw-prose :where(mark) {
+  padding: 0.1em 0.3em;
+  font-size: 0.9em;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--hw-ink);
+  background: #e9e8e4;
+  border-radius: var(--radius-chip);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.hw-prose :where(hr) {
+  height: 12px;
+  border: 0;
+  margin: 2.2em 0;
+  background:
+    linear-gradient(90deg, var(--hw-ink) 1px, transparent 1px) 0 50% / 8px 6px repeat-x,
+    linear-gradient(var(--hw-hair), var(--hw-hair)) 0 50% / 100% 1px no-repeat;
+}
+
+/* —— 列表 —— */
+.hw-prose :where(ul, ol) {
+  padding-left: 1.55em;
+  color: var(--hw-muted);
+}
+
+.hw-prose :where(li > ol, li > ul) {
+  margin: 0.15em 0;
+}
+
+.hw-prose :where(li > p) {
+  margin: 0;
+}
+
+.hw-prose :where(li > p + p) {
+  margin-top: 0.65em;
+}
+
+.hw-prose :where(ul) {
+  list-style: none;
+}
+
+.hw-prose :where(ul > li) {
+  position: relative;
+}
+
+.hw-prose :where(ul > li)::before {
+  content: "";
+  position: absolute;
+  left: -1.1em;
+  top: calc(0.875em - 2.5px);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #151513;
+}
+
+.hw-prose :where(ul ul > li)::before {
+  background: #65655e;
+}
+
+.hw-prose :where(ul ul ul > li)::before {
+  background: #a0a097;
+}
+
+.hw-prose :where(ol) {
+  list-style: none;
+  counter-reset: hw-ol;
+}
+
+.hw-prose :where(ol > li) {
+  counter-increment: hw-ol;
+  position: relative;
+}
+
+.hw-prose :where(ol > li)::before {
+  content: counter(hw-ol, decimal-leading-zero);
+  position: absolute;
+  top: 0;
+  left: -2.05em;
+  width: 1.7em;
+  text-align: right;
+  color: var(--hw-key);
+  font-family: var(--hw-mono);
+  font-size: 1em;
+  line-height: inherit;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+/* —— 任务列表 —— */
+.hw-prose :where(ul.contains-task-list),
+.hw-prose :where(ul:has(> li > input[type="checkbox"])) {
+  padding-left: 30px;
+  list-style: none;
+}
+
+.hw-prose :where(li:has(> input[type="checkbox"]))::before,
+.hw-prose :where(li.task-list-item)::before {
+  content: none !important;
+  display: none !important;
+}
+
+.hw-prose :where(li:has(> input[type="checkbox"])),
+.hw-prose :where(li.task-list-item) {
+  position: relative;
+  margin: 8px 0;
+  list-style: none;
+}
+
+.hw-prose :where(input[type="checkbox"]) {
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0.875em;
+  left: -30px;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  border: 3px solid #090a08;
+  border-radius: var(--radius-kbd);
+  corner-shape: squircle;
+  transform: translateY(-50%);
+  background: linear-gradient(150deg, #454740, #282a24 60%, #1a1c17);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -3px 2px rgba(0, 0, 0, 0.6),
+    0 2px 0 #080907,
+    0 4px 5px -3px rgba(0, 0, 0, 0.45);
+}
+
+.hw-prose :where(input[type="checkbox"]:checked) {
+  background-color: #1c1e19;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m4 8 2.5 2.5L12 5' fill='none' stroke='%23c8cac2' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: center;
+  background-size: 14px 14px;
+  background-repeat: no-repeat;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.75),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 0 #080907;
+}
+
+/* —— 引用 —— */
+.hw-prose :where(blockquote) {
+  position: relative;
+  border: none;
+  border-radius: var(--radius-panel);
+  corner-shape: squircle;
+  padding: 18px 20px 18px 22px;
+  margin: 1.35em 0;
+  color: var(--hw-muted);
+  background: linear-gradient(180deg, #fafafa, #f2f2f1);
+  box-shadow: var(--hw-raised);
+  font-size: 0.92em;
+  quotes: none;
+}
+
+.hw-prose :where(blockquote)::before,
+.hw-prose :where(blockquote)::after {
+  content: none;
+}
+
+.hw-prose :where(blockquote blockquote) {
+  margin: 0.7em 0;
+  box-shadow: var(--hw-inset);
+  background: rgba(0, 0, 0, 0.045);
+}
+
+.hw-prose :where(blockquote p) {
+  margin: 0.35em 0;
+}
+
+.hw-prose :where(blockquote > :first-child) {
+  margin-top: 0;
+}
+
+.hw-prose :where(blockquote > :last-child) {
+  margin-bottom: 0;
+}
+
+/* —— GitHub Alert（> [!TIP]）→ SPEC-01 · 33 Alert —— */
+.hw-prose :where(.markdown-alert) {
+  --hw-rule: rgb(0 0 0 / 0.28);
+  --hw-space: 16px;
+  --hw-legend-half: 4px;
+  --hw-status: oklch(0.6 0.21 258);
+  position: relative;
+  display: grid;
+  gap: calc(var(--hw-space) - var(--hw-legend-half));
+  width: 100%;
+  min-width: 0;
+  margin: 1.35em 0;
+  padding: 0 0 var(--hw-space);
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--hw-ink);
+}
+
+.hw-prose :where(.markdown-alert)::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 5px;
+  border: 1px solid var(--hw-rule);
+  border-top: 0;
+  pointer-events: none;
+  filter:
+    drop-shadow(0 -0.5px 0.6px rgb(0 0 0 / 0.22))
+    drop-shadow(0.5px 1px 0 rgb(255 255 255 / 1));
+}
+
+.hw-prose :where(.markdown-alert-note) {
+  --hw-status: oklch(0.6 0.21 258);
+}
+
+.hw-prose :where(.markdown-alert-tip) {
+  --hw-status: oklch(0.7 0.19 150);
+}
+
+.hw-prose :where(.markdown-alert-important) {
+  --hw-status: oklch(0.58 0.24 300);
+}
+
+.hw-prose :where(.markdown-alert-warning) {
+  --hw-status: oklch(0.78 0.17 75);
+}
+
+.hw-prose :where(.markdown-alert-caution) {
+  --hw-status: oklch(0.62 0.24 28);
+}
+
+.hw-prose :where(.markdown-alert-title) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font: 500 8px/1 var(--hw-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hw-ink);
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.85);
+}
+
+.hw-prose :where(.markdown-alert-title)::before,
+.hw-prose :where(.markdown-alert-title)::after {
+  content: "";
+  flex: 1;
+  align-self: flex-start;
+  height: 5px;
+  margin-top: calc(0.5em - 0.5px);
+  border-top: 1px solid var(--hw-rule);
+  filter:
+    drop-shadow(0 -0.5px 0.6px rgb(0 0 0 / 0.22))
+    drop-shadow(0.5px 1px 0 rgb(255 255 255 / 1));
+}
+
+.hw-prose :where(.markdown-alert-title)::before {
+  border-left: 1px solid var(--hw-rule);
+}
+
+.hw-prose :where(.markdown-alert-title)::after {
+  border-right: 1px solid var(--hw-rule);
+}
+
+.hw-prose :where(.markdown-alert-title .octicon) {
+  flex-shrink: 0;
+  width: 5px !important;
+  height: 5px !important;
+  margin: 0 !important;
+  border-radius: 50%;
+  background: var(--hw-status);
+  box-shadow: 0 0 5px 1px color-mix(in oklch, var(--hw-status) 55%, transparent);
+  fill: transparent !important;
+  overflow: hidden;
+}
+
+.hw-prose :where(.markdown-alert-title .octicon *) {
+  display: none;
+}
+
+.hw-prose :where(.markdown-alert > :not(.markdown-alert-title)) {
+  margin: 0.35em 0 0;
+  padding: 0 6px;
+  font: 400 12px/1.5 var(--hw-mono);
+  text-align: center;
+  color: #6a6964;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.85);
+}
+
+.hw-prose :where(.markdown-alert > :last-child) {
+  margin-bottom: 0;
+}
+
+/* —— 行内代码 / 代码块 —— */
+.hw-prose :where(code) {
+  font-family: var(--hw-mono);
+  font-size: 13px;
+  background: rgba(27, 27, 25, 0.07);
+  border-radius: var(--radius-chip);
+  padding: 0.1em 0.38em;
+  border: 1px solid rgba(200, 200, 194, 0.75);
+  color: var(--hw-ink);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  font-weight: 400;
+}
+
+/* 仅当源码侧没有空格时，由 rehype-inline-code-gap 打上 data-gap */
+.hw-prose :where(code)[data-gap~="before"] {
+  margin-inline-start: 0.35em;
+}
+
+.hw-prose :where(code)[data-gap~="after"] {
+  margin-inline-end: 0.35em;
+}
+
+.hw-prose :where(kbd) {
+  display: inline-block;
+  line-height: 1.2;
+  vertical-align: 0.1em;
+  font-family: var(--hw-mono);
+  font-size: 13px;
+  color: var(--hw-ink);
+  background: var(--hw-panel);
+  border-radius: var(--radius-kbd);
+  corner-shape: squircle;
+  padding: 0.12em 0.45em;
+  border: none;
+  box-shadow:
+    inset 0 0 0 1px #d2d2cc,
+    0 2px 0 #bdbdb7;
+}
+
+.hw-prose :where(pre) {
+  font-family: var(--hw-mono);
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: #e7e7e3;
+  border: 10px solid transparent;
+  border-radius: var(--radius-lcd);
+  corner-shape: squircle;
+  padding: 18px 20px;
+  margin: 1.6em 0;
+  overflow-x: auto;
+  background:
+    radial-gradient(ellipse at 18% 0%, rgba(255, 255, 255, 0.11), transparent 65%) padding-box,
+    linear-gradient(145deg, #171816, #070807 75%) padding-box,
+    linear-gradient(155deg, #30312f, #111210 70%, #232421) border-box;
+  box-shadow:
+    inset 0 0 0 2px #020302,
+    inset 0 4px 10px rgba(0, 0, 0, 0.8),
+    0 0 0 1px #70716d,
+    0 2px 0 1px #fff,
+    0 14px 22px -12px rgba(0, 0, 0, 0.55);
+}
+
+.hw-prose :where(pre code) {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  border-radius: 0;
+  text-shadow: 0 0 8px rgba(231, 231, 227, 0.12);
+}
+
+/* —— 表格 —— */
+.hw-prose :where(table) {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1.5em 0;
+  border: 7px solid #e7e8e3;
+  border-radius: var(--radius-table);
+  corner-shape: squircle;
+  overflow: hidden;
+  background: linear-gradient(150deg, #b6b9af, #c9ccc2 55%, #bfc2b8);
+  box-shadow:
+    inset 0 2px 7px rgba(36, 40, 30, 0.22),
+    inset 0 -1px 3px rgba(36, 40, 30, 0.1),
+    inset 0 0 0 1px #999c92,
+    0 9px 18px -13px rgba(0, 0, 0, 0.3);
+  font-family: var(--hw-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  display: block;
+  overflow-x: auto;
+}
+
+.hw-prose :where(thead, tr, th, td) {
+  border: none;
+  background: transparent;
+}
+
+.hw-prose :where(th) {
+  padding: 15px 18px 10px;
+  border-bottom: 1px dashed #93988b;
+  font-family: var(--hw-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #4d5349;
+  text-align: left;
+}
+
+.hw-prose :where(td) {
+  padding: 12px 18px;
+  vertical-align: top;
+  color: #575c52;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.hw-prose :where(tbody tr:last-child td) {
+  padding-bottom: 18px;
+}
+
+.hw-prose :where(tbody tr:hover td) {
+  color: #20241d;
+  font-weight: 600;
+  text-shadow: none;
+}
+
+/* —— 定义列表 / details —— */
+.hw-prose :where(dl),
+.hw-prose :where(details) {
+  margin: 1.1em 0;
+  padding: 16px 18px;
+  border-radius: var(--radius-panel);
+  corner-shape: squircle;
+  background: linear-gradient(180deg, #fafafa, #f2f2f1);
+  box-shadow: var(--hw-raised);
+}
+
+.hw-prose :where(dt) {
+  font-family: var(--hw-mono);
+  font-weight: 500;
+  font-size: 0.78em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--hw-ink);
+  margin-top: 0.85em;
+}
+
+.hw-prose :where(dt:first-child) {
+  margin-top: 0;
+}
+
+.hw-prose :where(dd) {
+  margin: 0.3em 0 0.45em;
+  padding-left: 0.9em;
+  border-left: 3px solid var(--hw-key);
+  box-shadow: -2px 0 0 var(--hw-key-soft);
+  color: var(--hw-muted);
+  font-size: 0.92em;
+}
+
+.hw-prose :where(summary) {
+  font-family: var(--hw-mono);
+  font-size: 0.78em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hw-ink);
+  cursor: pointer;
+}
+
+/* —— 图片 / 脚注 —— */
+.hw-prose :where(img) {
+  max-width: 100%;
+  border-radius: var(--radius-card);
+  corner-shape: squircle;
+  box-shadow: var(--hw-raised);
+}
+
+.hw-prose :where(figure) {
+  margin: 1.35em 0;
+}
+
+.hw-prose :where(figcaption) {
+  margin-top: 0.55em;
+  font-family: var(--hw-mono);
+  font-size: 0.78em;
+  letter-spacing: 0.04em;
+  color: var(--hw-dim);
+  text-align: center;
+}
+
+.hw-prose :where(.footnotes) {
+  font-size: 0.82em;
+  color: var(--hw-dim);
+  border-top: 1px solid var(--hw-hair);
+  padding-top: 1em;
+  margin-top: 2.5em;
+}

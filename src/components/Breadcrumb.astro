@@ -1,0 +1,47 @@
+---
+/**
+ * SPEC-01 / Hardware · 36 Breadcrumb
+ * 铭牌路径：斜刻度分隔线；当前页带 LED。
+ * @see https://spec-01.vercel.app/
+ */
+interface Crumb {
+  label: string;
+  href?: string;
+  /** 可选：当前项用 <time datetime> 包裹 */
+  datetime?: string;
+}
+
+interface Props {
+  items: Crumb[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+<nav class:list={["hw-breadcrumb", className]} aria-label="面包屑">
+  <ol class="hw-breadcrumb-list">
+    {
+      items.map((item, i) => {
+        const current = i === items.length - 1 || !item.href;
+        return (
+          <li>
+            {current ? (
+              <span class="hw-breadcrumb-current" aria-current="page">
+                {item.datetime ? (
+                  <time datetime={item.datetime}>{item.label}</time>
+                ) : (
+                  item.label
+                )}
+              </span>
+            ) : (
+              <a class="hw-breadcrumb-link" href={item.href}>
+                {item.label}
+              </a>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+</nav>

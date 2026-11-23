@@ -23,7 +23,7 @@ date: 2026-03-04
 
 ## 先说几个关键名词
 
-## ADMIN_TOKEN
+### ADMIN_TOKEN
 
 这是 Vaultwarden 管理后台 `/admin` 的访问密钥。
 
@@ -37,7 +37,7 @@ date: 2026-03-04
 python3 -c "import secrets; print(secrets.token_urlsafe(48))"
 ```
 
-## tunnel id
+### tunnel id
 
 执行下面命令后，Cloudflare 会返回一个 UUID：
 
@@ -52,7 +52,7 @@ cloudflared tunnel create vaultwarden-abei
 这串 UUID 就是 tunnel id。  
 后面的 config、DNS 绑定、隧道启动都要用它。
 
-## credentials-file
+### credentials-file
 
 路径一般是：
 
@@ -66,7 +66,7 @@ cloudflared tunnel create vaultwarden-abei
 
 ## 部署步骤
 
-## 准备容器环境
+### 准备容器环境
 
 如果你已经在用 OrbStack，直接走 OrbStack 的 Docker。  
 没有的话，也可以用 Colima：
@@ -76,7 +76,7 @@ brew install docker docker-compose colima
 colima start --cpu 2 --memory 4 --disk 40
 ```
 
-## 启动 Vaultwarden
+### 启动 Vaultwarden
 
 `docker-compose.yml`：
 
@@ -115,7 +115,7 @@ docker compose up -d
 curl -I http://127.0.0.1:8222
 ```
 
-## 配置 Cloudflare Tunnel
+### 配置 Cloudflare Tunnel
 
 安装并登录授权：
 
@@ -177,7 +177,7 @@ curl -I https://vault.abei.me
 
 ## 备选方案
 
-## 用 OpenClaw 自动化完成部署
+用 OpenClaw 自动化完成部署
 
 如果不想手动走完整流程，可以让 OpenClaw 代执行，你只负责授权和关键确认。
 

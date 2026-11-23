@@ -12,7 +12,9 @@
     "format:check": "vp fmt --check"
   },
   "dependencies": {
-    "astro": "^7.4.13"
+    "@astrojs/markdown-remark": "^7.3.10",
+    "astro": "^7.4.13",
+    "remark-github-blockquote-alert": "^2.1.1"
   },
   "devDependencies": {
     "@egoist/tailwindcss-icons": "^1.9.2",

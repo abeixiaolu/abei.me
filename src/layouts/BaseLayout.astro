@@ -18,21 +18,15 @@ const pageTitle = title === "abei" ? "abei" : `${title} · abei`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
     <title>{pageTitle}</title>
   </head>
   <body class="min-h-dvh">
-    <div class="mx-auto flex min-h-dvh max-w-3xl flex-col px-5 py-8 sm:px-8">
+    <div class="mx-auto flex min-h-dvh max-w-3xl flex-col px-4 py-5 sm:px-6 sm:py-7">
       <Header />
-      <main class="flex-1 py-10">
+      <main class="flex-1 py-8 sm:py-10">
         <slot />
       </main>
-      <footer class="border-t border-line py-6 text-sm text-muted">
+      <footer class="hw-footer">
         <p>© {new Date().getFullYear()} abei</p>
       </footer>
     </div>

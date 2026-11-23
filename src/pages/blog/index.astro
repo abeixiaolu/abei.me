@@ -1,5 +1,7 @@
 ---
 import { getCollection } from "astro:content";
+import ItemList from "../../components/ItemList.astro";
+import Lcd from "../../components/Lcd.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const allPosts = await getCollection("blog");
@@ -27,35 +29,38 @@ function formatDate(date: Date) {
 }
 ---
 
-<BaseLayout
-  title="Blog"
-  description="技术笔记、教程与碎碎念。"
->
+<BaseLayout title="Blog" description="技术笔记、教程与碎碎念。">
   <section>
-    <h1 class="text-3xl font-semibold tracking-tight">Blog</h1>
-    <p class="mt-2 text-muted">技术笔记、教程与碎碎念。</p>
+    <Lcd size="lg">
+      <p class="hw-caption">Index</p>
+      <h1 class="hw-title">Blog</h1>
+      <p class="hw-lede">技术笔记、教程与碎碎念。</p>
+    </Lcd>
 
-    <ul class="mt-10 divide-y divide-line border-y border-line">
-      {
-        posts.map((post) => (
-          <li>
+    <ItemList class="mt-8">
+      <div class="hw-item-list-head" aria-hidden="true">
+        <span>Title</span>
+        <span data-align="end">Date</span>
+      </div>
+      <div class="hw-item-list-body" role="list">
+        {
+          posts.map((post) => (
             <a
               href={`/blog/${post.id}`}
-              class="group flex flex-col gap-1 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
+              class="hw-item-list-row"
+              role="listitem"
             >
-              <span class="font-medium group-hover:text-accent">
-                {post.data.title}
-              </span>
+              <span>{post.data.title}</span>
               <time
                 datetime={post.data.date.toISOString()}
-                class="shrink-0 font-mono text-sm text-muted"
+                data-align="end"
               >
                 {formatDate(post.data.date)}
               </time>
             </a>
-          </li>
-        ))
-      }
-    </ul>
+          ))
+        }
+      </div>
+    </ItemList>
   </section>
 </BaseLayout>

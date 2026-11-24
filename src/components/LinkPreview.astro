@@ -1,0 +1,819 @@
+---
+/**
+ * 整站外链悬停预览：Microlink API 取 OG，硬件面板样式浮层。
+ * 事件委托一次绑定，兼容 ClientRouter 换页。
+ */
+---
+
+<script>
+  type PreviewData = {
+    url: string;
+    host: string;
+    title: string;
+    description: string;
+    image: string;
+    /** og：大图预览；icon：仅 favicon / logo，用紧凑样式 */
+    kind: "og" | "icon";
+  };
+
+  declare global {
+    interface Window {
+      __hwLinkPreviewBound?: boolean;
+      __hwLinkPreviewTip?: HTMLElement;
+    }
+  }
+
+  const SHOW_MS = 280;
+  const HIDE_MS = 140;
+  const CACHE_KEY = "hw-link-preview-v2";
+  const CACHE_MAX = 80;
+  const ICON_MAX_PX = 96;
+
+  const memory = new Map<string, PreviewData | null>();
+
+  function canHover() {
+    return matchMedia("(hover: hover) and (pointer: fine)").matches;
+  }
+
+  function preferReduceMotion() {
+    return matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  function loadSessionCache() {
+    try {
+      const raw = sessionStorage.getItem(CACHE_KEY);
+      if (!raw) return;
+      const entries = JSON.parse(raw) as [string, PreviewData | null][];
+      for (const [k, v] of entries) memory.set(k, v);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function saveSessionCache() {
+    try {
+      const entries = [...memory.entries()].slice(-CACHE_MAX);
+      sessionStorage.setItem(CACHE_KEY, JSON.stringify(entries));
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function absoluteUrl(href: string) {
+    try {
+      return new URL(href, location.href);
+    } catch {
+      return null;
+    }
+  }
+
+  function isExternalAnchor(el: EventTarget | null): el is HTMLAnchorElement {
+    if (!(el instanceof HTMLAnchorElement)) return false;
+    if (el.dataset.noPreview != null) return false;
+    if (el.closest(".hw-link-preview")) return false;
+    const href = el.getAttribute("href");
+    if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) {
+      return false;
+    }
+    const url = absoluteUrl(href);
+    if (!url || (url.protocol !== "http:" && url.protocol !== "https:")) return false;
+    return url.origin !== location.origin;
+  }
+
+  function faviconFor(host: string) {
+    return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=128`;
+  }
+
+  function stripWww(host: string) {
+    return host.replace(/^www\./i, "");
+  }
+
+  function looksLikeIconUrl(src: string) {
+    return /favicon|fluidicon|apple-touch-icon|\/logo(\.|\/)|google\.com\/s2\/favicons|icons\.duckduckgo\.com/i.test(
+      src,
+    );
+  }
+
+  function sameHostLabel(a: string, b: string) {
+    return stripWww(a).toLowerCase() === stripWww(b).toLowerCase();
+  }
+
+  /** 标题若只是域名，改用路径末段，避免和 kicker 重复 */
+  function resolveCopy(url: URL, titleRaw: string, descriptionRaw: string) {
+    const host = stripWww(url.hostname);
+    let title = titleRaw.trim();
+    let description = descriptionRaw.trim();
+
+    if (!title || sameHostLabel(title, host)) {
+      const path = `${url.pathname}${url.search}`.replace(/\/$/, "") || "/";
+      const leaf = path === "/" ? "" : path.split("/").filter(Boolean).pop() || path;
+      title = leaf || host;
+      if (!description && path !== "/" && leaf !== path) description = path;
+    }
+
+    if (description && sameHostLabel(description, host)) description = "";
+    return { host, title, description };
+  }
+
+  function fallbackPreview(url: URL): PreviewData {
+    const { host, title, description } = resolveCopy(url, "", "");
+    return {
+      url: url.href,
+      host,
+      title,
+      description,
+      image: faviconFor(url.hostname),
+      kind: "icon",
+    };
+  }
+
+  async function fetchPreview(url: URL, signal: AbortSignal): Promise<PreviewData> {
+    const cached = memory.get(url.href);
+    if (cached !== undefined) return cached ?? fallbackPreview(url);
+
+    const endpoint = new URL("https://api.microlink.io/");
+    endpoint.searchParams.set("url", url.href);
+    endpoint.searchParams.set("palette", "false");
+    endpoint.searchParams.set("audio", "false");
+    endpoint.searchParams.set("video", "false");
+    endpoint.searchParams.set("iframe", "false");
+
+    try {
+      const res = await fetch(endpoint, { signal });
+      if (!res.ok) throw new Error(String(res.status));
+      const json = (await res.json()) as {
+        status?: string;
+        data?: {
+          title?: string | null;
+          description?: string | null;
+          url?: string;
+          image?: { url?: string; width?: number; height?: number } | null;
+          logo?: { url?: string; width?: number; height?: number } | null;
+        };
+      };
+
+      if (json.status !== "success" || !json.data) throw new Error("meta");
+
+      const data = json.data;
+      const og = data.image?.url;
+      const logo = data.logo?.url;
+      const image = og || logo || faviconFor(url.hostname);
+      const ogSmall =
+        !!og &&
+        ((data.image?.width != null && data.image.width <= ICON_MAX_PX) ||
+          (data.image?.height != null && data.image.height <= ICON_MAX_PX));
+      const kind: PreviewData["kind"] =
+        og && !ogSmall && !looksLikeIconUrl(og) ? "og" : "icon";
+
+      const resolvedUrl = new URL(data.url || url.href);
+      const { host, title, description } = resolveCopy(
+        resolvedUrl,
+        data.title || "",
+        data.description || "",
+      );
+
+      const preview: PreviewData = {
+        url: resolvedUrl.href,
+        host,
+        title,
+        description,
+        image,
+        kind,
+      };
+      memory.set(url.href, preview);
+      saveSessionCache();
+      return preview;
+    } catch (err) {
+      if ((err as Error).name === "AbortError") throw err;
+      memory.set(url.href, null);
+      saveSessionCache();
+      return fallbackPreview(url);
+    }
+  }
+
+  function ensureTip() {
+    // ClientRouter 换页可能卸掉节点；用 window 引用把同一 tip 挂回 body
+    let tip =
+      window.__hwLinkPreviewTip ??
+      document.querySelector<HTMLElement>(".hw-link-preview") ??
+      undefined;
+
+    if (!tip) {
+      tip = document.createElement("aside");
+      tip.className = "hw-link-preview";
+      tip.hidden = true;
+      tip.setAttribute("aria-hidden", "true");
+      tip.innerHTML = `
+        <div class="hw-link-preview-shell">
+          <div class="hw-link-preview-media" data-slot="media"></div>
+          <div class="hw-link-preview-body">
+            <div class="hw-link-preview-kicker" data-slot="kicker"></div>
+            <div class="hw-link-preview-title" data-slot="title"></div>
+            <div class="hw-link-preview-desc" data-slot="desc"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (!tip.isConnected) document.body.appendChild(tip);
+    window.__hwLinkPreviewTip = tip;
+    return tip;
+  }
+
+  function placeTip(tip: HTMLElement, anchor: HTMLElement) {
+    const gap = 10;
+    const rect = anchor.getBoundingClientRect();
+    const tw = tip.offsetWidth;
+    const th = tip.offsetHeight;
+    let top = rect.top - th - gap;
+    let left = rect.left + rect.width / 2 - tw / 2;
+
+    if (top < 8) top = rect.bottom + gap;
+    if (top + th > window.innerHeight - 8) {
+      top = Math.max(8, window.innerHeight - th - 8);
+    }
+    left = Math.min(Math.max(8, left), window.innerWidth - tw - 8);
+
+    tip.style.top = `${Math.round(top)}px`;
+    tip.style.left = `${Math.round(left)}px`;
+  }
+
+  function renderLoading(tip: HTMLElement, url: URL) {
+    tip.dataset.state = "loading";
+    tip.dataset.kind = "og";
+    const media = tip.querySelector<HTMLElement>('[data-slot="media"]');
+    const kicker = tip.querySelector<HTMLElement>('[data-slot="kicker"]');
+    const title = tip.querySelector<HTMLElement>('[data-slot="title"]');
+    const desc = tip.querySelector<HTMLElement>('[data-slot="desc"]');
+    if (!media || !kicker || !title || !desc) return;
+
+    const host = stripWww(url.hostname);
+    delete media.dataset.empty;
+    delete media.dataset.icon;
+    media.dataset.signal = "";
+    media.innerHTML = `
+      <div class="hw-link-preview-signal" aria-hidden="true">
+        <div class="hw-link-preview-scope">
+          <span class="hw-link-preview-ring" style="--i:0"></span>
+          <span class="hw-link-preview-ring" style="--i:1"></span>
+          <span class="hw-link-preview-ring" style="--i:2"></span>
+          <span class="hw-link-preview-ring" style="--i:3"></span>
+          <span class="hw-link-preview-tx"></span>
+          <span class="hw-link-preview-sweep"></span>
+        </div>
+        <div class="hw-link-preview-signal-bar">
+          <span class="hw-link-preview-signal-led"></span>
+          <span class="hw-link-preview-signal-label">RX · Carrier</span>
+          <span class="hw-link-preview-signal-pulse">▮▮▮</span>
+        </div>
+      </div>
+    `;
+    kicker.textContent = host;
+    title.hidden = false;
+    title.textContent = "调谐信号…";
+    desc.textContent = "";
+  }
+
+  function renderTip(tip: HTMLElement, data: PreviewData) {
+    tip.dataset.state = "ready";
+    tip.dataset.kind = data.kind;
+    const media = tip.querySelector<HTMLElement>('[data-slot="media"]');
+    const kicker = tip.querySelector<HTMLElement>('[data-slot="kicker"]');
+    const title = tip.querySelector<HTMLElement>('[data-slot="title"]');
+    const desc = tip.querySelector<HTMLElement>('[data-slot="desc"]');
+    if (!media || !kicker || !title || !desc) return;
+
+    // 域名只展示一处
+    kicker.textContent = data.host;
+    title.textContent = data.title;
+    title.hidden = !data.title || sameHostLabel(data.title, data.host);
+    desc.textContent = data.description;
+
+    media.replaceChildren();
+    delete media.dataset.signal;
+
+    if (!data.image) {
+      media.dataset.empty = "";
+      return;
+    }
+
+    delete media.dataset.empty;
+
+    if (data.kind === "icon") {
+      media.dataset.icon = "";
+      const img = document.createElement("img");
+      img.src = data.image;
+      img.alt = "";
+      img.decoding = "async";
+      img.referrerPolicy = "no-referrer";
+      img.addEventListener("error", () => {
+        media.replaceChildren();
+        media.dataset.empty = "";
+      }, { once: true });
+      media.appendChild(img);
+      return;
+    }
+
+    delete media.dataset.icon;
+    const img = document.createElement("img");
+    img.src = data.image;
+    img.alt = "";
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.referrerPolicy = "no-referrer";
+    img.addEventListener(
+      "load",
+      () => {
+        // 实际是小图标却被当成 OG 时，降级为紧凑样式
+        if (
+          tip.dataset.state === "ready" &&
+          img.naturalWidth > 0 &&
+          img.naturalWidth <= ICON_MAX_PX &&
+          img.naturalHeight <= ICON_MAX_PX
+        ) {
+          const next = { ...data, kind: "icon" as const };
+          memory.set(data.url, next);
+          saveSessionCache();
+          renderTip(tip, next);
+        }
+      },
+      { once: true },
+    );
+    img.addEventListener("error", () => {
+      renderTip(tip, { ...data, image: faviconFor(data.host), kind: "icon" });
+    }, { once: true });
+    media.appendChild(img);
+  }
+
+  function boot() {
+    // 每次换页都把 tip 挂回 DOM；事件只绑一次
+    const tip = ensureTip();
+    tip.hidden = true;
+    tip.dataset.open = "false";
+    tip.setAttribute("aria-hidden", "true");
+    if (window.__hwLinkPreviewBound) return;
+    window.__hwLinkPreviewBound = true;
+    loadSessionCache();
+
+    let showTimer = 0;
+    let hideTimer = 0;
+    let pending: HTMLAnchorElement | null = null;
+    let current: HTMLAnchorElement | null = null;
+    let abort: AbortController | null = null;
+
+    const hide = (immediate = false) => {
+      const tip = ensureTip();
+      window.clearTimeout(showTimer);
+      window.clearTimeout(hideTimer);
+      pending = null;
+      const close = () => {
+        tip.hidden = true;
+        tip.dataset.open = "false";
+        tip.setAttribute("aria-hidden", "true");
+        current = null;
+        abort?.abort();
+        abort = null;
+      };
+      if (immediate || preferReduceMotion() || tip.hidden) {
+        close();
+        return;
+      }
+      hideTimer = window.setTimeout(close, HIDE_MS);
+    };
+
+    const showFor = (anchor: HTMLAnchorElement) => {
+      const tip = ensureTip();
+      window.clearTimeout(hideTimer);
+      window.clearTimeout(showTimer);
+      pending = anchor;
+      showTimer = window.setTimeout(async () => {
+        const tipNow = ensureTip();
+        const url = absoluteUrl(anchor.href);
+        if (!url || pending !== anchor) return;
+
+        current = anchor;
+        pending = null;
+        tipNow.hidden = false;
+        tipNow.dataset.open = "true";
+        tipNow.setAttribute("aria-hidden", "false");
+        renderLoading(tipNow, url);
+        placeTip(tipNow, anchor);
+
+        abort?.abort();
+        abort = new AbortController();
+        try {
+          const data = await fetchPreview(url, abort.signal);
+          if (current !== anchor) return;
+          renderTip(tipNow, data);
+          placeTip(tipNow, anchor);
+        } catch (err) {
+          if ((err as Error).name === "AbortError") return;
+        }
+      }, preferReduceMotion() ? 0 : SHOW_MS);
+    };
+
+    document.addEventListener(
+      "pointerover",
+      (event) => {
+        if (!canHover()) return;
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        const anchor = target.closest("a");
+        if (!isExternalAnchor(anchor)) return;
+        if (anchor === current || anchor === pending) {
+          window.clearTimeout(hideTimer);
+          return;
+        }
+        showFor(anchor);
+      },
+      true,
+    );
+
+    document.addEventListener(
+      "pointerout",
+      (event) => {
+        if (!canHover()) return;
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        const anchor = target.closest("a");
+        if (!isExternalAnchor(anchor)) return;
+        if (anchor !== current && anchor !== pending) return;
+
+        const related = event.relatedTarget;
+        const tip = ensureTip();
+        if (related instanceof Node && (anchor.contains(related) || tip.contains(related))) {
+          return;
+        }
+        hide(anchor === pending && current == null);
+      },
+      true,
+    );
+
+    // tip 上的进出：委托到 document，避免换页重建后丢监听
+    document.addEventListener("pointerover", (event) => {
+      const tip = window.__hwLinkPreviewTip;
+      if (!tip || !(event.target instanceof Node) || !tip.contains(event.target)) return;
+      window.clearTimeout(hideTimer);
+    });
+    document.addEventListener("pointerout", (event) => {
+      const tip = window.__hwLinkPreviewTip;
+      if (!tip || !(event.target instanceof Node) || !tip.contains(event.target)) return;
+      const related = event.relatedTarget;
+      if (related instanceof Node && tip.contains(related)) return;
+      hide();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") hide();
+    });
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        const tip = ensureTip();
+        if (tip.hidden || !current) return;
+        placeTip(tip, current);
+      },
+      { passive: true },
+    );
+  }
+
+  boot();
+  document.addEventListener("astro:page-load", boot);
+</script>
+
+<style is:global>
+  .hw-link-preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 60;
+    width: min(300px, calc(100vw - 16px));
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 140ms var(--ease-settle, ease);
+  }
+
+  .hw-link-preview[data-open="true"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .hw-link-preview-shell {
+    overflow: hidden;
+    border-radius: var(--radius-panel);
+    corner-shape: squircle;
+    background: var(--color-panel);
+    box-shadow:
+      inset 0 0 0 1px #d2d2cc,
+      0 2px 0 #bdbdb7,
+      0 12px 28px -16px rgb(0 0 0 / 0.35);
+    translate: 0 4px;
+    transition: translate 140ms var(--ease-settle, ease);
+  }
+
+  .hw-link-preview[data-open="true"] .hw-link-preview-shell {
+    translate: 0 0;
+  }
+
+  .hw-link-preview-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background:
+      linear-gradient(180deg, #ecece8, #e2e2de),
+      var(--color-tray);
+    border-bottom: 1px solid rgb(0 0 0 / 0.06);
+  }
+
+  .hw-link-preview-media[data-empty] {
+    aspect-ratio: auto;
+    height: 0;
+    border: 0;
+  }
+
+  .hw-link-preview-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* 仅有 favicon / logo：横排紧凑卡，域名只出现在 kicker */
+  .hw-link-preview[data-kind="icon"] .hw-link-preview-shell {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0;
+  }
+
+  .hw-link-preview[data-kind="icon"] .hw-link-preview-media,
+  .hw-link-preview-media[data-icon] {
+    aspect-ratio: auto;
+    width: 44px;
+    height: 44px;
+    margin: 12px 0 12px 12px;
+    border: 0;
+    border-radius: var(--radius-chip);
+    corner-shape: squircle;
+    background: var(--color-tray);
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06);
+    overflow: hidden;
+  }
+
+  .hw-link-preview[data-kind="icon"] .hw-link-preview-media img,
+  .hw-link-preview-media[data-icon] img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 6px;
+    box-sizing: border-box;
+  }
+
+  .hw-link-preview[data-kind="icon"] .hw-link-preview-body {
+    padding: 10px 12px 10px 10px;
+  }
+
+  .hw-link-preview-title[hidden] {
+    display: none;
+  }
+
+  /* —— 加载：示波器 / 电波传输屏 —— */
+  .hw-link-preview-media[data-signal] {
+    background: transparent;
+    border-bottom: 0;
+  }
+
+  .hw-link-preview-signal {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    height: 100%;
+    background: var(--gray-glass);
+    box-shadow: var(--gray-well);
+  }
+
+  .hw-link-preview-scope {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hw-link-preview-scope::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        180deg,
+        transparent 0 2px,
+        rgb(20 20 19 / 0.05) 2px 3px
+      );
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .hw-link-preview-tx {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    border-radius: 50%;
+    background: #1b1b19;
+    box-shadow:
+      0 0 0 2px rgb(255 255 255 / 0.35),
+      0 0 10px 2px oklch(0.72 0.19 150 / 0.55);
+    animation: hw-link-tx 1.1s ease-in-out infinite;
+  }
+
+  .hw-link-preview-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 160px;
+    height: 160px;
+    margin: -80px 0 0 -80px;
+    border: 1.5px solid rgb(20 20 19 / 0.5);
+    border-radius: 50%;
+    transform: scale(0.08);
+    opacity: 0;
+    animation: hw-link-ring 2.2s var(--ease-settle, ease-out) infinite;
+    animation-delay: calc(var(--i) * 0.45s);
+  }
+
+  .hw-link-preview-sweep {
+    position: absolute;
+    inset: -30%;
+    z-index: 1;
+    transform-origin: 50% 50%;
+    background: conic-gradient(
+      from 0deg at 50% 50%,
+      transparent 0deg,
+      rgb(20 20 19 / 0.12) 26deg,
+      transparent 52deg,
+      transparent 360deg
+    );
+    animation: hw-link-sweep 2.8s linear infinite;
+    mix-blend-mode: multiply;
+  }
+
+  .hw-link-preview-signal-bar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 10px 6px;
+    border-top: 1px solid rgb(20 20 19 / 0.12);
+    font: 600 8px/1 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray-ink);
+    text-shadow: var(--lcd-print);
+  }
+
+  .hw-link-preview-signal-led {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: oklch(0.72 0.19 150);
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.45),
+      0 0 7px 1px oklch(0.72 0.19 150 / 0.55);
+    animation: hw-link-led 0.9s steps(2, end) infinite;
+  }
+
+  .hw-link-preview-signal-label {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .hw-link-preview-signal-pulse {
+    letter-spacing: 0.08em;
+    color: rgb(20 20 19 / 0.55);
+    animation: hw-link-bars 1.05s steps(3, end) infinite;
+  }
+
+  .hw-link-preview-body {
+    display: grid;
+    gap: 6px;
+    padding: 10px 12px 12px;
+  }
+
+  .hw-link-preview-kicker {
+    font: 600 8px/1 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-dim);
+  }
+
+  .hw-link-preview-title {
+    font: 600 13px/1.3 var(--font-sans);
+    color: var(--color-ink);
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .hw-link-preview-desc {
+    font: 400 11px/1.45 var(--font-sans);
+    color: var(--color-dim);
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    min-height: 0;
+  }
+
+  .hw-link-preview-desc:empty {
+    display: none;
+  }
+
+  .hw-link-preview[data-state="loading"] .hw-link-preview-title {
+    color: var(--color-dim);
+  }
+
+  @keyframes hw-link-ring {
+    0% {
+      transform: scale(0.08);
+      opacity: 0.7;
+    }
+    70% {
+      opacity: 0.2;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+
+  @keyframes hw-link-tx {
+    0%,
+    100% {
+      box-shadow:
+        0 0 0 2px rgb(255 255 255 / 0.35),
+        0 0 8px 1px oklch(0.72 0.19 150 / 0.4);
+    }
+    50% {
+      box-shadow:
+        0 0 0 2px rgb(255 255 255 / 0.5),
+        0 0 14px 3px oklch(0.72 0.19 150 / 0.7);
+    }
+  }
+
+  @keyframes hw-link-sweep {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes hw-link-led {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0.25;
+    }
+  }
+
+  @keyframes hw-link-bars {
+    0% {
+      opacity: 0.25;
+    }
+    33% {
+      opacity: 0.55;
+    }
+    66% {
+      opacity: 0.85;
+    }
+    100% {
+      opacity: 0.35;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hw-link-preview,
+    .hw-link-preview-shell {
+      transition: none;
+    }
+
+    .hw-link-preview-ring,
+    .hw-link-preview-tx,
+    .hw-link-preview-sweep,
+    .hw-link-preview-signal-led,
+    .hw-link-preview-signal-pulse {
+      animation: none;
+    }
+
+    .hw-link-preview-ring {
+      opacity: calc(0.45 - var(--i) * 0.08);
+      transform: scale(calc(0.22 + var(--i) * 0.18));
+    }
+
+    .hw-link-preview-sweep {
+      display: none;
+    }
+  }
+</style>

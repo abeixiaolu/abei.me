@@ -6,7 +6,10 @@ import BaseLayout from "./BaseLayout.astro";
 interface Project {
   name: string;
   description: string;
-  url: string;
+  /** @deprecated 请改用 repo / live */
+  url?: string;
+  repo?: string;
+  live?: string;
 }
 
 interface ProjectGroup {
@@ -37,6 +40,17 @@ function isRepo(url: string) {
   } catch {
     return false;
   }
+}
+
+/** 兼容旧 url 字段，拆成 repo / live */
+function resolveLinks(project: Project) {
+  let repo = project.repo;
+  let live = project.live;
+  if (project.url) {
+    if (isRepo(project.url)) repo ??= project.url;
+    else live ??= project.url;
+  }
+  return { repo, live };
 }
 
 function padIndex(n: number) {
@@ -70,35 +84,67 @@ const headerMeta = meta ?? `MODE ${padIndex(totalPads)}`;
             <div class="hw-pad-bank">
               <ul class="hw-pad-grid">
                 {group.projects.map((project, i) => {
-                  const repo = isRepo(project.url);
+                  const { repo, live } = resolveLinks(project);
+                  // 整卡优先进 Live，没有再进 Repo
+                  const primary = live ?? repo;
                   return (
                     <li>
-                      <a
-                        href={project.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="hw-key hw-pad"
-                      >
-                        <span class="hw-key-pad hw-pad-face">
-                          <span class="hw-pad-meta">
+                      <div class="hw-key hw-pad">
+                        {primary && (
+                          <a
+                            class="hw-pad-stretch"
+                            href={primary}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={project.name}
+                          />
+                        )}
+                        <div class="hw-key-pad hw-pad-face">
+                          <div class="hw-pad-meta">
                             <span class="hw-pad-index">{padIndex(i + 1)}</span>
-                            <span class="hw-pad-status">
-                              <span
-                                class="hw-pad-led"
-                                data-tone={repo ? "repo" : "live"}
-                                aria-hidden="true"
-                              />
-                              <span>{repo ? "Repo" : "Live"}</span>
+                            <span class="hw-pad-actions">
+                              {repo && (
+                                <a
+                                  class="hw-pad-action"
+                                  href={repo}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  data-tone="repo"
+                                >
+                                  <span
+                                    class="hw-pad-led"
+                                    data-tone="repo"
+                                    aria-hidden="true"
+                                  />
+                                  Repo
+                                </a>
+                              )}
+                              {live && (
+                                <a
+                                  class="hw-pad-action"
+                                  href={live}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  data-tone="live"
+                                >
+                                  <span
+                                    class="hw-pad-led"
+                                    data-tone="live"
+                                    aria-hidden="true"
+                                  />
+                                  Live
+                                </a>
+                              )}
                             </span>
-                          </span>
+                          </div>
 
                           <span class="hw-pad-title">
                             <span
                               class:list={[
                                 "shrink-0 text-base opacity-70",
-                                repo
-                                  ? "i-carbon-logo-github"
-                                  : "i-carbon-direction-right-01-filled",
+                                live
+                                  ? "i-carbon-direction-right-01-filled"
+                                  : "i-carbon-logo-github",
                               ]}
                               aria-hidden="true"
                             />
@@ -106,8 +152,8 @@ const headerMeta = meta ?? `MODE ${padIndex(totalPads)}`;
                           </span>
 
                           <span class="hw-pad-desc">{project.description}</span>
-                        </span>
-                      </a>
+                        </div>
+                      </div>
                     </li>
                   );
                 })}

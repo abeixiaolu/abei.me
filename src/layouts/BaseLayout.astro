@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import Header from "../components/Header.astro";
+import LinkPreview from "../components/LinkPreview.astro";
 import NavHtmlCache from "../components/NavHtmlCache.astro";
 
 interface Props {
@@ -83,5 +84,6 @@ const pageReveal = {
       </footer>
     </div>
     <NavHtmlCache />
+    <LinkPreview />
   </body>
 </html>

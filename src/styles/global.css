@@ -1277,14 +1277,31 @@ a {
 }
 
 .hw-pad {
+  position: relative;
   height: 100%;
 }
 
+/* 整卡可点：优先 Live，否则 Repo；右上角 action 用更高层级单独可点 */
+.hw-pad-stretch {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+.hw-pad:has(.hw-pad-stretch:active) {
+  translate: 0 2px;
+  box-shadow: inset 0 0 0 1px #d2d2cc;
+}
+
 .hw-pad-face {
+  position: relative;
+  z-index: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
   padding: 12px 14px;
+  pointer-events: none;
 }
 
 .hw-pad-meta {
@@ -1302,10 +1319,38 @@ a {
   color: var(--color-muted);
 }
 
-.hw-pad-status {
+.hw-pad-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hw-pad-action {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  padding: 3px 6px 3px 5px;
+  border-radius: var(--radius-chip);
+  corner-shape: squircle;
+  color: var(--color-dim);
+  text-decoration: none;
+  transition:
+    color 120ms,
+    background-color 120ms;
+}
+
+.hw-pad-action:hover,
+.hw-pad-action:focus-visible {
+  color: var(--color-ink);
+  background: rgb(0 0 0 / 0.05);
+}
+
+.hw-pad-action:focus-visible {
+  outline: 1.5px solid var(--color-ink);
+  outline-offset: 1px;
 }
 
 .hw-pad-led {
@@ -1346,7 +1391,7 @@ a {
 }
 
 .hw-pad:hover .hw-pad-title,
-.hw-pad:focus-visible .hw-pad-title {
+.hw-pad:has(.hw-pad-stretch:focus-visible) .hw-pad-title {
   text-decoration-color: currentColor;
 }
 

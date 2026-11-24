@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 拦截正文中的非图床图片链接
+# 提交前：lint + TypeScript + 正文图片 CDN 检查
 set -euo pipefail
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
@@ -20,8 +20,41 @@ for c in \
 done
 
 if [[ -z "$NODE" ]]; then
-  echo "pre-commit: 找不到 node，跳过图片检查" >&2
-  exit 0
+  echo "pre-commit: 找不到 node，无法跑检查" >&2
+  exit 1
+fi
+
+PNPM=""
+for c in \
+  "$(command -v pnpm 2>/dev/null || true)" \
+  "$HOME/Library/pnpm/pnpm" \
+  /opt/homebrew/bin/pnpm \
+  /usr/local/bin/pnpm; do
+  for cand in $c; do
+    if [[ -n "$cand" && -x "$cand" ]]; then
+      PNPM="$cand"
+      break 2
+    fi
+  done
+done
+
+run_check() {
+  local label="$1"
+  shift
+  echo "pre-commit: $label …" >&2
+  if ! "$@"; then
+    echo "pre-commit: $label 失败，请修复后再提交" >&2
+    exit 1
+  fi
+}
+
+if [[ -n "$PNPM" ]]; then
+  run_check "oxlint" "$PNPM" lint
+  run_check "tsc" "$PNPM" typecheck
+else
+  # 无 pnpm 时退回本地二进制
+  run_check "oxlint" "$NODE" ./node_modules/oxlint/bin/oxlint src
+  run_check "tsc" "$NODE" ./node_modules/typescript/bin/tsc --noEmit
 fi
 
 exec "$NODE" "$ROOT/scripts/check-content-images.mjs"

@@ -1,0 +1,333 @@
+  .hw-link-preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 60;
+    width: min(300px, calc(100vw - 16px));
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 140ms var(--ease-settle, ease);
+  }
+
+  .hw-link-preview[data-open="true"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .hw-link-preview-shell {
+    overflow: hidden;
+    border-radius: var(--radius-panel);
+    corner-shape: squircle;
+    background: var(--color-panel);
+    box-shadow:
+      inset 0 0 0 1px #d2d2cc,
+      0 2px 0 #bdbdb7,
+      0 12px 28px -16px rgb(0 0 0 / 0.35);
+    translate: 0 4px;
+    transition: translate 140ms var(--ease-settle, ease);
+  }
+
+  .hw-link-preview[data-open="true"] .hw-link-preview-shell {
+    translate: 0 0;
+  }
+
+  .hw-link-preview-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background:
+      linear-gradient(180deg, #ecece8, #e2e2de),
+      var(--color-tray);
+    border-bottom: 1px solid rgb(0 0 0 / 0.06);
+  }
+
+  .hw-link-preview-media[data-empty] {
+    aspect-ratio: auto;
+    height: 0;
+    border: 0;
+  }
+
+  .hw-link-preview-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* 仅有 favicon / logo：横排紧凑卡，域名只出现在 kicker */
+  .hw-link-preview[data-kind="icon"] .hw-link-preview-shell {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0;
+  }
+
+  .hw-link-preview[data-kind="icon"] .hw-link-preview-media,
+  .hw-link-preview-media[data-icon] {
+    aspect-ratio: auto;
+    width: 44px;
+    height: 44px;
+    margin: 12px 0 12px 12px;
+    border: 0;
+    border-radius: var(--radius-chip);
+    corner-shape: squircle;
+    background: var(--color-tray);
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06);
+    overflow: hidden;
+  }
+
+  .hw-link-preview[data-kind="icon"] .hw-link-preview-media img,
+  .hw-link-preview-media[data-icon] img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 6px;
+    box-sizing: border-box;
+  }
+
+  .hw-link-preview[data-kind="icon"] .hw-link-preview-body {
+    padding: 10px 12px 10px 10px;
+  }
+
+  .hw-link-preview-title[hidden] {
+    display: none;
+  }
+
+  /* —— 加载：示波器 / 电波传输屏 —— */
+  .hw-link-preview-media[data-signal] {
+    background: transparent;
+    border-bottom: 0;
+  }
+
+  .hw-link-preview-signal {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    height: 100%;
+    background: var(--gray-glass);
+    box-shadow: var(--gray-well);
+  }
+
+  .hw-link-preview-scope {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hw-link-preview-scope::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        180deg,
+        transparent 0 2px,
+        rgb(20 20 19 / 0.05) 2px 3px
+      );
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .hw-link-preview-tx {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    border-radius: 50%;
+    background: #1b1b19;
+    box-shadow:
+      0 0 0 2px rgb(255 255 255 / 0.35),
+      0 0 10px 2px oklch(0.72 0.19 150 / 0.55);
+    animation: hw-link-tx 1.1s ease-in-out infinite;
+  }
+
+  .hw-link-preview-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 160px;
+    height: 160px;
+    margin: -80px 0 0 -80px;
+    border: 1.5px solid rgb(20 20 19 / 0.5);
+    border-radius: 50%;
+    transform: scale(0.08);
+    opacity: 0;
+    animation: hw-link-ring 2.2s var(--ease-settle, ease-out) infinite;
+    animation-delay: calc(var(--i) * 0.45s);
+  }
+
+  .hw-link-preview-sweep {
+    position: absolute;
+    inset: -30%;
+    z-index: 1;
+    transform-origin: 50% 50%;
+    background: conic-gradient(
+      from 0deg at 50% 50%,
+      transparent 0deg,
+      rgb(20 20 19 / 0.12) 26deg,
+      transparent 52deg,
+      transparent 360deg
+    );
+    animation: hw-link-sweep 2.8s linear infinite;
+    mix-blend-mode: multiply;
+  }
+
+  .hw-link-preview-signal-bar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 10px 6px;
+    border-top: 1px solid rgb(20 20 19 / 0.12);
+    font: 600 8px/1 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray-ink);
+    text-shadow: var(--lcd-print);
+  }
+
+  .hw-link-preview-signal-led {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: oklch(0.72 0.19 150);
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.45),
+      0 0 7px 1px oklch(0.72 0.19 150 / 0.55);
+    animation: hw-link-led 0.9s steps(2, end) infinite;
+  }
+
+  .hw-link-preview-signal-label {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .hw-link-preview-signal-pulse {
+    letter-spacing: 0.08em;
+    color: rgb(20 20 19 / 0.55);
+    animation: hw-link-bars 1.05s steps(3, end) infinite;
+  }
+
+  .hw-link-preview-body {
+    display: grid;
+    gap: 6px;
+    padding: 10px 12px 12px;
+  }
+
+  .hw-link-preview-kicker {
+    font: 600 8px/1 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-dim);
+  }
+
+  .hw-link-preview-title {
+    font: 600 13px/1.3 var(--font-sans);
+    color: var(--color-ink);
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .hw-link-preview-desc {
+    font: 400 11px/1.45 var(--font-sans);
+    color: var(--color-dim);
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    min-height: 0;
+  }
+
+  .hw-link-preview-desc:empty {
+    display: none;
+  }
+
+  .hw-link-preview[data-state="loading"] .hw-link-preview-title {
+    color: var(--color-dim);
+  }
+
+  @keyframes hw-link-ring {
+    0% {
+      transform: scale(0.08);
+      opacity: 0.7;
+    }
+    70% {
+      opacity: 0.2;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+
+  @keyframes hw-link-tx {
+    0%,
+    100% {
+      box-shadow:
+        0 0 0 2px rgb(255 255 255 / 0.35),
+        0 0 8px 1px oklch(0.72 0.19 150 / 0.4);
+    }
+    50% {
+      box-shadow:
+        0 0 0 2px rgb(255 255 255 / 0.5),
+        0 0 14px 3px oklch(0.72 0.19 150 / 0.7);
+    }
+  }
+
+  @keyframes hw-link-sweep {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes hw-link-led {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0.25;
+    }
+  }
+
+  @keyframes hw-link-bars {
+    0% {
+      opacity: 0.25;
+    }
+    33% {
+      opacity: 0.55;
+    }
+    66% {
+      opacity: 0.85;
+    }
+    100% {
+      opacity: 0.35;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hw-link-preview,
+    .hw-link-preview-shell {
+      transition: none;
+    }
+
+    .hw-link-preview-ring,
+    .hw-link-preview-tx,
+    .hw-link-preview-sweep,
+    .hw-link-preview-signal-led,
+    .hw-link-preview-signal-pulse {
+      animation: none;
+    }
+
+    .hw-link-preview-ring {
+      opacity: calc(0.45 - var(--i) * 0.08);
+      transform: scale(calc(0.22 + var(--i) * 0.18));
+    }
+
+    .hw-link-preview-sweep {
+      display: none;
+    }
+  }

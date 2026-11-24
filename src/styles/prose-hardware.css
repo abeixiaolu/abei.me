@@ -527,8 +527,8 @@
 }
 
 /* Serein Dark：LCD 框内始终用深色语法色，不盖住 hardware 背景 */
-.hw-prose :where(pre.astro-code),
-.hw-prose :where(pre.astro-code) span {
+.hw-prose :where(pre.astro-code, pre.shiki),
+.hw-prose :where(pre.astro-code, pre.shiki) span {
   color: var(--shiki-dark, #dbd7ca);
   background-color: transparent !important;
   font-style: var(--shiki-dark-font-style);

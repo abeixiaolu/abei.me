@@ -6,7 +6,7 @@
 /** 左侧开标点：紧贴 code 前时不补空隙 */
 const OPEN_PUNCT = /[《「『【（〈([{“‘]$/u;
 /** 右侧收标点：紧贴 code 后时不补空隙 */
-const CLOSE_PUNCT = /^[。，、；：？！…—》」』】）〉\]\)\},.!?;:”’]/u;
+const CLOSE_PUNCT = /^[。，、；：？！…—》」』】）〉\]},.!?;:”’]/u;
 
 export function rehypeInlineCodeGap() {
   return (tree) => walk(tree);

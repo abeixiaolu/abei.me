@@ -10,7 +10,6 @@ import { ROOT, CDN_URL_PREFIX, isAllowedCdnUrl } from "./lib/image-cdn.mjs";
 
 const CONTENT_ROOTS = [
   path.join(ROOT, "src/content"),
-  path.join(ROOT, "src/pages"),
 ];
 
 const MD_IMAGE = /!\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;

@@ -1,3 +1,4 @@
-# Cloudflare Pages：首页进 Diary；其余深链走 SPA shell
+# Cloudflare Pages：首页进 Diary
+# SPA 深链由 Pages 内置 fallback 处理（无顶层 404.html 时自动回 index.html）
+# 勿写 /* → /index.html 200：会被判无限循环并忽略
 /              /diary/       301
-/*             /index.html   200

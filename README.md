@@ -20,4 +20,5 @@ pnpm serve    # 预览生产构建
 ## 部署
 
 Cloudflare Pages：构建命令 `pnpm build`，输出目录 `dist/client`。  
-`public/_redirects`：`/` → `/diary/`，其余 SPA fallback 到 `index.html`。
+`public/_redirects`：仅 `/` → `/diary/`；深链靠 Pages 内置 SPA fallback（不要写 `/* /index.html 200`）。  
+从 Astro SSG 迁过来后若线上仍像旧站，到 CF 控制台对该域名 **Purge Everything**（旧页曾带 `s-maxage=604800`）。

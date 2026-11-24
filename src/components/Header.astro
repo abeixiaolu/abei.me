@@ -129,7 +129,8 @@ const pathname = Astro.url.pathname;
     const slot = document.querySelector<HTMLElement>(
       '.hw-nav-links .hw-nav-link[aria-current="page"] .hw-led',
     );
-    if (!nav || !led || !slot) {
+    // 窄屏隐藏导航链时 rect 为 0，不要写入错误坐标
+    if (!nav || !led || !slot || slot.getClientRects().length === 0) {
       if (led) led.style.opacity = "0";
       return;
     }
@@ -238,6 +239,22 @@ const pathname = Astro.url.pathname;
   if (!window.__hwNavBound) {
     window.__hwNavBound = true;
     document.addEventListener("astro:page-load", boot);
+
+    // 窄屏 links 为 display:none，坐标会算成 0；放大回宽屏后需重定位 LED
+    let ledLayoutFrame = 0;
+    const relayoutLed = () => {
+      cancelAnimationFrame(ledLayoutFrame);
+      ledLayoutFrame = requestAnimationFrame(() => {
+        requestAnimationFrame(() => placeLed(false));
+      });
+    };
+    window.addEventListener("resize", relayoutLed, { passive: true });
+    matchMedia("(min-width: 641px)").addEventListener("change", relayoutLed);
+
+    const navLinks = document.querySelector(".hw-nav-links");
+    if (navLinks && typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(relayoutLed).observe(navLinks);
+    }
 
     document.addEventListener("click", (event) => {
       const target = event.target;

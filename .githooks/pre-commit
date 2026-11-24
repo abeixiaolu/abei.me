@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# 拦截正文中的非图床图片链接
+set -euo pipefail
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+NODE=""
+for c in \
+  "$HOME/.local/share/vite-plus/bin/node" \
+  "$HOME/.local/share/pnpm/node" \
+  /opt/homebrew/bin/node \
+  /usr/local/bin/node \
+  "$(command -v node 2>/dev/null || true)"; do
+  for cand in $c; do
+    if [[ -x "$cand" ]]; then
+      NODE="$cand"
+      break 2
+    fi
+  done
+done
+
+if [[ -z "$NODE" ]]; then
+  echo "pre-commit: 找不到 node，跳过图片检查" >&2
+  exit 0
+fi
+
+exec "$NODE" "$ROOT/scripts/check-content-images.mjs"

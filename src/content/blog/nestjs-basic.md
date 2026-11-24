@@ -6,7 +6,7 @@ date: 2025-04-19
 
 ## NestJS Lifecycle
 
-![NestJS Lifecycle](/imgs/nestjs-lifecycle.png)
+![NestJS Lifecycle](https://fastly.jsdelivr.net/gh/abeixiaolu/imgs@8529a5715c0ad6046c8ed31f8a4df1904cdfc606/w/49/49aed49c145bb53e.webp)
 
 1. Guards：保护路由的组件，用于权限验证和访问控制，在请求到达控制器之前进行身份验证和授权检查
    ```ts

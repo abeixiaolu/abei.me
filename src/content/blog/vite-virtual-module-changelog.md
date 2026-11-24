@@ -206,4 +206,4 @@ console.log(data); // 输出虚拟模块的内容
 
 最终实现的效果图如下：
 
-![changelog](/imgs/changelog.png)
+![changelog](https://fastly.jsdelivr.net/gh/abeixiaolu/imgs@2f6aa86e1c7f48834215b3283476eb520e339ec6/w/62/625e262376cce1af.webp)

@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "sync:images": "node scripts/sync-images.mjs",
-    "typora:upload": "node scripts/typora-upload.mjs",
-
-    "build": "node scripts/sync-images.mjs && IMAGE_CDN_STRICT=1 astro build",
+    "build": "astro build",
     "preview": "astro preview",
+    "typora:upload": "node scripts/typora-upload.mjs",
+    "check:images": "node scripts/check-content-images.mjs",
+    "prepare": "git config core.hooksPath .githooks",
     "format": "vp fmt",
     "lint": "vp lint",
     "format:check": "vp fmt --check"

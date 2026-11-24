@@ -98,7 +98,7 @@ stow .
 ```
 
 然后重启终端，打开ghostty，大功告成！
-![Beautiful Terminal](/imgs/my-terminal.png)
+![Beautiful Terminal](https://fastly.jsdelivr.net/gh/abeixiaolu/imgs@74361c5b180c75ba847a3b6abbd296e726358085/w/2b/2b4bfdcb602b4f5d.webp)
 
 ## Raycast配置
 
@@ -107,7 +107,7 @@ stow .
 - 快捷键设置为`command + space`，你需要提前在系统设置->键盘->快捷键->聚焦中取消掉Spotlight的快捷键。
 - 进入设置，在Advanced面板中开启Hyper Key。然后使用Hyper Key来作为快速切换键用于切换软件、窗口管理等。
 - 其它我基本没有做什么设置了，常用的功能有计算器、Quicklinks、剪贴板历史、窗口管理等。
-  ![Raycast Settings](/imgs/raycast-settings.png)
+  ![Raycast Settings](https://fastly.jsdelivr.net/gh/abeixiaolu/imgs@0fca21ffe5ccda08b19e6e0c92a034bc8aef4419/w/bc/bcfd6ff7b7224a3f.webp)
 
 ## 输入法配置
 

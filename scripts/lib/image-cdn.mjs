@@ -1,12 +1,12 @@
 /**
- * 图床共用：hash、无损 WebP、上传 GitHub、读写 image-map。
+ * Typora 图床：无损 WebP 上传到 GitHub（jsDelivr 加速）。
  * Token：GITHUB_TOKEN → .env → git credential（仅本地）。
  */
 
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { readFile, writeFile, mkdir, access } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Octokit } from "@octokit/rest";
@@ -18,12 +18,13 @@ export const ROOT = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "../..",
 );
-export const SRC_DIR = path.join(ROOT, "src/imgs");
-export const MAP_PATH = path.join(ROOT, "src/data/image-map.json");
 export const IMAGE_REPO = process.env.IMAGE_REPO || "abeixiaolu/imgs";
 export const CDN_HOST = (
   process.env.IMAGE_CDN_HOST || "https://fastly.jsdelivr.net"
 ).replace(/\/$/, "");
+
+/** 正文允许的图床 URL 前缀（commit hook 共用） */
+export const CDN_URL_PREFIX = `${CDN_HOST}/gh/${IMAGE_REPO}@`;
 
 export function remotePathFor(hash) {
   return `w/${hash.slice(0, 2)}/${hash}.webp`;
@@ -37,18 +38,8 @@ export function contentHash(buf) {
   return createHash("sha256").update(buf).digest("hex").slice(0, 16);
 }
 
-export async function loadMap() {
-  try {
-    return JSON.parse(await readFile(MAP_PATH, "utf8"));
-  } catch (err) {
-    if (err?.code === "ENOENT") return {};
-    throw err;
-  }
-}
-
-export async function saveMap(map) {
-  await mkdir(path.dirname(MAP_PATH), { recursive: true });
-  await writeFile(MAP_PATH, `${JSON.stringify(map, null, 2)}\n`);
+export function isAllowedCdnUrl(url) {
+  return typeof url === "string" && url.startsWith(CDN_URL_PREFIX);
 }
 
 async function readDotEnvToken() {
@@ -67,14 +58,10 @@ async function readDotEnvToken() {
 
 async function readGitCredentialToken() {
   try {
-    const { stdout } = await execFileAsync(
-      "git",
-      ["credential", "fill"],
-      {
-        input: "protocol=https\nhost=github.com\n\n",
-        cwd: ROOT,
-      },
-    );
+    const { stdout } = await execFileAsync("git", ["credential", "fill"], {
+      input: "protocol=https\nhost=github.com\n\n",
+      cwd: ROOT,
+    });
     const line = stdout.split("\n").find((l) => l.startsWith("password="));
     return line ? line.slice("password=".length) : null;
   } catch {
@@ -89,10 +76,6 @@ export async function resolveToken() {
     (await readGitCredentialToken()) ||
     null
   );
-}
-
-export function createOctokit(token) {
-  return new Octokit({ auth: token });
 }
 
 async function fileExists(octokit, owner, repo, remotePath) {
@@ -131,10 +114,9 @@ async function uploadWebp(octokit, owner, repo, remotePath, webpBuf) {
 }
 
 /**
- * 将本地图片字节上传为无损 WebP，返回 map 条目。
- * @param {{ buf: Buffer, logical?: string, log?: (msg: string) => void }} opts
+ * @param {{ buf: Buffer, log?: (msg: string) => void }} opts
  */
-export async function ensureUploaded({ buf, logical, log = () => {} }) {
+export async function ensureUploaded({ buf, log = () => {} }) {
   const token = await resolveToken();
   if (!token) {
     throw new Error(
@@ -147,7 +129,7 @@ export async function ensureUploaded({ buf, logical, log = () => {} }) {
 
   const hash = contentHash(buf);
   const remotePath = remotePathFor(hash);
-  const octokit = createOctokit(token);
+  const octokit = new Octokit({ auth: token });
 
   let commit;
   if (await fileExists(octokit, owner, repo, remotePath)) {
@@ -164,15 +146,5 @@ export async function ensureUploaded({ buf, logical, log = () => {} }) {
     path: remotePath,
     commit,
     cdn: cdnUrl(commit, remotePath),
-    ...(logical ? { logical } : {}),
   };
-}
-
-export async function pathExists(p) {
-  try {
-    await access(p);
-    return true;
-  } catch {
-    return false;
-  }
 }

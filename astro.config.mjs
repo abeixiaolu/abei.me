@@ -3,6 +3,7 @@ import { unified } from "@astrojs/markdown-remark";
 import tailwindcss from "@tailwindcss/vite";
 import { remarkAlert } from "remark-github-blockquote-alert";
 import { rehypeInlineCodeGap } from "./src/lib/rehype-inline-code-gap.mjs";
+import { rehypeEnableTaskCheckboxes } from "./src/lib/rehype-enable-task-checkboxes.mjs";
 import sereinDark from "./src/themes/serein-dark.json";
 import sereinLight from "./src/themes/serein-light.json";
 
@@ -26,7 +27,7 @@ export default defineConfig({
     },
     processor: unified({
       remarkPlugins: [remarkAlert],
-      rehypePlugins: [rehypeInlineCodeGap],
+      rehypePlugins: [rehypeInlineCodeGap, rehypeEnableTaskCheckboxes],
     }),
   },
   vite: {

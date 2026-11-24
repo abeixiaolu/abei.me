@@ -216,6 +216,8 @@
 .hw-prose :where(ol) {
   list-style: none;
   counter-reset: hw-ol;
+  /* 给「01.」留出槽位，避免序号比正文更突出、贴边被裁 */
+  padding-left: 2.5em;
 }
 
 .hw-prose :where(ol > li) {
@@ -273,6 +275,7 @@
   border-radius: var(--radius-kbd);
   corner-shape: squircle;
   transform: translateY(-50%);
+  cursor: pointer;
   background: linear-gradient(150deg, #454740, #282a24 60%, #1a1c17);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.28),

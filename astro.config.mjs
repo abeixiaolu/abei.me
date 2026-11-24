@@ -2,9 +2,12 @@ import { defineConfig } from "astro/config";
 import { unified } from "@astrojs/markdown-remark";
 import tailwindcss from "@tailwindcss/vite";
 import { remarkAlert } from "remark-github-blockquote-alert";
+import { rehypeImageCdn } from "./src/lib/rehype-image-cdn.mjs";
 import { rehypeInlineCodeGap } from "./src/lib/rehype-inline-code-gap.mjs";
+import { viteImgsDev } from "./src/lib/vite-imgs-dev.mjs";
 import sereinDark from "./src/themes/serein-dark.json";
 import sereinLight from "./src/themes/serein-light.json";
+
 
 export default defineConfig({
   site: "https://abei.me",
@@ -26,10 +29,11 @@ export default defineConfig({
     },
     processor: unified({
       remarkPlugins: [remarkAlert],
-      rehypePlugins: [rehypeInlineCodeGap],
+      rehypePlugins: [rehypeInlineCodeGap, rehypeImageCdn],
     }),
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), viteImgsDev()],
   },
 });
+

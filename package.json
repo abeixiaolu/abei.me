@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "sync:images": "node scripts/sync-images.mjs",
+    "typora:upload": "node scripts/typora-upload.mjs",
+
+    "build": "node scripts/sync-images.mjs && IMAGE_CDN_STRICT=1 astro build",
     "preview": "astro preview",
     "format": "vp fmt",
     "lint": "vp lint",
@@ -19,8 +22,10 @@
   "devDependencies": {
     "@egoist/tailwindcss-icons": "^1.9.2",
     "@iconify/json": "^2.2.560",
+    "@octokit/rest": "^22.0.1",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.5",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.3.5",
     "typescript": "^7.0.2",
     "vite": "catalog:",

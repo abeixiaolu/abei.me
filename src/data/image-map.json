@@ -1,0 +1,26 @@
+{
+  "/imgs/changelog.png": {
+    "hash": "625e262376cce1af",
+    "path": "w/62/625e262376cce1af.webp",
+    "commit": "2f6aa86e1c7f48834215b3283476eb520e339ec6",
+    "cdn": "https://fastly.jsdelivr.net/gh/abeixiaolu/imgs@2f6aa86e1c7f48834215b3283476eb520e339ec6/w/62/625e262376cce1af.webp"
+  },
+  "/imgs/my-terminal.png": {
+    "hash": "2b4bfdcb602b4f5d",
+    "path": "w/2b/2b4bfdcb602b4f5d.webp",
+    "commit": "74361c5b180c75ba847a3b6abbd296e726358085",
+    "cdn": "https://fastly.jsdelivr.net/gh/abeixiaolu/imgs@74361c5b180c75ba847a3b6abbd296e726358085/w/2b/2b4bfdcb602b4f5d.webp"
+  },
+  "/imgs/nestjs-lifecycle.png": {
+    "hash": "49aed49c145bb53e",
+    "path": "w/49/49aed49c145bb53e.webp",
+    "commit": "8529a5715c0ad6046c8ed31f8a4df1904cdfc606",
+    "cdn": "https://fastly.jsdelivr.net/gh/abeixiaolu/imgs@8529a5715c0ad6046c8ed31f8a4df1904cdfc606/w/49/49aed49c145bb53e.webp"
+  },
+  "/imgs/raycast-settings.png": {
+    "hash": "bcfd6ff7b7224a3f",
+    "path": "w/bc/bcfd6ff7b7224a3f.webp",
+    "commit": "0fca21ffe5ccda08b19e6e0c92a034bc8aef4419",
+    "cdn": "https://fastly.jsdelivr.net/gh/abeixiaolu/imgs@0fca21ffe5ccda08b19e6e0c92a034bc8aef4419/w/bc/bcfd6ff7b7224a3f.webp"
+  }
+}

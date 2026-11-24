@@ -654,16 +654,21 @@
   cursor: pointer;
 }
 
-/* —— 图片 / 脚注 —— */
+/* —— 图片 / 脚注：裸图，无阴影 / 边框 / 圆角 —— */
 .hw-prose :where(img) {
   max-width: 100%;
-  border-radius: var(--radius-card);
-  corner-shape: squircle;
-  box-shadow: var(--hw-raised);
+  height: auto;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .hw-prose :where(figure) {
-  margin: 1.35em 0;
+  margin: 0;
+  padding: 0;
 }
 
 .hw-prose :where(figcaption) {

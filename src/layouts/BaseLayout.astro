@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import Header from "../components/Header.astro";
+import NavHtmlCache from "../components/NavHtmlCache.astro";
 
 interface Props {
   title: string;
@@ -81,5 +82,6 @@ const pageReveal = {
         <p>© {new Date().getFullYear()} abei</p>
       </footer>
     </div>
+    <NavHtmlCache />
   </body>
 </html>

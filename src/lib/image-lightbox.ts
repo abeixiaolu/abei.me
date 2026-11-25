@@ -45,22 +45,34 @@ function ensureLightbox() {
     root.setAttribute('aria-modal', 'true');
     root.setAttribute('aria-label', '图片预览');
     root.innerHTML = `
-      <button type="button" class="hw-img-lightbox-nav hw-img-lightbox-prev" aria-label="上一张" hidden>
-        <span class="i-carbon-chevron-left hw-img-lightbox-nav-icon" aria-hidden="true"></span>
-      </button>
-      <button type="button" class="hw-img-lightbox-nav hw-img-lightbox-next" aria-label="下一张" hidden>
-        <span class="i-carbon-chevron-right hw-img-lightbox-nav-icon" aria-hidden="true"></span>
-      </button>
       <figure class="hw-img-lightbox-stage t-modal">
         <img class="hw-img-lightbox-img" alt="" decoding="async" />
         <figcaption class="hw-img-lightbox-caption" hidden></figcaption>
       </figure>
+      <div class="hw-img-lightbox-controls">
+        <button type="button" class="hw-img-lightbox-nav hw-img-lightbox-prev" aria-label="上一张" hidden>
+          <span class="i-carbon-chevron-left hw-img-lightbox-nav-icon" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="hw-img-lightbox-nav hw-img-lightbox-next" aria-label="下一张" hidden>
+          <span class="i-carbon-chevron-right hw-img-lightbox-nav-icon" aria-hidden="true"></span>
+        </button>
+      </div>
     `;
   }
 
   // 热更新：补齐导航 / 去掉旧关闭按钮
   root.querySelector('.hw-img-lightbox-close')?.remove();
-  if (!root.querySelector('.hw-img-lightbox-prev')) {
+  let controls = root.querySelector<HTMLElement>('.hw-img-lightbox-controls');
+  if (!controls) {
+    controls = document.createElement('div');
+    controls.className = 'hw-img-lightbox-controls';
+    root.append(controls);
+  }
+  // 把散落在根上的旧导航收入 controls（小屏排在 caption 下方）
+  root.querySelectorAll<HTMLElement>(':scope > .hw-img-lightbox-nav').forEach((btn) => {
+    controls!.append(btn);
+  });
+  if (!controls.querySelector('.hw-img-lightbox-prev')) {
     const prev = document.createElement('button');
     prev.type = 'button';
     prev.className = 'hw-img-lightbox-nav hw-img-lightbox-prev';
@@ -68,9 +80,9 @@ function ensureLightbox() {
     prev.hidden = true;
     prev.innerHTML =
       '<span class="i-carbon-chevron-left hw-img-lightbox-nav-icon" aria-hidden="true"></span>';
-    root.prepend(prev);
+    controls.append(prev);
   }
-  if (!root.querySelector('.hw-img-lightbox-next')) {
+  if (!controls.querySelector('.hw-img-lightbox-next')) {
     const next = document.createElement('button');
     next.type = 'button';
     next.className = 'hw-img-lightbox-nav hw-img-lightbox-next';
@@ -78,7 +90,7 @@ function ensureLightbox() {
     next.hidden = true;
     next.innerHTML =
       '<span class="i-carbon-chevron-right hw-img-lightbox-nav-icon" aria-hidden="true"></span>';
-    root.append(next);
+    controls.append(next);
   }
 
   root.tabIndex = -1;

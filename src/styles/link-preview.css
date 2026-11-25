@@ -159,8 +159,13 @@
 
   .hw-link-preview-sweep {
     position: absolute;
-    inset: -30%;
+    top: 50%;
+    left: 50%;
     z-index: 1;
+    /* 正方形且边长 ≥ 容器对角，旋转时扇形才不会被裁成三角 */
+    width: 142%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
     transform-origin: 50% 50%;
     background: conic-gradient(
       from 0deg at 50% 50%,
@@ -278,7 +283,7 @@
 
   @keyframes hw-link-sweep {
     to {
-      transform: rotate(360deg);
+      rotate: 360deg;
     }
   }
 

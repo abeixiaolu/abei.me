@@ -27,6 +27,21 @@ export default function Header() {
   onSettled(() => {
     let menuCloseTimer = 0;
     let ledLayoutFrame = 0;
+    let scrollFrame = 0;
+    let lastScrollY = window.scrollY;
+    let collapsed = false;
+
+    const navRoot = () => document.querySelector<HTMLElement>('.hw-nav');
+
+    const setCollapsed = (next: boolean) => {
+      if (collapsed === next) return;
+      if (next) {
+        const trigger = document.querySelector<HTMLElement>('[data-hw-menu-trigger]');
+        if (trigger?.getAttribute('aria-expanded') === 'true') return;
+      }
+      collapsed = next;
+      navRoot()?.toggleAttribute('data-collapsed', next);
+    };
 
     const syncCurrent = (path = location.pathname) => {
       document.querySelectorAll<HTMLAnchorElement>('.hw-nav-link').forEach((link) => {
@@ -104,6 +119,7 @@ export default function Header() {
     const openMenu = () => {
       const { trigger, popup } = menuParts();
       if (!trigger || !popup) return;
+      setCollapsed(false);
       window.clearTimeout(menuCloseTimer);
       popup.hidden = false;
       popup.classList.remove('is-closing');
@@ -136,6 +152,8 @@ export default function Header() {
 
     ctl.boot = (animate: boolean) => {
       closeMenu();
+      setCollapsed(false);
+      lastScrollY = window.scrollY;
       requestAnimationFrame(() => {
         syncCurrent();
         placeLed(animate);
@@ -150,6 +168,42 @@ export default function Header() {
         requestAnimationFrame(() => placeLed(false));
       });
     };
+
+    /** 下滑收起、上滑展开；近顶始终展开 */
+    const updateScrollNav = () => {
+      scrollFrame = 0;
+      if (preferReduceMotion()) {
+        setCollapsed(false);
+        lastScrollY = window.scrollY;
+        return;
+      }
+
+      const y = Math.max(0, window.scrollY);
+      const topShow = 64;
+      const deltaMin = 6;
+
+      if (y <= topShow) {
+        setCollapsed(false);
+        lastScrollY = y;
+        return;
+      }
+
+      const dy = y - lastScrollY;
+      if (dy > deltaMin) {
+        setCollapsed(true);
+        lastScrollY = y;
+      } else if (dy < -deltaMin) {
+        setCollapsed(false);
+        lastScrollY = y;
+      }
+    };
+
+    const onScroll = () => {
+      if (scrollFrame) return;
+      scrollFrame = requestAnimationFrame(updateScrollNav);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', relayoutLed, { passive: true });
     const mq = matchMedia('(min-width: 641px)');
     mq.addEventListener('change', relayoutLed);
@@ -207,12 +261,14 @@ export default function Header() {
     document.addEventListener('keydown', onKey);
 
     return () => {
+      window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', relayoutLed);
       mq.removeEventListener('change', relayoutLed);
       ro?.disconnect();
       document.removeEventListener('click', onClick);
       document.removeEventListener('keydown', onKey);
       window.clearTimeout(menuCloseTimer);
+      if (scrollFrame) cancelAnimationFrame(scrollFrame);
     };
   });
 

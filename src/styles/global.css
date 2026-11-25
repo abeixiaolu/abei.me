@@ -259,7 +259,9 @@ a {
 
 /* —— 亚克力导航条 —— */
 .hw-nav {
-  position: relative;
+  --nav-stick-top: max(12px, env(safe-area-inset-top));
+  position: sticky;
+  top: var(--nav-stick-top);
   z-index: 20;
   display: flex;
   align-items: center;
@@ -284,6 +286,24 @@ a {
     0 12px 28px -12px hsl(var(--shadow-color) / calc(0.28 * var(--shadow-k)));
   isolation: isolate;
   user-select: none;
+  transform: translateY(0);
+  opacity: 1;
+  transition:
+    transform var(--badge-slide-dur) var(--badge-slide-ease),
+    opacity var(--badge-slide-dur) var(--badge-slide-ease);
+}
+
+/* 下滑收起：向上移出并渐隐；上滑时去掉属性即向下渐显 */
+.hw-nav[data-collapsed] {
+  transform: translateY(calc(-100% - var(--nav-stick-top) - 8px));
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hw-nav {
+    transition: none;
+  }
 }
 
 .hw-nav::before {

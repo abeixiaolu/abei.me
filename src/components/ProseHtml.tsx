@@ -1,4 +1,5 @@
 import { createEffect } from 'solid-js';
+import { bindImageLightbox } from '../lib/image-lightbox';
 
 type Props = {
   html: string;
@@ -62,7 +63,12 @@ export default function ProseHtml(props: Props) {
     () => {
       const el = root;
       if (!el) return;
-      return bindImageLoading(el);
+      const unbindLoad = bindImageLoading(el);
+      const unbindZoom = bindImageLightbox(el);
+      return () => {
+        unbindLoad();
+        unbindZoom();
+      };
     },
   );
 

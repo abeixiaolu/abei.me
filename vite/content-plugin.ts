@@ -88,8 +88,14 @@ async function loadCollection(
   for (const file of files) {
     const raw = await fs.readFile(file, 'utf8');
     const { data, content } = matter(raw);
-    const parsed = postSchema.parse(data);
     const id = toId(file, base);
+    // Typora 新建常无 frontmatter：用文件名作 title，mtime 作 date
+    const stat = await fs.stat(file);
+    const parsed = postSchema.parse({
+      ...data,
+      title: typeof data.title === 'string' ? data.title : id,
+      date: data.date ?? stat.mtime,
+    });
     const html = await renderMarkdown(content);
     posts.push({
       id,

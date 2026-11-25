@@ -1,11 +1,10 @@
-import { Title } from '@solidjs/meta';
 import type { RouteProps } from '@solidjs/router';
 import { Show } from 'solid-js';
 import Breadcrumb from '../../components/Breadcrumb';
 import ProseHtml from '../../components/ProseHtml';
 import ReadingProgress from '../../components/ReadingProgress';
+import Seo from '../../components/Seo';
 import { content, formatDateLong, getPost } from '../../lib/content';
-import { pageTitle } from '../../lib/page-title';
 
 function slugOf(params: { slug?: string }) {
   return (params.slug ?? '').replace(/\/$/, '');
@@ -19,14 +18,19 @@ export default function DiaryPost(props: RouteProps<'/diary/*slug'>) {
       when={post()}
       fallback={
         <section>
-          <Title>{pageTitle('Not Found')}</Title>
+          <Seo title="Not Found" path="/diary/" />
           <p class="font-mono text-sm text-dim">日记不存在。</p>
         </section>
       }
     >
       {(p) => (
         <>
-          <Title>{pageTitle(p().title)}</Title>
+          <Seo
+            title={p().title}
+            description={p().description}
+            path={`/diary/${p().id}/`}
+            type="article"
+          />
           <ReadingProgress />
           <article>
             <header class="hw-article-head">

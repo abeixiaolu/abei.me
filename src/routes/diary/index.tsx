@@ -1,9 +1,8 @@
-import { Title } from '@solidjs/meta';
 import { For } from 'solid-js';
 import ItemList from '../../components/ItemList';
+import Seo from '../../components/Seo';
 import StnHeader from '../../components/StnHeader';
 import { content, formatDateShort, listPosts, padIndex } from '../../lib/content';
-import { pageTitle } from '../../lib/page-title';
 
 const posts = listPosts(content.diary);
 const lede = 'Field notes and daily logs.';
@@ -12,7 +11,7 @@ const meta = `MODE ${padIndex(posts.length)}`;
 export default function DiaryIndex() {
   return (
     <section>
-      <Title>{pageTitle('Diary')}</Title>
+      <Seo title="Diary" description={lede} path="/diary/" />
       <StnHeader caption="Archive" meta={meta} title="Diary" lede={lede} />
 
       <ItemList class="mt-8">

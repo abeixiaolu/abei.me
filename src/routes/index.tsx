@@ -1,6 +1,6 @@
-import { Title } from '@solidjs/meta';
 import { onSettled } from 'solid-js';
 import { useNavigate } from '@solidjs/router';
+import Seo from '../components/Seo';
 
 /** 首页 → Diary（与 CF _redirects 一致） */
 export default function Home() {
@@ -10,5 +10,5 @@ export default function Home() {
     navigate('/diary/', { replace: true });
   });
 
-  return <Title>abei</Title>;
+  return <Seo title="abei" path="/" />;
 }

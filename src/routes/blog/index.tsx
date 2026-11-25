@@ -1,9 +1,8 @@
-import { Title } from '@solidjs/meta';
 import { For } from 'solid-js';
 import ItemList from '../../components/ItemList';
+import Seo from '../../components/Seo';
 import StnHeader from '../../components/StnHeader';
 import { content, formatDateShort, listPosts, padIndex } from '../../lib/content';
-import { pageTitle } from '../../lib/page-title';
 
 const posts = listPosts(content.blog);
 const lede = 'Notes, tutorials, and asides.';
@@ -12,7 +11,7 @@ const meta = `MODE ${padIndex(posts.length)}`;
 export default function BlogIndex() {
   return (
     <section>
-      <Title>{pageTitle('Blog')}</Title>
+      <Seo title="Blog" description={lede} path="/blog/" />
       <StnHeader caption="Archive" meta={meta} title="Blog" lede={lede} />
 
       <ItemList class="mt-8">

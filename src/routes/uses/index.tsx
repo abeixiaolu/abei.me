@@ -1,15 +1,18 @@
-import { Title } from '@solidjs/meta';
 import ProseHtml from '../../components/ProseHtml';
+import Seo from '../../components/Seo';
 import StnHeader from '../../components/StnHeader';
 import { content } from '../../lib/content';
-import { pageTitle } from '../../lib/page-title';
 
 const page = content.pages.uses;
 
 export default function UsesPage() {
   return (
     <section>
-      <Title>{pageTitle(page.title)}</Title>
+      <Seo
+        title={page.title}
+        description={page.description ?? page.lede}
+        path="/uses/"
+      />
       <StnHeader
         caption={page.caption}
         meta={page.meta}

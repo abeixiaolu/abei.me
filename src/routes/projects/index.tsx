@@ -1,9 +1,8 @@
-import { Title } from '@solidjs/meta';
 import { For } from 'solid-js';
 import Badge from '../../components/Badge';
+import Seo from '../../components/Seo';
 import StnHeader from '../../components/StnHeader';
 import { content, padIndex, type Project } from '../../lib/content';
-import { pageTitle } from '../../lib/page-title';
 
 const page = content.pages.projects;
 const groups = page.groups ?? [];
@@ -31,7 +30,11 @@ function resolveLinks(project: Project) {
 export default function ProjectsPage() {
   return (
     <section>
-      <Title>{pageTitle(page.title)}</Title>
+      <Seo
+        title={page.title}
+        description={page.description ?? page.lede}
+        path="/projects/"
+      />
       <StnHeader
         caption={page.caption}
         meta={headerMeta}

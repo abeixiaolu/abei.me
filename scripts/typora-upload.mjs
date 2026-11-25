@@ -5,7 +5,7 @@
  */
 
 import { readFile } from "node:fs/promises";
-import { ensureUploaded } from "./lib/image-cdn.mjs";
+import { ensureUploaded, logUploadInvocation } from "./lib/image-cdn.mjs";
 
 function log(...args) {
   console.error(...args);
@@ -27,6 +27,9 @@ async function main() {
     process.exit(1);
   }
 
+  await logUploadInvocation(paths);
+
+  // 单进程内串行；跨进程靠 GitHub 409/422 重试（不用文件锁，避免 Typora 放弃等待中的进程）
   const urls = [];
   for (const p of paths) {
     urls.push(await uploadOne(p));

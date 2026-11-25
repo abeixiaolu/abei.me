@@ -23,6 +23,9 @@ app.config.timestamp_*.js
 
 # Temp
 gitignore
+.typora-upload.lock
+.typora-upload.log
+.typora-upload-debug.log
 
 # System Files
 .DS_Store

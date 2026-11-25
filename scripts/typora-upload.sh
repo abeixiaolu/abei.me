@@ -4,6 +4,7 @@
 #
 # 插入时选「上传图像」：压缩上传图床，正文只留 CDN 链接（不归档原图）。
 # Token 优先读项目 .env 的 GITHUB_TOKEN。
+# 调试：每次调用追加写入 .typora-upload-debug.log（stdout/stderr/耗时/退出码）
 
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -26,7 +27,6 @@ for c in \
   done
 done
 
-
 if [[ -z "$NODE" ]]; then
   echo "Upload Failed: node not found" >&2
   exit 1
@@ -40,4 +40,31 @@ if [[ -f "$ROOT/.env" ]]; then
   set +a
 fi
 
-exec "$NODE" "$ROOT/scripts/typora-upload.mjs" "$@"
+DEBUG_LOG="$ROOT/.typora-upload-debug.log"
+OUT="$(mktemp -t typora-up-out)"
+ERR="$(mktemp -t typora-up-err)"
+cleanup() { rm -f "$OUT" "$ERR"; }
+trap cleanup EXIT
+
+START_MS="$(python3 -c 'import time; print(int(time.time()*1000))' 2>/dev/null || echo 0)"
+set +e
+"$NODE" "$ROOT/scripts/typora-upload.mjs" "$@" >"$OUT" 2>"$ERR"
+CODE=$?
+set -e
+END_MS="$(python3 -c 'import time; print(int(time.time()*1000))' 2>/dev/null || echo 0)"
+DUR=$((END_MS - START_MS))
+
+{
+  echo "---- $(date -u +%Y-%m-%dT%H:%M:%SZ) pid=$$ code=$CODE ${DUR}ms ----"
+  echo "argv: $*"
+  echo "stdout:"
+  cat "$OUT"
+  echo "stderr:"
+  cat "$ERR"
+  echo
+} >>"$DEBUG_LOG" 2>/dev/null || true
+
+# Typora 只读 stdout；stderr 也回显方便「验证上传」面板
+cat "$OUT"
+cat "$ERR" >&2
+exit "$CODE"

@@ -107,7 +107,9 @@
 }
 
 .hw-film-card .hw-img-frame > img {
-  transition: transform 220ms var(--ease-settle), opacity 0.26s ease-out;
+  transition:
+    transform 220ms var(--ease-settle),
+    opacity 0.26s ease-out;
   transform-origin: center;
 }
 
@@ -253,7 +255,9 @@
   box-shadow:
     inset 0 0 0 1px #d2d2cc,
     0 2px 0 #bdbdb7;
-  transition: translate 60ms, box-shadow 60ms;
+  transition:
+    translate 60ms,
+    box-shadow 60ms;
 }
 
 .hw-film-album:hover {

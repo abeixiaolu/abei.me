@@ -54,14 +54,17 @@ function toHex([r, g, b]) {
   return `#${[r, g, b].map((n) => n.toString(16).padStart(2, '0')).join('')}`;
 }
 
-/** 图床长边上限；原片（如 X100VI 40MP）超出则缩小，避免无损 WebP 撑爆 GitHub Contents API */
+/** 图床长边上限；原片（如 X100VI 40MP）超出则缩小，避免撑爆 GitHub Contents API */
 const WEB_MAX_EDGE = 2560;
-/** 超过此体积也走有损，避免小尺寸但超大文件 */
-const LOSSLESS_MAX_BYTES = 2.5 * 1024 * 1024;
+/** 像素太多时跳过无损候选（编码极慢且几乎必负于有损） */
+const LOSSLESS_MAX_PIXELS = 2560 * 2560;
 
 /**
+ * 智能压缩：无损与高质有损都编码，取更小者。
+ * 「画质无损」优先，但若无损体积更大（常见于 JPEG 源）则改用有损，避免越压越大。
+ *
  * @param {Buffer} buf
- * @returns {Promise<{ w: number, h: number, color: string, lqip: string, webp: Buffer }>}
+ * @returns {Promise<{ w: number, h: number, color: string, lqip: string, webp: Buffer, encoding: 'lossless' | 'lossy' }>}
  */
 export async function buildImageAssets(buf) {
   const meta = await sharp(buf, { failOn: 'none' }).rotate().metadata();
@@ -70,10 +73,8 @@ export async function buildImageAssets(buf) {
   }
 
   const longEdge = Math.max(meta.width, meta.height);
-  const useLossless = longEdge <= WEB_MAX_EDGE && buf.length <= LOSSLESS_MAX_BYTES;
-
   const pipeline = sharp(buf, { failOn: 'none' }).rotate();
-  if (!useLossless && longEdge > WEB_MAX_EDGE) {
+  if (longEdge > WEB_MAX_EDGE) {
     pipeline.resize({
       width: meta.width >= meta.height ? WEB_MAX_EDGE : undefined,
       height: meta.height > meta.width ? WEB_MAX_EDGE : undefined,
@@ -81,18 +82,33 @@ export async function buildImageAssets(buf) {
     });
   }
 
-  const webpPromise = useLossless
+  const outW = longEdge > WEB_MAX_EDGE
+    ? meta.width >= meta.height
+      ? WEB_MAX_EDGE
+      : Math.round((meta.width / meta.height) * WEB_MAX_EDGE)
+    : meta.width;
+  const outH = longEdge > WEB_MAX_EDGE
+    ? meta.height > meta.width
+      ? WEB_MAX_EDGE
+      : Math.round((meta.height / meta.width) * WEB_MAX_EDGE)
+    : meta.height;
+  const tryLossless = outW * outH <= LOSSLESS_MAX_PIXELS;
+
+  const lossyPromise = pipeline
+    .clone()
+    .webp({ quality: 90, effort: 4 })
+    .toBuffer({ resolveWithObject: true });
+
+  const losslessPromise = tryLossless
     ? pipeline
         .clone()
         .webp({ lossless: true })
         .toBuffer({ resolveWithObject: true })
-    : pipeline
-        .clone()
-        .webp({ quality: 88, effort: 4 })
-        .toBuffer({ resolveWithObject: true });
+    : null;
 
-  const [webpOut, lqipBuf, thumb] = await Promise.all([
-    webpPromise,
+  const [lossyOut, losslessOut, lqipBuf, thumb] = await Promise.all([
+    lossyPromise,
+    losslessPromise,
     pipeline
       .clone()
       .resize({ width: 32, withoutEnlargement: true })
@@ -105,14 +121,21 @@ export async function buildImageAssets(buf) {
       .toBuffer({ resolveWithObject: true }),
   ]);
 
+  /** @type {{ data: Buffer, info: { width?: number, height?: number }, encoding: 'lossless' | 'lossy' }} */
+  let chosen = { ...lossyOut, encoding: 'lossy' };
+  if (losslessOut && losslessOut.data.length <= lossyOut.data.length) {
+    chosen = { ...losslessOut, encoding: 'lossless' };
+  }
+
   const color = toHex([thumb.data[0], thumb.data[1], thumb.data[2]]);
 
   return {
-    w: webpOut.info.width || meta.width,
-    h: webpOut.info.height || meta.height,
+    w: chosen.info.width || outW,
+    h: chosen.info.height || outH,
     color,
     lqip: `data:image/webp;base64,${lqipBuf.toString('base64')}`,
-    webp: webpOut.data,
+    webp: chosen.data,
+    encoding: chosen.encoding,
   };
 }
 

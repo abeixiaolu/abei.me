@@ -1,4 +1,4 @@
-/** 正文图片点击放大（灯箱）+ 同文切换 */
+/** 正文 / Film 图片灯箱：底部缩略图条切换，可滚动时显示边缘阴影 */
 
 type ZoomTarget = {
   src: string;
@@ -45,52 +45,59 @@ function ensureLightbox() {
     root.setAttribute('aria-modal', 'true');
     root.setAttribute('aria-label', '图片预览');
     root.innerHTML = `
+      <div class="hw-img-lightbox-backdrop" aria-hidden="true">
+        <img class="hw-img-lightbox-backdrop-img" alt="" decoding="async" />
+      </div>
+      <button type="button" class="hw-img-lightbox-close" aria-label="关闭">
+        <span class="i-carbon-close hw-img-lightbox-close-icon" aria-hidden="true"></span>
+      </button>
       <figure class="hw-img-lightbox-stage t-modal">
         <img class="hw-img-lightbox-img" alt="" decoding="async" />
         <figcaption class="hw-img-lightbox-caption" hidden></figcaption>
       </figure>
-      <div class="hw-img-lightbox-controls">
-        <button type="button" class="hw-img-lightbox-nav hw-img-lightbox-prev" aria-label="上一张" hidden>
-          <span class="i-carbon-chevron-left hw-img-lightbox-nav-icon" aria-hidden="true"></span>
-        </button>
-        <button type="button" class="hw-img-lightbox-nav hw-img-lightbox-next" aria-label="下一张" hidden>
-          <span class="i-carbon-chevron-right hw-img-lightbox-nav-icon" aria-hidden="true"></span>
-        </button>
+      <div class="hw-img-lightbox-strip" hidden>
+        <div class="hw-img-lightbox-strip-scroller" role="list"></div>
       </div>
     `;
   }
 
-  // 热更新：补齐导航 / 去掉旧关闭按钮
-  root.querySelector('.hw-img-lightbox-close')?.remove();
-  let controls = root.querySelector<HTMLElement>('.hw-img-lightbox-controls');
-  if (!controls) {
-    controls = document.createElement('div');
-    controls.className = 'hw-img-lightbox-controls';
-    root.append(controls);
+  // 热更新：去掉旧左右键，补齐模糊背景 / 关闭 / 缩略图条
+  root.querySelector('.hw-img-lightbox-controls')?.remove();
+  root.querySelectorAll('.hw-img-lightbox-nav').forEach((el) => el.remove());
+
+  if (!root.querySelector('.hw-img-lightbox-backdrop')) {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'hw-img-lightbox-backdrop';
+    backdrop.setAttribute('aria-hidden', 'true');
+    backdrop.innerHTML =
+      '<img class="hw-img-lightbox-backdrop-img" alt="" decoding="async" />';
+    root.prepend(backdrop);
   }
-  // 把散落在根上的旧导航收入 controls（小屏排在 caption 下方）
-  root.querySelectorAll<HTMLElement>(':scope > .hw-img-lightbox-nav').forEach((btn) => {
-    controls!.append(btn);
-  });
-  if (!controls.querySelector('.hw-img-lightbox-prev')) {
-    const prev = document.createElement('button');
-    prev.type = 'button';
-    prev.className = 'hw-img-lightbox-nav hw-img-lightbox-prev';
-    prev.setAttribute('aria-label', '上一张');
-    prev.hidden = true;
-    prev.innerHTML =
-      '<span class="i-carbon-chevron-left hw-img-lightbox-nav-icon" aria-hidden="true"></span>';
-    controls.append(prev);
+
+  let closeBtn = root.querySelector<HTMLButtonElement>('.hw-img-lightbox-close');
+  if (!closeBtn) {
+    closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'hw-img-lightbox-close';
+    closeBtn.setAttribute('aria-label', '关闭');
+    closeBtn.innerHTML =
+      '<span class="i-carbon-close hw-img-lightbox-close-icon" aria-hidden="true"></span>';
+    root.append(closeBtn);
   }
-  if (!controls.querySelector('.hw-img-lightbox-next')) {
-    const next = document.createElement('button');
-    next.type = 'button';
-    next.className = 'hw-img-lightbox-nav hw-img-lightbox-next';
-    next.setAttribute('aria-label', '下一张');
-    next.hidden = true;
-    next.innerHTML =
-      '<span class="i-carbon-chevron-right hw-img-lightbox-nav-icon" aria-hidden="true"></span>';
-    controls.append(next);
+
+  let strip = root.querySelector<HTMLElement>('.hw-img-lightbox-strip');
+  if (!strip) {
+    strip = document.createElement('div');
+    strip.className = 'hw-img-lightbox-strip';
+    strip.hidden = true;
+    strip.innerHTML = '<div class="hw-img-lightbox-strip-scroller" role="list"></div>';
+    root.append(strip);
+  }
+  if (!strip.querySelector('.hw-img-lightbox-strip-scroller')) {
+    const scroller = document.createElement('div');
+    scroller.className = 'hw-img-lightbox-strip-scroller';
+    scroller.setAttribute('role', 'list');
+    strip.append(scroller);
   }
 
   root.tabIndex = -1;
@@ -103,6 +110,7 @@ let closeTimer = 0;
 let lastFocus: HTMLElement | null = null;
 let scrollLocked = false;
 let overlayBound = false;
+let stripScrollBound = false;
 let gallery: ZoomTarget[] = [];
 let galleryIndex = 0;
 
@@ -135,16 +143,89 @@ function collectGallery(proseRoot: HTMLElement): ZoomTarget[] {
   return items;
 }
 
+function stripEls(root: HTMLElement) {
+  const strip = root.querySelector<HTMLElement>('.hw-img-lightbox-strip');
+  const scroller = root.querySelector<HTMLElement>('.hw-img-lightbox-strip-scroller');
+  return { strip, scroller };
+}
+
+/** 根据滚动位置切换左右可滚动阴影 */
+function syncStripShadows(root: HTMLElement) {
+  const { strip, scroller } = stripEls(root);
+  if (!strip || !scroller || strip.hidden) return;
+
+  const max = scroller.scrollWidth - scroller.clientWidth;
+  const left = scroller.scrollLeft;
+  const epsilon = 2;
+
+  strip.toggleAttribute('data-can-scroll-start', max > epsilon && left > epsilon);
+  strip.toggleAttribute('data-can-scroll-end', max > epsilon && left < max - epsilon);
+}
+
+function rebuildStrip(root: HTMLElement) {
+  const { strip, scroller } = stripEls(root);
+  if (!strip || !scroller) return;
+
+  scroller.replaceChildren();
+
+  if (gallery.length <= 1) {
+    strip.hidden = true;
+    strip.removeAttribute('data-can-scroll-start');
+    strip.removeAttribute('data-can-scroll-end');
+    return;
+  }
+
+  strip.hidden = false;
+  gallery.forEach((item, index) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'hw-img-lightbox-thumb';
+    btn.setAttribute('role', 'listitem');
+    btn.setAttribute('aria-label', item.alt.trim() || `第 ${index + 1} 张`);
+    btn.dataset.index = String(index);
+
+    const img = document.createElement('img');
+    img.src = item.src;
+    img.alt = '';
+    img.decoding = 'async';
+    img.draggable = false;
+    img.addEventListener('load', () => syncStripShadows(root), { once: true });
+    btn.append(img);
+    scroller.append(btn);
+  });
+}
+
+function syncStripActive(root: HTMLElement) {
+  const { scroller } = stripEls(root);
+  if (!scroller) return;
+
+  scroller.querySelectorAll<HTMLElement>('.hw-img-lightbox-thumb').forEach((thumb) => {
+    const on = Number(thumb.dataset.index) === galleryIndex;
+    thumb.toggleAttribute('data-active', on);
+    thumb.setAttribute('aria-current', on ? 'true' : 'false');
+    if (on) {
+      thumb.scrollIntoView({
+        inline: 'nearest',
+        block: 'nearest',
+        behavior: preferReduceMotion() ? 'auto' : 'smooth',
+      });
+    }
+  });
+
+  requestAnimationFrame(() => syncStripShadows(root));
+}
+
 function syncSlide(root: HTMLElement) {
   const img = root.querySelector<HTMLImageElement>('.hw-img-lightbox-img');
+  const backdrop = root.querySelector<HTMLImageElement>('.hw-img-lightbox-backdrop-img');
   const caption = root.querySelector<HTMLElement>('.hw-img-lightbox-caption');
-  const prev = root.querySelector<HTMLButtonElement>('.hw-img-lightbox-prev');
-  const next = root.querySelector<HTMLButtonElement>('.hw-img-lightbox-next');
   const item = gallery[galleryIndex];
   if (!img || !caption || !item) return;
 
   img.src = item.src;
   img.alt = item.alt;
+  if (backdrop) backdrop.src = item.src;
+
   const alt = item.alt.trim();
   if (alt) {
     caption.hidden = false;
@@ -155,12 +236,11 @@ function syncSlide(root: HTMLElement) {
   }
 
   const multi = gallery.length > 1;
-  if (prev) prev.hidden = !multi;
-  if (next) next.hidden = !multi;
   root.setAttribute(
     'aria-label',
     multi ? `图片预览 ${galleryIndex + 1} / ${gallery.length}` : '图片预览',
   );
+  syncStripActive(root);
 }
 
 function showAt(index: number) {
@@ -173,6 +253,15 @@ function showAt(index: number) {
 function step(delta: number) {
   if (gallery.length <= 1) return;
   showAt(galleryIndex + delta);
+}
+
+/** 外部图集打开灯箱（Film 等） */
+export function openImageLightbox(
+  items: ZoomTarget[],
+  index: number,
+  trigger?: HTMLElement | null,
+) {
+  openLightbox(items, index, trigger);
 }
 
 function openLightbox(
@@ -192,6 +281,7 @@ function openLightbox(
   lastFocus = trigger ?? (document.activeElement as HTMLElement | null);
   gallery = items;
   galleryIndex = Math.min(Math.max(0, index), items.length - 1);
+  rebuildStrip(root);
   syncSlide(root);
 
   root.hidden = false;
@@ -203,6 +293,7 @@ function openLightbox(
   root.classList.add('is-open');
   stage.classList.add('is-open');
   root.focus({ preventScroll: true });
+  requestAnimationFrame(() => syncStripShadows(root));
 }
 
 function closeLightbox() {
@@ -211,6 +302,8 @@ function closeLightbox() {
 
   const stage = root.querySelector<HTMLElement>('.hw-img-lightbox-stage');
   const img = root.querySelector<HTMLImageElement>('.hw-img-lightbox-img');
+  const { strip, scroller } = stripEls(root);
+
   root.classList.remove('is-open');
   root.classList.add('is-closing');
   stage?.classList.remove('is-open');
@@ -224,6 +317,14 @@ function closeLightbox() {
     if (img) {
       img.removeAttribute('src');
       img.alt = '';
+    }
+    const backdrop = root.querySelector<HTMLImageElement>('.hw-img-lightbox-backdrop-img');
+    backdrop?.removeAttribute('src');
+    scroller?.replaceChildren();
+    if (strip) {
+      strip.hidden = true;
+      strip.removeAttribute('data-can-scroll-start');
+      strip.removeAttribute('data-can-scroll-end');
     }
     gallery = [];
     galleryIndex = 0;
@@ -241,16 +342,28 @@ function bindOverlayOnce(root: HTMLElement) {
   root.addEventListener('click', (event) => {
     const target = event.target;
     if (!(target instanceof Element)) return;
-    if (target.closest('.hw-img-lightbox-prev')) {
+
+    if (target.closest('.hw-img-lightbox-close')) {
       event.preventDefault();
-      step(-1);
+      closeLightbox();
       return;
     }
-    if (target.closest('.hw-img-lightbox-next')) {
+
+    const thumb = target.closest<HTMLElement>('.hw-img-lightbox-thumb');
+    if (thumb && root.contains(thumb)) {
       event.preventDefault();
-      step(1);
+      event.stopPropagation();
+      const index = Number(thumb.dataset.index);
+      if (Number.isFinite(index)) showAt(index);
       return;
     }
+
+    // 点缩略图条空白不关闭
+    if (target.closest('.hw-img-lightbox-strip')) {
+      event.stopPropagation();
+      return;
+    }
+
     closeLightbox();
   });
 
@@ -272,6 +385,23 @@ function bindOverlayOnce(root: HTMLElement) {
       step(1);
     }
   });
+
+  if (!stripScrollBound) {
+    stripScrollBound = true;
+    const onScrollOrResize = () => syncStripShadows(root);
+    root.addEventListener(
+      'scroll',
+      (event) => {
+        if ((event.target as Element | null)?.classList?.contains(
+          'hw-img-lightbox-strip-scroller',
+        )) {
+          syncStripShadows(root);
+        }
+      },
+      true,
+    );
+    window.addEventListener('resize', onScrollOrResize);
+  }
 }
 
 /** 在 prose 根节点上绑定图片点击放大；返回清理函数 */

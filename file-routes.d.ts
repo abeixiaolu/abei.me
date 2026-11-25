@@ -65,6 +65,18 @@ declare module "virtual:file-routes" {
       $$route?: undefined;
     },
     {
+      path: "/film/*slug";
+      page: true;
+      $component: FileRouteLazyRef<Pick<typeof import("./src/routes/film/[...slug]"), Extract<"default", keyof typeof import("./src/routes/film/[...slug]")>>>;
+      $$route?: undefined;
+    },
+    {
+      path: "/film/";
+      page: true;
+      $component: FileRouteLazyRef<Pick<typeof import("./src/routes/film/index"), Extract<"default", keyof typeof import("./src/routes/film/index")>>>;
+      $$route?: undefined;
+    },
+    {
       path: "/";
       page: true;
       $component: FileRouteLazyRef<Pick<typeof import("./src/routes/index"), Extract<"default", keyof typeof import("./src/routes/index")>>>;
@@ -112,6 +124,14 @@ declare module "virtual:file-routes" {
       children?: undefined;
     },
     {
+      path: "/film/";
+      id: "/film/";
+      page: true;
+      $component: FileRouteLazyRef<Pick<typeof import("./src/routes/film/index"), Extract<"default", keyof typeof import("./src/routes/film/index")>>>;
+      $$route?: undefined;
+      children?: undefined;
+    },
+    {
       path: "/uses/";
       id: "/uses/";
       page: true;
@@ -140,6 +160,14 @@ declare module "virtual:file-routes" {
       id: "/blog/*slug";
       page: true;
       $component: FileRouteLazyRef<Pick<typeof import("./src/routes/blog/[...slug]"), Extract<"default", keyof typeof import("./src/routes/blog/[...slug]")>>>;
+      $$route?: undefined;
+      children?: undefined;
+    },
+    {
+      path: "/film/*slug";
+      id: "/film/*slug";
+      page: true;
+      $component: FileRouteLazyRef<Pick<typeof import("./src/routes/film/[...slug]"), Extract<"default", keyof typeof import("./src/routes/film/[...slug]")>>>;
       $$route?: undefined;
       children?: undefined;
     },

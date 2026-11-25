@@ -54,23 +54,52 @@ function toHex([r, g, b]) {
   return `#${[r, g, b].map((n) => n.toString(16).padStart(2, '0')).join('')}`;
 }
 
+/** 图床长边上限；原片（如 X100VI 40MP）超出则缩小，避免无损 WebP 撑爆 GitHub Contents API */
+const WEB_MAX_EDGE = 2560;
+/** 超过此体积也走有损，避免小尺寸但超大文件 */
+const LOSSLESS_MAX_BYTES = 2.5 * 1024 * 1024;
+
 /**
  * @param {Buffer} buf
  * @returns {Promise<{ w: number, h: number, color: string, lqip: string, webp: Buffer }>}
  */
 export async function buildImageAssets(buf) {
-  const meta = await sharp(buf, { failOn: 'none' }).metadata();
+  const meta = await sharp(buf, { failOn: 'none' }).rotate().metadata();
   if (!meta.width || !meta.height) {
     throw new Error('无法读取图片尺寸');
   }
 
-  const [webp, lqipBuf, thumb] = await Promise.all([
-    sharp(buf, { failOn: 'none' }).webp({ lossless: true }).toBuffer(),
-    sharp(buf, { failOn: 'none' })
+  const longEdge = Math.max(meta.width, meta.height);
+  const useLossless = longEdge <= WEB_MAX_EDGE && buf.length <= LOSSLESS_MAX_BYTES;
+
+  const pipeline = sharp(buf, { failOn: 'none' }).rotate();
+  if (!useLossless && longEdge > WEB_MAX_EDGE) {
+    pipeline.resize({
+      width: meta.width >= meta.height ? WEB_MAX_EDGE : undefined,
+      height: meta.height > meta.width ? WEB_MAX_EDGE : undefined,
+      withoutEnlargement: true,
+    });
+  }
+
+  const webpPromise = useLossless
+    ? pipeline
+        .clone()
+        .webp({ lossless: true })
+        .toBuffer({ resolveWithObject: true })
+    : pipeline
+        .clone()
+        .webp({ quality: 88, effort: 4 })
+        .toBuffer({ resolveWithObject: true });
+
+  const [webpOut, lqipBuf, thumb] = await Promise.all([
+    webpPromise,
+    pipeline
+      .clone()
       .resize({ width: 32, withoutEnlargement: true })
       .webp({ quality: 20, effort: 4 })
       .toBuffer(),
-    sharp(buf, { failOn: 'none' })
+    pipeline
+      .clone()
       .resize(1, 1, { fit: 'cover' })
       .raw()
       .toBuffer({ resolveWithObject: true }),
@@ -79,11 +108,11 @@ export async function buildImageAssets(buf) {
   const color = toHex([thumb.data[0], thumb.data[1], thumb.data[2]]);
 
   return {
-    w: meta.width,
-    h: meta.height,
+    w: webpOut.info.width || meta.width,
+    h: webpOut.info.height || meta.height,
     color,
     lqip: `data:image/webp;base64,${lqipBuf.toString('base64')}`,
-    webp,
+    webp: webpOut.data,
   };
 }
 

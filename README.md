@@ -14,6 +14,7 @@ pnpm serve    # 预览生产构建
 ## 内容
 
 - 日记 / 博客：`src/content/diary`、`src/content/blog`
+- 胶片：`src/content/film`（一专辑一篇；正文 `![alt](url "胶片名")`）
 - 静态页：`src/content/pages/{uses,projects}.md`
 - 构建期经 `virtual:site-content` 编译为 HTML（remark / rehype / Shiki）
 

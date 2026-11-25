@@ -658,11 +658,11 @@
 }
 
 /*
- * 对齐 media-delivery / Twitter 一类写法：
+ * 对齐 media-delivery / Twitter 一类写法（Prose / Film 共用）：
  * 容器 aspect-ratio + 主色/LQIP 背景 → ::after 模糊预览 → 高清图 opacity 淡入。
  * img 留在文档流（width:100%; height:auto），靠 width/height 属性保留比例，避免 CLS。
  */
-.hw-prose :where(.hw-img-frame) {
+.hw-img-frame {
   display: block;
   position: relative;
   width: 100%;
@@ -670,7 +670,7 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: var(--ph-color, color-mix(in oklab, var(--hw-paper) 88%, var(--hw-ink)));
+  background-color: var(--ph-color, color-mix(in oklab, var(--color-paper) 88%, var(--color-ink)));
   background-image: var(--lqip, none);
   background-size: cover;
   background-position: center;
@@ -678,7 +678,7 @@
   cursor: zoom-in;
 }
 
-.hw-prose :where(.hw-img-frame[data-lqip])::after {
+.hw-img-frame[data-lqip]::after {
   content: "";
   position: absolute;
   inset: -6%;
@@ -701,7 +701,7 @@
   box-shadow: none;
 }
 
-.hw-prose :where(.hw-img-frame > img) {
+.hw-img-frame > img {
   position: relative;
   z-index: 1;
   display: block;
@@ -710,29 +710,29 @@
   max-width: none;
 }
 
-.hw-prose :where(.hw-img-frame--sized > img) {
+.hw-img-frame--sized > img {
   opacity: 0;
   transition: opacity 0.26s ease-out;
 }
 
-.hw-prose :where(.hw-img-frame--sized[data-loaded] > img) {
+.hw-img-frame--sized[data-loaded] > img {
   opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hw-prose :where(.hw-img-frame[data-lqip])::after {
+  .hw-img-frame[data-lqip]::after {
     filter: none;
     transform: none;
   }
 
-  .hw-prose :where(.hw-img-frame--sized > img) {
+  .hw-img-frame--sized > img {
     opacity: 1;
     transition: none;
   }
 }
 
 @media (scripting: none) {
-  .hw-prose :where(.hw-img-frame--sized > img) {
+  .hw-img-frame--sized > img {
     opacity: 1;
     transition: none;
   }

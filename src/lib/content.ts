@@ -35,9 +35,40 @@ export type SitePage = {
   groups?: ProjectGroup[];
 };
 
+export type FilmLayout = 'masonry' | 'grid';
+
+export type FilmPhoto = {
+  src: string;
+  alt: string;
+  film?: string;
+  w?: number;
+  h?: number;
+  color?: string;
+  lqip?: string;
+};
+
+export type FilmAlbum = {
+  id: string;
+  title: string;
+  description?: string;
+  date: string;
+  layout: FilmLayout;
+  cover: string;
+  hidden: boolean;
+  photos: FilmPhoto[];
+  html: string;
+};
+
+/** 展平后的照片（带专辑信息，供首页画廊） */
+export type FilmPhotoRef = FilmPhoto & {
+  albumId: string;
+  albumTitle: string;
+};
+
 export type SiteContent = {
   blog: Post[];
   diary: Post[];
+  film: FilmAlbum[];
   pages: {
     uses: SitePage;
     projects: SitePage;
@@ -65,6 +96,26 @@ export function listPosts(posts: Post[]) {
 
 export function getPost(posts: Post[], id: string) {
   return posts.find((post) => post.id === id);
+}
+
+export function listFilmAlbums(albums: FilmAlbum[] = content.film) {
+  return albums
+    .filter((album) => !album.hidden)
+    .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+}
+
+export function getFilmAlbum(id: string, albums: FilmAlbum[] = content.film) {
+  return albums.find((album) => album.id === id);
+}
+
+export function flattenFilmPhotos(albums: FilmAlbum[] = listFilmAlbums()): FilmPhotoRef[] {
+  return albums.flatMap((album) =>
+    album.photos.map((photo) => ({
+      ...photo,
+      albumId: album.id,
+      albumTitle: album.title,
+    })),
+  );
 }
 
 export function formatDateShort(iso: string) {

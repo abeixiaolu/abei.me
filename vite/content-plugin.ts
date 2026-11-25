@@ -28,6 +28,15 @@ const pageSchema = z.object({
   lede: z.string().optional(),
 });
 
+const filmAlbumSchema = z.object({
+  title: z.string(),
+  description: z.string().optional(),
+  date: z.coerce.date(),
+  layout: z.enum(['masonry', 'grid']).optional().default('masonry'),
+  cover: z.string().optional(),
+  hidden: z.boolean().optional().default(false),
+});
+
 type Project = {
   name: string;
   description: string;
@@ -121,19 +130,66 @@ async function loadPage(
   };
 }
 
+async function loadFilmAlbums(
+  root: string,
+  renderMarkdown: (md: string) => Promise<string>,
+) {
+  const filmMdUrl = `${pathToFileURL(path.join(root, 'src/lib/film-md.mjs')).href}?t=${Date.now()}`;
+  const { extractFilmPhotos } = await import(filmMdUrl);
+  const base = path.join(root, 'src/content/film');
+  const files = await walkMarkdown(base);
+  const albums = [];
+
+  for (const file of files) {
+    const raw = await fs.readFile(file, 'utf8');
+    const { data, content } = matter(raw);
+    const id = toId(file, base);
+    // 缺省 frontmatter：用文件名作 title，mtime 作 date，避免草稿直接炸构建
+    const stat = await fs.stat(file);
+    const parsed = filmAlbumSchema.parse({
+      title: typeof data.title === 'string' ? data.title : id,
+      description: data.description,
+      date: data.date ?? stat.mtime,
+      layout: data.layout,
+      cover: data.cover,
+      hidden: data.hidden,
+    });
+    // 正文按 Markdown 顺序整页渲染；photos 仅供首页画廊 / 封面
+    const [photos, html] = await Promise.all([
+      extractFilmPhotos(content),
+      content.trim() ? renderMarkdown(content) : Promise.resolve(''),
+    ]);
+    const cover = parsed.cover || photos[0]?.src || '';
+    albums.push({
+      id,
+      title: parsed.title,
+      description: parsed.description,
+      date: parsed.date.toISOString(),
+      layout: parsed.layout,
+      cover,
+      hidden: parsed.hidden,
+      photos,
+      html,
+    });
+  }
+
+  return albums;
+}
+
 async function buildPayload(root: string) {
   // 带时间戳，避免 Node ESM 缓存导致 rehype / image-meta 改了仍跑旧代码
   const markdownUrl = `${pathToFileURL(path.join(root, 'src/lib/markdown.mjs')).href}?t=${Date.now()}`;
   const mod = await import(markdownUrl);
   const renderMarkdown = mod.renderMarkdown as (md: string) => Promise<string>;
-  const [blog, diary, uses, projects] = await Promise.all([
+  const [blog, diary, film, uses, projects] = await Promise.all([
     loadCollection(root, 'blog', renderMarkdown),
     loadCollection(root, 'diary', renderMarkdown),
+    loadFilmAlbums(root, renderMarkdown),
     loadPage(root, 'uses', renderMarkdown),
     loadPage(root, 'projects', renderMarkdown),
   ]);
 
-  return { blog, diary, pages: { uses, projects } };
+  return { blog, diary, film, pages: { uses, projects } };
 }
 
 export function contentPlugin(root = process.cwd()): Plugin {
@@ -178,6 +234,7 @@ export function contentPlugin(root = process.cwd()): Plugin {
           file.includes(`${path.sep}src${path.sep}lib${path.sep}markdown.mjs`) ||
           file.includes(`${path.sep}src${path.sep}lib${path.sep}rehype-`) ||
           file.includes(`${path.sep}src${path.sep}lib${path.sep}image-meta.mjs`) ||
+          file.includes(`${path.sep}src${path.sep}lib${path.sep}film-md.mjs`) ||
           file.includes(`${path.sep}src${path.sep}data${path.sep}image-meta.json`)
         ) {
           invalidate();

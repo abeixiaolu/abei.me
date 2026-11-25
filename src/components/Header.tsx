@@ -1,6 +1,6 @@
 import { For, createEffect, onSettled } from 'solid-js';
 import { useLocation } from '@solidjs/router';
-import { isNavActive, navItems } from '../data/nav';
+import { isNavActive, visibleNavItems } from '../data/nav';
 
 function readMs(value: string, fallback: number) {
   const v = value.trim();
@@ -288,7 +288,7 @@ export default function Header() {
       </a>
 
       <nav class="hw-nav-links" aria-label="主导航">
-        <For each={[...navItems]}>
+        <For each={visibleNavItems()}>
           {(item) => {
             const active = () => isNavActive(pathname(), item.href);
             return (
@@ -331,7 +331,7 @@ export default function Header() {
           aria-label="主导航"
           hidden
         >
-          <For each={[...navItems]}>
+          <For each={visibleNavItems()}>
             {(item, i) => {
               const active = () => isNavActive(pathname(), item.href);
               return (

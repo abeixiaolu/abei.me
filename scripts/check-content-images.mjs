@@ -6,14 +6,14 @@
 
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
-import { ROOT, CDN_URL_PREFIX, isAllowedCdnUrl } from "./lib/image-cdn.mjs";
+import {
+  ROOT,
+  CDN_URL_PREFIX,
+  isAllowedCdnUrl,
+  collectContentImageUrls,
+} from "./lib/image-cdn.mjs";
 
-const CONTENT_ROOTS = [
-  path.join(ROOT, "src/content"),
-];
-
-const MD_IMAGE = /!\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
-const HTML_IMAGE = /<img\b[^>]*\bsrc=["']([^"']+)["']/gi;
+const CONTENT_ROOTS = [path.join(ROOT, "src/content")];
 
 async function listMarkdown(dir) {
   const out = [];
@@ -35,21 +35,6 @@ async function listMarkdown(dir) {
   return out;
 }
 
-function stripCodeFences(text) {
-  return text.replace(/```[\s\S]*?```/g, "").replace(/`[^`\n]+`/g, "");
-}
-
-function collectUrls(text) {
-  const body = stripCodeFences(text);
-  const urls = [];
-  for (const re of [MD_IMAGE, HTML_IMAGE]) {
-    re.lastIndex = 0;
-    let m;
-    while ((m = re.exec(body))) urls.push(m[1]);
-  }
-  return urls;
-}
-
 async function main() {
   const files = (
     await Promise.all(CONTENT_ROOTS.map((d) => listMarkdown(d)))
@@ -58,7 +43,7 @@ async function main() {
   const bad = [];
   for (const file of files) {
     const text = await readFile(file, "utf8");
-    for (const url of collectUrls(text)) {
+    for (const url of collectContentImageUrls(text)) {
       if (isAllowedCdnUrl(url)) continue;
       bad.push({ file: path.relative(ROOT, file), url });
     }

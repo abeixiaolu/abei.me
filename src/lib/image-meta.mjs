@@ -171,3 +171,21 @@ export async function upsertImageMeta(hash, entry) {
   await fs.writeFile(IMAGE_META_PATH, `${JSON.stringify(sorted, null, 2)}\n`, 'utf8');
   return { changed: true, entry: sorted[key] };
 }
+
+/**
+ * 从图床管理页删除时同步清本地 meta。
+ * @param {string} hash
+ */
+export async function removeImageMeta(hash) {
+  const all = await loadImageMeta({ fresh: true });
+  const key = hash.toLowerCase();
+  if (!(key in all)) return { removed: false };
+  delete all[key];
+  const sorted = Object.fromEntries(
+    Object.entries(all).sort(([a], [b]) => a.localeCompare(b)),
+  );
+  cache = sorted;
+  await fs.mkdir(path.dirname(IMAGE_META_PATH), { recursive: true });
+  await fs.writeFile(IMAGE_META_PATH, `${JSON.stringify(sorted, null, 2)}\n`, 'utf8');
+  return { removed: true };
+}

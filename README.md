@@ -11,6 +11,23 @@ pnpm build    # 输出 dist/client
 pnpm serve    # 预览生产构建
 ```
 
+### 本地图床管理
+
+仅 `pnpm dev`（Vite 中间件）可用；开发时导航会出现 **Imgbed**，也可手动打开：
+
+`http://localhost:3000/_imgbed/`
+
+生产构建不包含该导航项，线上也无 API。
+
+在项目根 `.env` 配置：
+
+```bash
+IMGBED_PASSWORD=your-password
+GITHUB_TOKEN=ghp_...   # 已有 Typora 上传即可复用
+```
+
+支持批量上传 / 删除，并标出正文未引用的图片（对比 GitHub 图床与 `image-meta.json`）。
+
 ## 内容
 
 - 日记 / 博客：`src/content/diary`、`src/content/blog`

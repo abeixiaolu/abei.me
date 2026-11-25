@@ -41,6 +41,12 @@ declare module "virtual:file-routes" {
       $$route: FileRouteEagerRef<Pick<typeof import("./src/routes/[...404]"), Extract<"route", keyof typeof import("./src/routes/[...404]")>>>;
     },
     {
+      path: "/_imgbed/";
+      page: true;
+      $component: FileRouteLazyRef<Pick<typeof import("./src/routes/_imgbed/index"), Extract<"default", keyof typeof import("./src/routes/_imgbed/index")>>>;
+      $$route?: undefined;
+    },
+    {
       path: "/blog/*slug";
       page: true;
       $component: FileRouteLazyRef<Pick<typeof import("./src/routes/blog/[...slug]"), Extract<"default", keyof typeof import("./src/routes/blog/[...slug]")>>>;
@@ -144,6 +150,14 @@ declare module "virtual:file-routes" {
       id: "/diary/";
       page: true;
       $component: FileRouteLazyRef<Pick<typeof import("./src/routes/diary/index"), Extract<"default", keyof typeof import("./src/routes/diary/index")>>>;
+      $$route?: undefined;
+      children?: undefined;
+    },
+    {
+      path: "/_imgbed/";
+      id: "/_imgbed/";
+      page: true;
+      $component: FileRouteLazyRef<Pick<typeof import("./src/routes/_imgbed/index"), Extract<"default", keyof typeof import("./src/routes/_imgbed/index")>>>;
       $$route?: undefined;
       children?: undefined;
     },

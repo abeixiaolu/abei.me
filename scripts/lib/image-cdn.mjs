@@ -6,12 +6,15 @@
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { appendFile, readFile } from "node:fs/promises";
+import { appendFile, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Octokit } from "@octokit/rest";
 import {
   buildImageAssets,
+  hashFromCdnUrl,
+  loadImageMeta,
+  removeImageMeta,
   upsertImageMeta,
 } from "../../src/lib/image-meta.mjs";
 
@@ -21,6 +24,11 @@ export const ROOT = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "../..",
 );
+
+const CONTENT_ROOTS = [path.join(ROOT, "src/content")];
+const MD_IMAGE = /!\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+const HTML_IMAGE = /<img\b[^>]*\bsrc=["']([^"']+)["']/gi;
+const REMOTE_WEBP = /^w\/[0-9a-f]{2}\/([0-9a-f]{16})\.webp$/i;
 
 const UPLOAD_LOG = path.join(ROOT, ".typora-upload.log");
 
@@ -58,11 +66,13 @@ export function isAllowedCdnUrl(url) {
   return typeof url === "string" && url.startsWith(CDN_URL_PREFIX);
 }
 
-async function readDotEnvToken() {
+/** 读取项目根 .env 中的单个键（不导出到前端） */
+export async function readDotEnv(key) {
   try {
     const text = await readFile(path.join(ROOT, ".env"), "utf8");
+    const re = new RegExp(`^\\s*${key}\\s*=\\s*(.+?)\\s*$`);
     for (const line of text.split("\n")) {
-      const m = line.match(/^\s*GITHUB_TOKEN\s*=\s*(.+?)\s*$/);
+      const m = line.match(re);
       if (!m) continue;
       return m[1].replace(/^["']|["']$/g, "");
     }
@@ -70,6 +80,10 @@ async function readDotEnvToken() {
     /* 无 .env */
   }
   return null;
+}
+
+async function readDotEnvToken() {
+  return readDotEnv("GITHUB_TOKEN");
 }
 
 async function readGitCredentialToken() {
@@ -215,5 +229,224 @@ export async function ensureUploaded({ buf, log = () => {} }) {
     cdn: cdnUrl(commit, remotePath),
     w: assets.w,
     h: assets.h,
+  };
+}
+
+async function createOctokit() {
+  const token = await resolveToken();
+  if (!token) {
+    throw new Error(
+      "缺少 GITHUB_TOKEN：可写入项目 .env，或 export GITHUB_TOKEN=...",
+    );
+  }
+  const [owner, repo] = IMAGE_REPO.split("/");
+  if (!owner || !repo) throw new Error(`IMAGE_REPO 无效: ${IMAGE_REPO}`);
+  return { octokit: new Octokit({ auth: token }), owner, repo };
+}
+
+async function listMarkdown(dir) {
+  const out = [];
+  let entries;
+  try {
+    entries = await readdir(dir, { withFileTypes: true });
+  } catch (err) {
+    if (err?.code === "ENOENT") return out;
+    throw err;
+  }
+  for (const ent of entries) {
+    const full = path.join(dir, ent.name);
+    if (ent.isDirectory()) {
+      out.push(...(await listMarkdown(full)));
+      continue;
+    }
+    if (ent.isFile() && /\.mdx?$/i.test(ent.name)) out.push(full);
+  }
+  return out;
+}
+
+function stripCodeFences(text) {
+  return text.replace(/```[\s\S]*?```/g, "").replace(/`[^`\n]+`/g, "");
+}
+
+/** 从 Markdown 正文抽出图片 URL（跳过代码块） */
+export function collectContentImageUrls(text) {
+  const body = stripCodeFences(text);
+  const urls = [];
+  for (const re of [MD_IMAGE, HTML_IMAGE]) {
+    re.lastIndex = 0;
+    let m;
+    while ((m = re.exec(body))) urls.push(m[1]);
+  }
+  return urls;
+}
+
+/** 扫描 src/content，收集正文引用的图床 hash */
+export async function collectContentImageHashes() {
+  const files = (
+    await Promise.all(CONTENT_ROOTS.map((d) => listMarkdown(d)))
+  ).flat();
+  const hashes = new Set();
+  for (const file of files) {
+    const text = await readFile(file, "utf8");
+    for (const url of collectContentImageUrls(text)) {
+      const hash = hashFromCdnUrl(url);
+      if (hash) hashes.add(hash);
+    }
+  }
+  return hashes;
+}
+
+/**
+ * 列出图床仓库中全部 w/{xx}/{hash}.webp
+ * @returns {Promise<{ commit: string, items: { hash: string, path: string, cdn: string }[] }>}
+ */
+export async function listRemoteWebps() {
+  const { octokit, owner, repo } = await createOctokit();
+  const { data: repoInfo } = await octokit.repos.get({ owner, repo });
+  const branch = repoInfo.default_branch || "main";
+  const { data: ref } = await octokit.git.getRef({
+    owner,
+    repo,
+    ref: `heads/${branch}`,
+  });
+  const commit = ref.object.sha;
+  const { data: commitData } = await octokit.git.getCommit({
+    owner,
+    repo,
+    commit_sha: commit,
+  });
+  const { data: tree } = await octokit.git.getTree({
+    owner,
+    repo,
+    tree_sha: commitData.tree.sha,
+    recursive: "true",
+  });
+
+  const items = [];
+  for (const node of tree.tree ?? []) {
+    if (node.type !== "blob" || !node.path) continue;
+    const m = node.path.match(REMOTE_WEBP);
+    if (!m) continue;
+    const hash = m[1].toLowerCase();
+    items.push({
+      hash,
+      path: node.path,
+      cdn: cdnUrl(commit, node.path),
+    });
+  }
+  items.sort((a, b) => a.hash.localeCompare(b.hash));
+  return { commit, items };
+}
+
+/**
+ * 删除图床上的单个 WebP，并清本地 meta。
+ * @param {string} hash
+ * @param {{ allowReferenced?: boolean, referenced?: Set<string> }} [opts]
+ */
+export async function deleteRemoteWebp(hash, opts = {}) {
+  const key = hash.toLowerCase();
+  if (!/^[0-9a-f]{16}$/.test(key)) {
+    throw new Error(`无效 hash: ${hash}`);
+  }
+
+  const referenced =
+    opts.referenced ?? (await collectContentImageHashes());
+  if (!opts.allowReferenced && referenced.has(key)) {
+    throw new Error(`仍被正文引用，拒绝删除: ${key}`);
+  }
+
+  const remotePath = remotePathFor(key);
+  const { octokit, owner, repo } = await createOctokit();
+
+  let deletedRemote = false;
+  try {
+    const { data } = await octokit.repos.getContent({
+      owner,
+      repo,
+      path: remotePath,
+    });
+    if (Array.isArray(data) || !("sha" in data) || !data.sha) {
+      throw new Error(`无法删除目录路径: ${remotePath}`);
+    }
+    await octokit.repos.deleteFile({
+      owner,
+      repo,
+      path: remotePath,
+      message: `delete ${remotePath}`,
+      sha: data.sha,
+    });
+    deletedRemote = true;
+  } catch (err) {
+    if (err?.status !== 404) throw err;
+  }
+
+  const meta = await removeImageMeta(key);
+  return {
+    hash: key,
+    deletedRemote,
+    removedMeta: meta.removed,
+  };
+}
+
+/**
+ * 合并远程文件 + meta + 正文引用，供管理页列表使用。
+ */
+export async function buildImageInventory() {
+  const [{ items: remote }, meta, referenced] = await Promise.all([
+    listRemoteWebps(),
+    loadImageMeta({ fresh: true }),
+    collectContentImageHashes(),
+  ]);
+
+  const byHash = new Map();
+  for (const item of remote) {
+    byHash.set(item.hash, {
+      hash: item.hash,
+      path: item.path,
+      cdn: item.cdn,
+      onRemote: true,
+      inMeta: false,
+      referenced: referenced.has(item.hash),
+    });
+  }
+
+  for (const [hash, entry] of Object.entries(meta)) {
+    const key = hash.toLowerCase();
+    const existing = byHash.get(key);
+    if (existing) {
+      existing.inMeta = true;
+      existing.w = entry.w;
+      existing.h = entry.h;
+      existing.color = entry.color;
+      existing.lqip = entry.lqip;
+      continue;
+    }
+    const remotePath = remotePathFor(key);
+    byHash.set(key, {
+      hash: key,
+      path: remotePath,
+      cdn: null,
+      onRemote: false,
+      inMeta: true,
+      referenced: referenced.has(key),
+      w: entry.w,
+      h: entry.h,
+      color: entry.color,
+      lqip: entry.lqip,
+    });
+  }
+
+  const items = [...byHash.values()].sort((a, b) =>
+    a.hash.localeCompare(b.hash),
+  );
+  return {
+    items,
+    stats: {
+      total: items.length,
+      remote: remote.length,
+      meta: Object.keys(meta).length,
+      referenced: referenced.size,
+      orphan: items.filter((i) => !i.referenced).length,
+    },
   };
 }

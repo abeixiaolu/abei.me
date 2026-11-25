@@ -34,3 +34,5 @@ alwaysApply: true
 | 56 | LCD | `src/components/Lcd.astro`（列表页 caption / title / lede） |
 | 51 | Item list | `src/components/ItemList.astro`（Blog 列表） |
 | 06 | Flat knob | `src/components/ReadingProgress.astro`（右下角悬浮阅读进度） |
+| — | Checkbox | `src/components/Checkbox.tsx`（按键 + 角 LED） |
+| — | Toast / Toaster | `src/components/Toaster.tsx` + `src/lib/toast.ts`（`notify()`） |

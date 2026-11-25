@@ -9,6 +9,8 @@ type SeoProps = {
   path?: string;
   image?: string;
   type?: 'website' | 'article';
+  /** 隐藏页（如本地图床管理）不收录 */
+  noindex?: boolean;
 };
 
 /** 页面级 title / description / Open Graph / Twitter Card */
@@ -23,6 +25,7 @@ export default function Seo(props: SeoProps) {
     <>
       <Title>{title()}</Title>
       <Meta name="description" content={description()} />
+      {props.noindex ? <Meta name="robots" content="noindex, nofollow" /> : null}
       <Link rel="canonical" href={url()} />
       <Meta property="og:type" content={type()} />
       <Meta property="og:site_name" content={site.name} />

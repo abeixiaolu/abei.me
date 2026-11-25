@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "check": "pnpm lint && pnpm typecheck",
     "typora:upload": "node scripts/typora-upload.mjs",
+    "images:meta": "node scripts/backfill-image-meta.mjs",
     "check:images": "node scripts/check-content-images.mjs",
     "prepare": "git config core.hooksPath .githooks"
   },

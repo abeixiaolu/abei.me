@@ -61,9 +61,22 @@ async function getHighlighter() {
   return highlighterPromise;
 }
 
+/** 本模块实例内复用；content-plugin 用 ?t= 重载本文件时会自然刷新 */
+let rehypeImageSizePromise;
+
+async function getRehypeImageSize() {
+  if (!rehypeImageSizePromise) {
+    rehypeImageSizePromise = import(`./rehype-image-size.mjs?t=${Date.now()}`).then(
+      (m) => m.rehypeImageSize,
+    );
+  }
+  return rehypeImageSizePromise;
+}
+
 /** @param {string} markdown */
 export async function renderMarkdown(markdown) {
   const highlighter = await getHighlighter();
+  const rehypeImageSize = await getRehypeImageSize();
   const file = await unified()
     .use(remarkParse)
     .use(remarkGfm)
@@ -78,6 +91,7 @@ export async function renderMarkdown(markdown) {
     })
     .use(rehypeInlineCodeGap)
     .use(rehypeEnableTaskCheckboxes)
+    .use(rehypeImageSize)
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(markdown);
 

@@ -122,7 +122,9 @@ async function loadPage(
 }
 
 async function buildPayload(root: string) {
-  const mod = await import(pathToFileURL(path.join(root, 'src/lib/markdown.mjs')).href);
+  // 带时间戳，避免 Node ESM 缓存导致 rehype / image-meta 改了仍跑旧代码
+  const markdownUrl = `${pathToFileURL(path.join(root, 'src/lib/markdown.mjs')).href}?t=${Date.now()}`;
+  const mod = await import(markdownUrl);
   const renderMarkdown = mod.renderMarkdown as (md: string) => Promise<string>;
   const [blog, diary, uses, projects] = await Promise.all([
     loadCollection(root, 'blog', renderMarkdown),
@@ -165,9 +167,19 @@ export function contentPlugin(root = process.cwd()): Plugin {
     configureServer(devServer) {
       server = devServer;
       const contentDir = path.join(root, 'src/content');
+      const markdownLib = path.join(root, 'src/lib');
+      const imageMeta = path.join(root, 'src/data/image-meta.json');
       devServer.watcher.add(contentDir);
+      devServer.watcher.add(markdownLib);
+      devServer.watcher.add(imageMeta);
       devServer.watcher.on('all', (_event, file) => {
-        if (file.includes(`${path.sep}src${path.sep}content${path.sep}`)) {
+        if (
+          file.includes(`${path.sep}src${path.sep}content${path.sep}`) ||
+          file.includes(`${path.sep}src${path.sep}lib${path.sep}markdown.mjs`) ||
+          file.includes(`${path.sep}src${path.sep}lib${path.sep}rehype-`) ||
+          file.includes(`${path.sep}src${path.sep}lib${path.sep}image-meta.mjs`) ||
+          file.includes(`${path.sep}src${path.sep}data${path.sep}image-meta.json`)
+        ) {
           invalidate();
         }
       });

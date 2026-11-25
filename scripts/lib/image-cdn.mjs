@@ -10,7 +10,10 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Octokit } from "@octokit/rest";
-import sharp from "sharp";
+import {
+  buildImageAssets,
+  upsertImageMeta,
+} from "../../src/lib/image-meta.mjs";
 
 const execFileAsync = promisify(execFile);
 
@@ -131,14 +134,26 @@ export async function ensureUploaded({ buf, log = () => {} }) {
   const remotePath = remotePathFor(hash);
   const octokit = new Octokit({ auth: token });
 
+  const assets = await buildImageAssets(buf);
+  const metaWrite = await upsertImageMeta(hash, {
+    w: assets.w,
+    h: assets.h,
+    color: assets.color,
+    lqip: assets.lqip,
+  });
+  log(
+    metaWrite.changed
+      ? `meta ${hash} ${assets.w}×${assets.h} ${assets.color}`
+      : `meta ${hash} 已是最新`,
+  );
+
   let commit;
   if (await fileExists(octokit, owner, repo, remotePath)) {
     commit = await lastCommitForPath(octokit, owner, repo, remotePath);
     log(`已存在 ${remotePath} @ ${commit.slice(0, 7)}`);
   } else {
-    const webp = await sharp(buf).webp({ lossless: true }).toBuffer();
-    commit = await uploadWebp(octokit, owner, repo, remotePath, webp);
-    log(`上传 → ${remotePath} (${buf.length} → ${webp.length} bytes)`);
+    commit = await uploadWebp(octokit, owner, repo, remotePath, assets.webp);
+    log(`上传 → ${remotePath} (${buf.length} → ${assets.webp.length} bytes)`);
   }
 
   return {
@@ -146,5 +161,7 @@ export async function ensureUploaded({ buf, log = () => {} }) {
     path: remotePath,
     commit,
     cdn: cdnUrl(commit, remotePath),
+    w: assets.w,
+    h: assets.h,
   };
 }

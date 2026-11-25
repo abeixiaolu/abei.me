@@ -67,7 +67,8 @@
 :root {
   --corner-scale: 1;
   --radius-key: calc(10px * var(--corner-scale));
-  --radius-nav: calc(16px * var(--corner-scale));
+  /* 亚克力头栏：胶囊全圆角（半高以上即视觉上完全圆润） */
+  --radius-nav: 9999px;
   --radius-panel: calc(10px * var(--corner-scale));
   --radius-card: calc(6px * var(--corner-scale));
   --radius-tray: calc(10px * var(--corner-scale));
@@ -267,7 +268,8 @@ a {
   min-height: 48px;
   padding: 0 14px 0 16px;
   border-radius: var(--radius-nav);
-  corner-shape: squircle;
+  /* 胶囊全圆角用 round，避免 squircle 把两端撑成方圆角 */
+  corner-shape: round;
   /* 避免 VT / 子层在圆角外露出亚克力白底 */
   overflow: clip;
   background: linear-gradient(180deg, rgb(248 248 246 / 0.9), rgb(242 242 240 / 0.78));

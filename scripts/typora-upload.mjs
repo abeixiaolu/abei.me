@@ -1,6 +1,6 @@
 /**
  * Typora 自定义上传：无损 WebP → 图床 → stdout 返回 CDN URL。
- * 不落盘原图、不写 image-map（正文已是 CDN 链接）。
+ * 同时写入 src/data/image-meta.json（尺寸 + LQIP）。
  * 日志走 stderr。
  */
 
